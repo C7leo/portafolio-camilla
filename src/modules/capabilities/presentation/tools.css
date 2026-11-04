@@ -1,0 +1,190 @@
+﻿/* Section 05: two editorial hero panels and an asymmetric, interactive bento. */
+#ecosystem{--paper:#fafaf7;--violet:#9747ff;--lime:#c7ff35;--tools-lavender:#f2e8fc;--tools-radius:28px;background:var(--paper);padding:30px clamp(24px,3.1vw,70px) 44px;color:var(--ink)}
+#ecosystem>.section-top{border:0;padding:0;margin:0 0 36px;gap:22px;font-family:monospace}
+#ecosystem .eyebrow{font:400 clamp(9px,.82vw,14px)/1.5 monospace;letter-spacing:.13em;gap:25px}
+#ecosystem .section-number{font:inherit;padding-right:25px;letter-spacing:0}
+#ecosystem .tools-header-rule{height:1px;background:var(--ink);opacity:.6;flex:1}
+#ecosystem .tools-header-link{display:flex;align-items:center;gap:20px;font:400 clamp(9px,.82vw,14px)/1.5 monospace;letter-spacing:.03em;flex-shrink:0}
+#ecosystem .tools-header-link>span:last-child{font:28px/1 var(--heading)}
+#ecosystem .tools-heroes{display:grid;grid-template-columns:minmax(0,1.17fr) minmax(0,1fr);gap:12px;margin-bottom:12px}
+#ecosystem .technology-heading{position:relative;display:block;min-width:0;container-type:inline-size;border-radius:var(--tools-radius);background:linear-gradient(110deg,#eaffaa,#edffb2 65%,#e9ffa6);padding:34px 6%;overflow:hidden;isolation:isolate}
+#ecosystem .tools-kicker{font:400 clamp(10px,1vw,16px)/1.5 monospace;letter-spacing:.04em;margin-bottom:20px}
+#ecosystem .tools-title{font:400 12cqw/1.03 var(--display);letter-spacing:-.025em;margin:0;position:relative;z-index:1}
+#ecosystem .tools-title>span{display:block;white-space:nowrap;color:var(--ink)}
+#ecosystem .tools-title em{font-style:normal;color:var(--violet)}
+#ecosystem .tools-subtitle{font:400 clamp(13px,1.35vw,23px)/1.3 monospace;margin-top:23px;letter-spacing:-.035em}
+#ecosystem .tools-underline{position:absolute;width:38%;height:45px;bottom:15%;right:21%;transform:rotate(-2deg)}
+#ecosystem .tools-underline path,#ecosystem .tools-star path{fill:none;stroke:var(--violet);stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+#ecosystem .tools-star{position:absolute;top:9%;right:31%;width:6%;height:17%;transform:rotate(8deg);opacity:.8}
+#ecosystem .tools-star path{stroke-width:3}
+#ecosystem .tools-hero-visual{position:relative;width:100%;min-width:0;min-height:350px;border-radius:var(--tools-radius);background:#edddfc;isolation:isolate;overflow:visible;clip-path:inset(0 0 0 -22% round 0 var(--tools-radius) var(--tools-radius) 0)}
+#ecosystem .tools-visual-grid{position:absolute;inset:0;background-image:linear-gradient(#9747ff0a 1px,transparent 1px),linear-gradient(90deg,#9747ff0a 1px,transparent 1px);background-size:32px 32px;mask-image:linear-gradient(90deg,#000,transparent 95%);z-index:-1}
+#ecosystem .tools-hero-cat{position:absolute;left:-18%;top:12%;width:116%;height:116%;object-fit:contain;object-position:left top;display:block;pointer-events:none}
+#ecosystem .tools-handnote{position:absolute;top:17%;right:4%;width:115px;font:600 clamp(18px,1.5vw,25px)/.95 'Caveat',cursive;transform:rotate(-12deg)}
+#ecosystem .tools-handnote svg{display:block;width:80px;height:70px;margin-left:-30px}
+#ecosystem .tools-handnote path{fill:none;stroke:var(--ink);stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+#ecosystem .tools-spark{position:absolute;right:4%;bottom:25%;font:52px/1 var(--heading);color:var(--violet)}
+#ecosystem .tech-categories{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;margin:0;padding:0;border:0;scroll-margin-top:100px}
+#ecosystem .tech-node{position:relative;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:0;grid-column:span 4;min-width:0;min-height:190px;padding:30px 9%;border:1px solid #deded8;border-radius:var(--tools-radius);background:var(--paper);text-align:left;color:var(--ink);letter-spacing:0;overflow:hidden;isolation:isolate;transition:transform .3s,border-color .3s,background-color .3s}
+#ecosystem .tech-node:hover{transform:translateY(-3px);padding:30px 9%;border-color:var(--violet);background:#f6f0fc}
+#ecosystem .tech-node.selected{border-color:var(--violet);outline:2px solid var(--violet);outline-offset:-2px}
+#ecosystem .tech-node:focus-visible,#ecosystem .tools-close:focus-visible,#ecosystem .tools-header-link:focus-visible{outline:3px solid var(--violet);outline-offset:4px}
+#ecosystem .tech-number{font:400 14px/1.3 'DM Sans',sans-serif;color:#777;min-width:0;margin-bottom:16px;letter-spacing:0}
+#ecosystem .tech-category-name{display:block;max-width:70%;font:500 clamp(18px,1.45vw,25px)/1.08 var(--heading);letter-spacing:-.055em;white-space:normal}
+#ecosystem .tech-card-0 .tech-category-name,#ecosystem .tech-card-1 .tech-category-name{max-width:150px}
+#ecosystem .tech-summary{display:block;max-width:76%;margin-top:10px;font:400 clamp(12px,1vw,16px)/1.3 'DM Sans',sans-serif;color:var(--muted);letter-spacing:-.035em}
+#ecosystem .tech-category-icon{position:absolute;top:30px;right:8%;width:43px;height:43px}
+#ecosystem .tech-category-icon svg{display:block;width:100%;height:100%}
+#ecosystem .tech-arrow{position:absolute;bottom:22px;right:8%;display:grid;place-items:center;width:44px;height:44px;border:1px solid #d4d4ce;border-radius:50%;font:400 27px/1 var(--heading);margin:0;transition:transform .3s,background .3s}
+#ecosystem .tech-node:hover .tech-arrow{transform:rotate(-35deg);background:#e1c3ff}
+#ecosystem .tech-card-0{background:var(--tools-lavender);border-color:transparent}
+#ecosystem .tech-card-0 .tech-arrow{background:#e4c9fc;border-color:transparent}
+#ecosystem .tech-card-3{grid-column:span 6;background:#1c1723;color:var(--paper);padding:30px 6%;background-image:radial-gradient(ellipse at 85% 80%,#482d6255,transparent 65%)}
+#ecosystem .tech-card-3:hover{background-color:#24192f;padding:30px 6%}
+#ecosystem .tech-card-3 .tech-number{color:#cd9aff}
+#ecosystem .tech-card-3 .tech-category-name,#ecosystem .tech-card-3 .tech-summary{max-width:36%}
+#ecosystem .tech-card-3 .tech-summary{color:#d6d1da}
+#ecosystem .tech-card-3 .tech-category-icon{top:23px;right:4%;width:25px;height:25px;color:#caa0f0;opacity:.7}
+#ecosystem .tools-database{position:absolute;right:0;top:0;width:65%;height:100%;object-fit:contain;z-index:-1;pointer-events:none}
+#ecosystem .tech-card-3 .tech-arrow{right:57%;bottom:24px;background:#dfbaff;color:var(--ink);border-color:transparent}
+#ecosystem .tech-card-4,#ecosystem .tech-card-5{grid-column:span 3;padding:30px 11%}
+#ecosystem .tech-card-4:hover,#ecosystem .tech-card-5:hover{padding:30px 11%}
+#ecosystem .tech-card-4{background:linear-gradient(120deg,#dfff8b,#e8ff9d);border-color:transparent}
+#ecosystem .tech-card-4 .tech-arrow{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+#ecosystem .tech-card-4 .tech-summary,#ecosystem .tech-card-5 .tech-summary{max-width:75%}
+#ecosystem .tech-card-4 .tech-category-name,#ecosystem .tech-card-5 .tech-category-name{max-width:65%}
+#ecosystem .tech-tool-symbol{display:grid;place-items:center;width:38px;height:38px;flex:none;color:var(--violet)}
+#ecosystem .tech-tool-symbol svg,#ecosystem .tech-brand-logo{display:block;width:36px;height:36px;object-fit:contain;filter:none}
+#ecosystem .tools-status{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+html[lang=es] #ecosystem .tools-title{font-size:12cqw}
+html[lang=es] #ecosystem .tools-title>span:last-child>span{display:block}
+@media(min-width:1600px){#ecosystem .tools-hero-visual{min-height:388px}#ecosystem .tech-node{min-height:198px}}
+@media(min-width:701px) and (max-width:1050px){
+ #ecosystem .tools-heroes{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #ecosystem .technology-heading{padding:28px 7%}
+ #ecosystem .tools-hero-visual{min-height:300px}
+ #ecosystem .tools-title{font-size:10.1cqw}
+ #ecosystem .tools-subtitle{font-size:13px}
+ #ecosystem .tools-underline{bottom:10%;right:8%}
+ #ecosystem .tools-handnote{top:10%;right:4%;width:100px;font-size:19px}
+ #ecosystem .tech-categories{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #ecosystem .tech-node,#ecosystem .tech-card-3,#ecosystem .tech-card-4,#ecosystem .tech-card-5{grid-column:span 1;min-height:205px;padding:27px 9%}
+ #ecosystem .tech-card-3{grid-column:span 2;min-height:220px}
+ #ecosystem .tech-node:hover{padding:27px 9%}
+ #ecosystem .tools-database{width:60%}
+ #ecosystem .tech-category-name{font-size:22px}
+ #ecosystem .tech-summary{font-size:14px}
+ #ecosystem .tools-header-rule{display:none}
+ #ecosystem .eyebrow{gap:12px;letter-spacing:0}
+ #ecosystem .section-number{padding-right:12px}
+}
+@media(max-width:700px){
+ #ecosystem{padding-top:24px;padding-bottom:30px;--tools-radius:23px}
+ #ecosystem>.section-top{flex-wrap:wrap;gap:13px;margin-bottom:23px}
+ #ecosystem .eyebrow{font-size:9px;gap:12px;letter-spacing:.02em}
+ #ecosystem .section-number{padding-right:12px}
+ #ecosystem .tools-header-rule{display:none}
+ #ecosystem .tools-header-link{margin-left:auto;font-size:9px;gap:10px}
+ #ecosystem .tools-heroes{grid-template-columns:minmax(0,1fr)}
+ #ecosystem .technology-heading{padding:28px 7% 32px}
+ #ecosystem .tools-kicker{font-size:10px;margin-bottom:21px}
+ #ecosystem .tools-title{font-size:10.6cqw}
+ #ecosystem .tools-subtitle{font-size:14px;margin-top:23px}
+ #ecosystem .tools-underline{right:7%;bottom:12%;width:40%}
+ #ecosystem .tools-star{top:8%;right:18%;height:17%}
+ #ecosystem .tools-hero-visual{min-height:245px;aspect-ratio:1.4;overflow:hidden;clip-path:none}
+ #ecosystem .tools-handnote{font-size:21px;right:5%;width:120px;top:8%}
+ #ecosystem .tools-hero-cat{left:-7%;top:14%;width:112%;height:104%}
+ #ecosystem .tools-spark{font-size:36px}
+ #ecosystem .tech-categories{grid-template-columns:minmax(0,1fr)}
+ #ecosystem .tech-node,#ecosystem .tech-card-3,#ecosystem .tech-card-4,#ecosystem .tech-card-5,#ecosystem .tech-node:hover{grid-column:1;padding:26px 8%;min-height:198px}
+ #ecosystem .tech-category-name{font-size:23px;max-width:65%}
+ #ecosystem .tech-summary{font-size:14px;max-width:70%}
+ #ecosystem .tech-category-icon{top:27px;width:37px;height:37px}
+ #ecosystem .tech-arrow{width:40px;height:40px;bottom:22px}
+ #ecosystem .tech-card-3{min-height:230px}
+ #ecosystem .tech-card-3 .tech-category-name,#ecosystem .tech-card-3 .tech-summary{max-width:43%}
+ #ecosystem .tools-database{width:59%;top:12%;height:80%;right:-2%}
+ #ecosystem .tech-card-3 .tech-arrow{right:45%;bottom:19px}
+ #ecosystem .tech-panel{padding:22px}
+ #ecosystem .tools-detail-layout{grid-template-columns:minmax(0,1fr);gap:20px}
+ #ecosystem .tools-visual{height:220px}
+ #ecosystem .tech-quick-item{font-size:11px;padding:8px 10px}
+ #ecosystem #tech-description{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){#ecosystem *,#ecosystem *::before,#ecosystem *::after{transition:none!important;animation:none!important}#ecosystem .tech-node:hover{transform:none}}
+
+/* The expanded panel occupies grid tracks beside the selected card. */
+#ecosystem .tech-categories.has-active{grid-template-columns:repeat(24,minmax(0,1fr));align-items:stretch;isolation:isolate}
+#ecosystem .has-active>.active-card{grid-column:1 / span 4;grid-row:1 / span 2}
+#ecosystem .has-active>.tech-panel{grid-column:5 / span 15;grid-row:1 / span 2}
+#ecosystem .has-active>.companion-1{grid-column:20 / span 5;grid-row:1}
+#ecosystem .has-active>.companion-2{grid-column:20 / span 5;grid-row:2}
+#ecosystem .has-active>.remainder-1{grid-column:1 / span 12;grid-row:3}
+#ecosystem .has-active>.remainder-2{grid-column:13 / span 6;grid-row:3}
+#ecosystem .has-active>.remainder-3{grid-column:19 / span 6;grid-row:3}
+#ecosystem .has-active>.tech-node{transition:border-color .35s,background-color .35s;min-height:178px}
+#ecosystem .has-active>.tech-node:hover{transform:none}
+#ecosystem .has-active>.active-card,#ecosystem .has-active>.active-card:hover{padding:30px 12%;min-height:340px;background:var(--tools-lavender);border-color:var(--violet);outline:0;color:var(--ink)}
+#ecosystem .has-active>.active-card .tech-number{color:var(--muted);margin-bottom:32px}
+#ecosystem .has-active>.active-card .tech-category-name{font-size:clamp(20px,1.6vw,27px);max-width:100%;overflow-wrap:anywhere}
+#ecosystem .has-active>.active-card .tech-summary{max-width:100%;font-size:clamp(13px,1.1vw,17px);color:var(--muted);margin-top:14px;padding-bottom:70px}
+#ecosystem .has-active>.active-card .tech-category-icon{width:34px;height:34px;right:12%;top:25px;color:var(--ink);opacity:1}
+#ecosystem .has-active>.active-card .tech-arrow{left:12%;right:auto;bottom:25px;width:48px;height:48px;background:#dfbaff;color:var(--ink);border-color:transparent}
+#ecosystem .has-active>.active-card .tools-database,#ecosystem .has-active>[class*=companion-] .tools-database{display:none}
+#ecosystem .has-active>[class*=companion-],#ecosystem .has-active>[class*=companion-]:hover{padding:22px 10%;min-height:158px;background:var(--paper);color:var(--ink)}
+#ecosystem .has-active>[class*=companion-] .tech-number{font-size:12px;margin-bottom:12px;color:var(--muted)}
+#ecosystem .has-active>[class*=companion-] .tech-category-name{font-size:20px;max-width:78%}
+#ecosystem .has-active>[class*=companion-] .tech-summary{font-size:12px;max-width:78%;padding-right:8px;color:var(--muted)}
+#ecosystem .has-active>[class*=companion-] .tech-category-icon{width:32px;height:32px;top:23px;right:9%;color:var(--ink);opacity:1}
+#ecosystem .has-active>[class*=companion-] .tech-arrow{width:35px;height:35px;font-size:23px;right:9%;bottom:18px;left:auto}
+#ecosystem .tech-panel{position:relative;min-width:0;min-height:340px;padding:24px 26px;border:1px solid #d8b7ff;border-radius:var(--tools-radius);background:linear-gradient(120deg,#faf7fd,#f8f5fb);align-self:stretch}
+#ecosystem .tools-panel-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
+#ecosystem .tools-panel-kicker{font:400 12px/1.4 monospace;letter-spacing:-.03em;min-width:0}
+#ecosystem .tools-close{position:static;display:flex;align-items:center;justify-content:center;gap:5px;min-width:44px;min-height:44px;margin:-10px -10px -10px 0;padding:4px;border:0;border-radius:50%;background:transparent;color:var(--muted);font-size:24px;flex:none}
+#ecosystem .tools-close:hover{background:#eee2fa;color:var(--ink)}
+#ecosystem .tools-close-label{font-size:11px}
+#ecosystem #tech-name{font:400 clamp(30px,3vw,49px)/1.05 var(--display);letter-spacing:-.025em;max-width:100%;margin:0 0 5px;overflow-wrap:anywhere}
+#ecosystem .tools-panel-intro{font-size:clamp(13px,1.1vw,17px);line-height:1.4;color:var(--muted);margin-bottom:16px}
+#ecosystem .tech-quick-list{list-style:none;display:grid;grid-template-columns:repeat(var(--tool-count),minmax(0,1fr));gap:9px;padding:0;margin:0}
+#ecosystem .tech-quick-item{display:flex;align-items:center;justify-content:flex-start;gap:10px;flex:1 1 115px;min-width:0;min-height:62px;padding:10px 13px;border:1px solid #e9e5ed;border-radius:14px;background:#fff;transition:background .25s,border-color .25s}
+#ecosystem .tech-quick-item:hover{background:var(--paper);border-color:#cba6f4}
+#ecosystem .tech-quick-item>span:last-child{font-size:13px;line-height:1.25;overflow-wrap:anywhere}
+#ecosystem .tools-panel-context{border-top:1px solid #e7dfed;margin-top:16px;padding-top:12px}
+#ecosystem #tech-label{display:block;font-size:8px;line-height:1.5;letter-spacing:.06em;color:var(--muted);margin-bottom:5px}
+#ecosystem #tech-description{font-size:11px;line-height:1.5;color:var(--muted);margin:0;max-width:none}
+#ecosystem .tech-panel.is-closing{opacity:0;transform:translateX(-8px);transition:opacity .1s,transform .1s}
+@media(min-width:701px) and (max-width:1050px){
+ #ecosystem .tech-categories.has-active{grid-template-columns:repeat(2,minmax(0,1fr))}
+ #ecosystem .has-active>.tech-node,#ecosystem .has-active>.tech-panel{grid-column:auto;grid-row:auto;order:3}
+ #ecosystem .has-active>.active-card{order:0;min-height:230px}
+ #ecosystem .has-active>.companion-1{order:1;min-height:230px}
+ #ecosystem .has-active>.tech-panel{order:2;grid-column:1 / -1;min-height:0}
+ #ecosystem .has-active>.tech-node,#ecosystem .has-active>.tech-node:hover{padding:26px 9%}
+ #ecosystem .has-active>.active-card .tech-number{margin-bottom:18px}
+ #ecosystem .has-active>.active-card .tech-summary{padding-bottom:40px}
+ #ecosystem .has-active>.active-card .tech-arrow{width:40px;height:40px;left:auto;right:9%}
+ #ecosystem .has-active>.tech-card-3:not(.active-card){grid-column:1 / -1}
+}
+@media(max-width:700px){
+ #ecosystem .tech-categories.has-active{grid-template-columns:minmax(0,1fr)}
+ #ecosystem .has-active>.tech-node,#ecosystem .has-active>.tech-panel{grid-column:1;grid-row:auto;order:initial}
+ #ecosystem .has-active>.tech-node,#ecosystem .has-active>.tech-node:hover{min-height:198px;padding:26px 8%}
+ #ecosystem .has-active>.active-card .tech-number{margin-bottom:16px}
+ #ecosystem .has-active>.active-card .tech-category-name,#ecosystem .has-active>[class*=companion-] .tech-category-name{font-size:23px;max-width:70%}
+ #ecosystem .has-active>.active-card .tech-summary,#ecosystem .has-active>[class*=companion-] .tech-summary{font-size:14px;max-width:75%;padding-bottom:20px}
+ #ecosystem .has-active>.active-card .tech-arrow{width:40px;height:40px;left:auto;right:8%;bottom:20px}
+ #ecosystem .has-active>.active-card .tech-category-icon{right:8%;top:26px}
+ #ecosystem .tech-panel{padding:22px 18px;min-height:0}
+ #ecosystem #tech-name{font-size:30px}
+ #ecosystem .tools-panel-kicker{font-size:10px}
+ #ecosystem .tools-close-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+ #ecosystem .tech-quick-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #ecosystem .tech-quick-item{flex-basis:100px;padding:10px;gap:8px}
+ #ecosystem .tech-tool-symbol,#ecosystem .tech-brand-logo,#ecosystem .tech-tool-symbol svg{width:30px;height:30px}
+}
+
+@media(min-width:1051px) and (max-width:1250px){
+ #ecosystem .tech-quick-list{grid-template-columns:repeat(3,minmax(0,1fr))}
+ #ecosystem .has-active>.active-card .tech-category-name{font-size:20px}
+}

@@ -1,0 +1,9 @@
+/* Keep the established brand and navigation; the Hero lives in hero-editorial.css. */
+:root{--hero-pad:clamp(24px,4.3vw,84px);--hero-header-height:clamp(72px,5vw,84px)}
+.header{height:clamp(80px,5.26vw,92px);padding-inline:var(--hero-pad)}
+.header .wordmark{font-size:clamp(27px,2.1vw,36px);gap:15px;font-weight:500;letter-spacing:-1.8px}
+.header nav{font-size:clamp(11px,.8vw,14px);gap:40px}
+.header .nav-contact{gap:36px;padding:12px 0}
+@media(min-width:1151px){.header{height:var(--hero-header-height)}.header nav{gap:48px}}
+@media(min-width:701px) and (max-width:1150px){.header nav{gap:25px}.header .wordmark{font-size:28px}}
+@media(max-width:700px){.header{height:75px;padding-inline:24px}.header .wordmark{font-size:26px;gap:10px}.header nav{gap:20px;font-size:12px}.header .nav-contact{padding:8px 0;gap:25px}}

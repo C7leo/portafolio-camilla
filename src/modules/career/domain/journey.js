@@ -1,0 +1,5 @@
+export const journey = [
+  { period: 'CURRENT EXPERIENCE', company: 'BCP', role: 'Software Engineering Pre-Professional Intern', description: 'Learning how reliable information takes shape. Supporting data governance, Power BI reporting, data validation, documentation and internal reporting requests.', tags: 'Data governance / Reporting / Information management' },
+  { period: 'PREVIOUS EXPERIENCE', company: 'BanBif', role: 'IT Service Desk / Incident Resolution', description: 'An introduction to enterprise IT: supporting technical requests, investigating incidents and understanding the value of clear communication and structured troubleshooting.', tags: 'Technical support / Troubleshooting / Service management' },
+  { period: 'ACADEMIC FOUNDATION', company: 'UPC', role: 'Software Engineering student · Eighth cycle', description: 'Building a foundation in application development, databases, software quality, agile development and project management. Expected graduation: December 2027, subject to the remaining graduation-project courses and academic schedule.', tags: 'Universidad Peruana de Ciencias Aplicadas / Peru' },
+];

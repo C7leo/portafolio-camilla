@@ -1,0 +1,8 @@
+const arrow = '<span aria-hidden="true">↗</span>';
+export function renderNavigation() { return `<header class="header"><a class="wordmark" href="#home" aria-label="Portfolio home"><img class="brand-logo" src="/assets/shared/brand/logo.png" alt="" width="1451" height="542"/><span class="brand-name">camilla<span class="brand-dot">.</span></span></a><nav aria-label="Main navigation" id="navigation"><a href="#about">About</a><a href="#work">Selected work</a><a href="#journey">Journey</a><a class="nav-contact" href="#contact">Let's connect ${arrow}</a></nav><div class="header-controls"><div class="language-switch" data-language-controls role="group" aria-label="Site language"><button type="button" data-language="en" lang="en" aria-label="English" aria-pressed="true">EN</button><span aria-hidden="true">/</span><button type="button" data-language="es" lang="es" aria-label="Español" aria-pressed="false">ES</button></div><button class="menu-toggle" aria-expanded="false" aria-controls="navigation">Menu <span>+</span></button></div></header>`; }
+export function initNavigation() {
+const menu = document.querySelector('.menu-toggle');
+menu.addEventListener('click', () => { const open = menu.getAttribute('aria-expanded') !== 'true'; menu.setAttribute('aria-expanded', String(open)); document.querySelector('#navigation').classList.toggle('open',open); });
+document.querySelectorAll('nav a').forEach(a=>a.addEventListener('click',()=>{menu.setAttribute('aria-expanded','false');document.querySelector('#navigation').classList.remove('open');}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){menu.setAttribute('aria-expanded','false');document.querySelector('#navigation').classList.remove('open');}});
+}
