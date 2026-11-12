@@ -1,0 +1,46 @@
+﻿<section #experienceScene id="experiencia" class="experience" aria-labelledby="experience-title" tabindex="-1">
+  <app-experience-valley #valley [preview]="valleyPreview" (unavailable)="onGraphicsUnavailable()" />
+  <div class="experience-grid" aria-hidden="true">
+    <app-editorial-grid tone="dark" [rules]="[{ at: '84px' }, { at: 'calc(100% - 32px)' }]" />
+  </div>
+  <div class="experience-reveal">
+    <div class="experience-backdrop" aria-hidden="true">
+      <div class="experience-photo">
+        <canvas #valleyPreview class="experience-valley-preview"></canvas>
+        <div class="experience-aperture-line"></div>
+      </div>
+      <div class="experience-opening" aria-hidden="true">
+        <p class="experience-opening-word"><span class="opening-left">{{ openingParts[0] }}</span><span class="opening-right">{{ openingParts[1] }}</span></p>
+      </div>
+    </div>
+    <div class="experience-visual-intro" aria-hidden="true"></div>
+  </div>
+
+  <div class="experience-content">
+    <div class="experience-stage">
+      <div class="container journey-composition">
+        <header class="experience-header">
+          <div class="title-composition"><h2 id="experience-title">{{ 'Cada experiencia abre un nuevo mundo.' | t }}</h2></div>
+        </header>
+        <ol class="experience-list" [attr.aria-label]="'Trayectoria profesional' | t">
+          @for (entry of experiences; track entry.id) {
+            <li class="experience-entry" [attr.data-company]="entry.id" [attr.aria-labelledby]="entry.id + '-company'">
+              <div class="entry-information">
+                <h3 class="company-name" [id]="entry.id + '-company'">{{ entry.company }}</h3>
+                <p class="role" [id]="entry.id + '-role'">{{ entry.role | t }}</p>
+                <p class="period" [id]="entry.id + '-period'">{{ entry.period }}</p>
+                <p class="description">{{ entry.description | t }}</p>
+                <ul class="technologies" [attr.aria-label]="'Tecnologías' | t">
+                  @for (technology of entry.technologies; track technology) { <li>{{ technology | t }}</li> }
+                </ul>
+              </div>
+            </li>
+          }
+        </ol>
+      </div>
+      <button class="journey-mode" type="button" (click)="toggleReadingMode()" [attr.aria-pressed]="readingMode()">
+        {{ readingMode() ? (english ? 'Return to journey' : 'Volver al recorrido') : (english ? 'Read without animation' : 'Leer sin animación') }}
+      </button>
+    </div>
+  </div>
+</section>

@@ -1,26 +1,17 @@
-# Organización y limpieza de imágenes
+# Recursos activos
 
-Los recursos de presentación se organizan en `public/assets` con los mismos nombres de módulo que `src/modules`. Los archivos de marca compartidos pertenecen a `shared`; las imágenes no se mezclan con los datos de dominio.
+Los archivos gráficos conservan su contenido original. Su ubicación expresa quién los utiliza:
 
-Se actualizaron rutas literales y dinámicas en HTML, JavaScript y CSS, además de pruebas, scripts y documentación. Se conservaron los nombres de las imágenes originales. La comparación SHA-256 confirmó que cada imagen, máscara y video trasladado conserva exactamente sus bytes.
+- `src/app/shared/assets/night-lily.png`: fotografía compartida por Hero, introducción y footer.
+- `src/app/shared/assets/logo.png`: logo del navbar y favicon.
+- `src/app/shell/intro/assets/cinematic-intro.mp4`: vídeo original de entrada.
+- `src/app/contexts/profile/presentation/about/assets/`: retrato y proceso de trabajo.
+- `src/app/contexts/projects/infrastructure/assets/`: imágenes de Harmonix, SpotFinder, NutriSend, SmartCampus, Courtly, EduSpace y Veyra.
+- `public/assets/skills/`: los trece SVG utilizados por el marquee de tecnologías. El nombre de esta ruta pública se conserva para mantener sus URLs. Las atribuciones y la licencia Devicon permanecen junto a los SVG.
+- `public/cv/`: PDF en español e inglés que descarga el navbar.
 
-## Archivos retirados
+Vite resuelve los recursos de `src` mediante `new URL(..., import.meta.url)` y `url(...)` en CSS. Los recursos públicos conservan sus URLs y usan `import.meta.env.BASE_URL` desde la aplicación. No hay referencias a las antiguas fotografías empresariales ni a los iconos del Contacto retirado.
 
-| Ubicación anterior | Motivo |
-| --- | --- |
-| `public/01_mundo.png` | Copia idéntica de la ilustración de About conservada |
-| `public/01_ing_software.png` | Copia idéntica de la ilustración de About conservada |
-| `public/01_datos_gobierno.png` | Copia idéntica de la ilustración de About conservada |
-| `public/01_aprendizaje_continuo.png` | Copia idéntica de la ilustración de About conservada |
-| `public/Gato cósmico neón en órbita.png` | Copia idéntica del gato de proyectos conservado |
-| `public/assets/03_gato_asombrado-3.png` | Variante sin referencias en el código; se conserva el sticker activo |
+Las escenas del horizonte, el valle y el carrusel son código de presentación; sus archivos `.d.ts` forman parte del contrato TypeScript. La reorganización no altera sus shaders ni sus movimientos.
 
-Estas seis imágenes sumaban 8.89 MB. El original `public/03_video.mp4` se trasladó a `resources/data-story/03_video-original.mp4` para conservarlo sin incluir otros 2.22 MB en el sitio publicado. El MP4 optimizado y los seis WebP de respaldo siguen disponibles en el módulo `data-story`.
-
-No se retiraron los fotogramas de movimiento reducido, las máscaras CSS, los logos de categorías no seleccionadas inicialmente ni las capturas de proyectos. Todos tienen consumidores actuales.
-
-## Validación
-
-`npx playwright test tests/assets.spec.js --workers=1` recorre las seis categorías, recoge las imágenes actuales, los posters, el video, la máscara CSS y el favicon. Compara esas referencias con todos los archivos multimedia publicados y verifica respuestas HTTP con tipos `image/*` o `video/*`, evitando falsos positivos del fallback HTML de Vite.
-
-Las pruebas de cada sección validan además las rutas nuevas, los fallos de carga, los cambios de idioma y el video reversible. `npm run build` reconstruye `dist` a partir de la estructura limpia.
+Los PDF se generan desde los Markdown de `docs/career/` con `npm run cv:export`. El exportador utiliza Chrome mediante la dependencia de desarrollo Playwright; el sitio distribuido no necesita un navegador automatizado ni genera documentos en el cliente.

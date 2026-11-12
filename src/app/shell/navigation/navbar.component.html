@@ -1,0 +1,32 @@
+﻿<header class="floating-header">
+  <nav class="navbar" [attr.aria-label]="'Navegación principal' | t">
+    <div class="glass-surface" aria-hidden="true"></div>
+    <a class="brand" href="#inicio" [attr.aria-label]="'Camilla. Ir al inicio' | t" (click)="closeMenu()"><img class="brand-logo" [src]="logoSrc" alt="" width="36" height="36" /></a>
+    <button #menuToggle class="menu-toggle" type="button" aria-controls="primary-navigation"
+      [attr.aria-expanded]="menuOpen()" [attr.aria-label]="(menuOpen() ? 'Cerrar menú' : 'Abrir menú') | t"
+      (click)="menuOpen.set(!menuOpen())">
+      <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+    </button>
+    <div id="primary-navigation" class="navigation" [class.is-open]="menuOpen()">
+      @for (item of sections; track item.id) {
+        <a class="nav-link" [class.active]="activeSection() === item.id" [href]="'#' + item.id"
+          [attr.aria-current]="activeSection() === item.id ? 'location' : null" (click)="closeMenu()">{{ item.label | t }}</a>
+      }
+    </div>
+    <div class="language-selector" role="group" [attr.aria-label]="'Idioma' | t">
+      <button type="button" class="language-choice" lang="en" aria-label="Switch to English"
+        [attr.aria-pressed]="language.language() === 'en'" (click)="language.setLanguage('en')">EN</button>
+      <span aria-hidden="true">/</span>
+      <button type="button" class="language-choice" lang="es" aria-label="Cambiar a español"
+        [attr.aria-pressed]="language.language() === 'es'" (click)="language.setLanguage('es')">ES</button>
+    </div>
+    <a class="contact" href="#contacto" [attr.aria-current]="activeSection() === 'contacto' ? 'location' : null" (click)="closeMenu()">
+      <span>{{ 'Contacto' | t }}</span>
+      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M5 15 15 5M5 5h10v10" /></svg>
+    </a>
+    <a class="cv-download" [href]="cvUrl" [attr.download]="cvFilename" [attr.aria-label]="'Descargar CV en PDF' | t" [title]="'Descargar CV en PDF' | t" (click)="closeMenu()">
+      <span class="cv-label">{{ 'Descargar CV' | t }}</span>
+      <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M10 3v9m-4-4 4 4 4-4M4 13v4h12v-4" /></svg>
+    </a>
+  </nav>
+</header>

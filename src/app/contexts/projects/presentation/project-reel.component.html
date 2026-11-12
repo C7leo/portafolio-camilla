@@ -1,0 +1,51 @@
+<div class="reel-track" [class.is-fallback]="fallback()">
+<div #stage class="reel-stage" [class.is-fallback]="fallback()">
+  <app-editorial-grid [rules]="[{ anchor: '.reel-header', offset: -24 }, { anchor: '.reel-bottom', offset: -20, mobile: false }]" />
+  <header class="reel-header">
+    <p class="reel-index">{{ '03 / Projects' | t }}</p>
+  </header>
+  <h2 id="projects-title" class="reel-title"><span>{{ 'SELECTED' | t }}</span><span>{{ 'WORK.' | t }}</span></h2>
+  <p class="reel-caption">{{ 'Ideas que se convierten en experiencias digitales.' | t }}</p>
+  <div class="reel-rule" aria-hidden="true"></div>
+  <div class="reel-gallery">
+  @if (!fallback()) {
+    <canvas #canvas class="reel-canvas" tabindex="0" role="region"
+      [attr.aria-label]="description" aria-describedby="reel-instructions"></canvas>
+    <p id="reel-instructions" class="sr-only">{{ 'Usa las flechas para explorar los proyectos. Inicio vuelve al primero.' | t }} {{ 'Pulsa Enter o espacio para ver los enlaces del proyecto.' | t }}</p>
+  } @else {
+    <div class="reel-fallback" [attr.aria-label]="'Archivo visual de proyectos' | t">
+      @for (project of projects; track project.id) {
+        <figure>
+          <button class="fallback-project" type="button" (click)="openProject($index)" [attr.aria-label]="project.name">
+          @if (project.image) { <img [src]="project.image" [alt]="project.imageAlt | t" loading="lazy" /> }
+          </button>
+          <figcaption>{{ project.name }} · {{ project.category | t }}</figcaption>
+        </figure>
+      }
+    </div>
+  }
+  </div>
+  @if (!fallback()) {
+    <div class="reel-bottom">
+      <p class="reel-hint">{{ 'Desplázate para descubrir los proyectos' | t }}</p>
+      <nav class="reel-project-links" [attr.aria-label]="'Proyectos' | t">
+        @for (project of projects; track project.id) {
+          <button type="button" (click)="openProject($index)" [class.is-active]="selected() === $index">{{ project.name }}</button>
+        }
+      </nav>
+    </div>
+  }
+  <div class="reel-tooltip" aria-hidden="true"></div>
+  <dialog #projectDialog class="project-dialog" aria-labelledby="reel-project-name" (click)="closeOnBackdrop($event)">
+    <button class="dialog-close" type="button" (click)="closeProject()" [attr.aria-label]="'Cerrar' | t">×</button>
+    @if (openedProject(); as project) {
+      <h3 id="reel-project-name">{{ project.name }}</h3>
+      <p>{{ project.description | t }}</p>
+      <div class="dialog-links">
+        <a [href]="project.landingUrl" target="_blank" rel="noopener noreferrer">{{ 'Ver landing page' | t }}</a>
+        <a [href]="project.repositoryUrl" target="_blank" rel="noopener noreferrer">{{ 'Repositorio' | t }}</a>
+      </div>
+    }
+  </dialog>
+</div>
+</div>
