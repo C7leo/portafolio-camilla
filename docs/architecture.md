@@ -68,7 +68,7 @@ Los datos del portafolio son de lectura. Los modelos y contratos se mantienen pe
 ## Editar contenido
 
 - Identidad, ubicación, biografía: `contexts/profile/infrastructure/static-profile.repository.ts`.
-- Contacto: variables públicas de `.env`, documentadas en `.env.example`; su adaptador es `contexts/profile/infrastructure/contact-links.ts`.
+- Contacto: variables públicas de `.env`, documentadas en `docs/development.md`; su adaptador es `contexts/profile/infrastructure/contact-links.ts`.
 - Proyectos e imágenes: `contexts/projects/infrastructure/project.catalog.ts` y `assets/`.
 - BCP y BanBif: `contexts/experience/infrastructure/experience.catalog.ts`.
 - Traducciones y metadatos por idioma: `shared/i18n/language.service.ts`.

@@ -9,7 +9,7 @@ npm ci
 npm run dev
 ```
 
-Configura los enlaces públicos de contacto siguiendo `.env.example`. El idioma ES/EN, la introducción, los recorridos visuales, las rutas de proyectos y la descarga de CV forman parte de la aplicación existente.
+Configura los enlaces públicos de contacto en un archivo `.env` local siguiendo [la configuración de desarrollo](docs/development.md#contenido-y-configuración). El idioma ES/EN, la introducción, los recorridos visuales, las rutas de proyectos y la descarga de CV forman parte de la aplicación existente.
 
 ## Organización
 
