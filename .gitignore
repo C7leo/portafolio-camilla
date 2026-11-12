@@ -5,5 +5,5 @@ test-results/
 .local/
 .env
 .env.*
-!.env.example
-.env.example
+.agents/
+skills-lock.json
