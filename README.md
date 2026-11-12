@@ -66,5 +66,6 @@ El exportador genera los PDF públicos con texto seleccionable usando Chrome. Co
 - [Sistema visual](docs/design-system.md)
 - [Idioma ES/EN](docs/i18n.md)
 - [Cuadrícula editorial](docs/editorial-grid.md)
+- [Auditoría responsive y regresiones móviles](docs/mobile-responsive-audit.md)
 
 `.local/` conserva evidencias, auditorías y copias de recuperación; no forma parte del sitio publicado. `node_modules`, `dist` y los resultados de Playwright están ignorados por Git.

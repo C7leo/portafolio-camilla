@@ -37,6 +37,9 @@ export function createProjectReel(canvas, stage, projects, options) {
   const caption = stage.querySelector('.reel-caption');
   const rule = stage.querySelector('.reel-rule');
   const tooltip = stage.querySelector('.reel-tooltip');
+  const labels = [...stage.querySelectorAll('.reel-card-label')];
+  const header = stage.querySelector('.reel-header');
+  const bottom = stage.querySelector('.reel-bottom');
   const cards = projects.map((project, index) => {
     const geometry = new THREE.PlaneGeometry(1, 1, NX, NY);
     geometry.attributes.position.setUsage(THREE.DynamicDrawUsage);
@@ -63,7 +66,9 @@ export function createProjectReel(canvas, stage, projects, options) {
   const point = new THREE.Vector3(), tangent = new THREE.Vector3(), up = new THREE.Vector3();
   const worldUp = new THREE.Vector3(0, 1, 0);
   let width = 1, height = 1, aspect = 1, tanH = 1, cols = 3, rows = 3;
+  let mobileGrid;
   let target = 0, progress = 0, frame = 0, visible = false, disposed = false, failed = false, hovered = -1;
+  let lastTick = 0;
 
   function at(distance) {
     const f = clamp(distance / length) * SAMPLES, index = Math.min(SAMPLES - 1, Math.floor(f)), fraction = f - index;
@@ -73,6 +78,18 @@ export function createProjectReel(canvas, stage, projects, options) {
   }
   function grid(index) {
     const vh = 16 * tanH, vw = vh * aspect;
+    if (width <= 820 && mobileGrid) {
+      // Use the same measured cells for WebGL artwork and its DOM label. Reserve
+      // header, hint and label space before fitting the complete mosaic.
+      const { top, end, gap, labelHeight, w, h } = mobileGrid;
+      const fullWidth = w * cols + gap * (cols - 1);
+      const fullHeight = (h + labelHeight) * rows + gap * (rows - 1);
+      const x = (width - fullWidth) / 2 + (index % cols) * (w + gap);
+      const y = top + Math.max(0, (end - top - fullHeight) / 2) + Math.floor(index / cols) * (h + labelHeight + gap);
+      const label = labels[index];
+      if (label) { label.style.left = `${x}px`; label.style.top = `${y + h}px`; label.style.width = `${w}px`; }
+      return { x: (x + w / 2 - width / 2) / width * vw, y: (height / 2 - y - h / 2) / height * vh, w: w / width * vw, h: h / height * vh };
+    }
     const availableWidth = vw * (cols === 3 ? .74 : .88), availableHeight = vh * .64;
     const gap = availableWidth * .022;
     const w = Math.min((availableWidth - gap * (cols - 1)) / cols, (availableHeight - gap * (rows - 1)) / rows * WIDTH / HEIGHT);
@@ -108,12 +125,20 @@ export function createProjectReel(canvas, stage, projects, options) {
     const head = mix(0, length + cards.length * STEP, span(progress, .14, .63));
     for (const card of cards) {
       const distance = head - card.index * STEP, end = length - WIDTH;
+      let landing = 0;
       card.mesh.visible = distance > WIDTH && card.material.uniforms.ready.value > 0;
-      if (!card.mesh.visible) continue;
-      if (distance < end) pose(card, head, 0);
-      else {
+      if (card.mesh.visible && distance < end) pose(card, head, 0);
+      else if (card.mesh.visible) {
         const start = mix(.14, .63, (end + card.index * STEP) / (length + cards.length * STEP));
-        pose(card, end + card.index * STEP, out(span(progress, start, start + .13)));
+        landing = out(span(progress, start, start + .13));
+        pose(card, end + card.index * STEP, landing);
+      }
+      const label = labels[card.index];
+      if (label) {
+        const readable = width <= 820 && landing >= .995;
+        label.style.visibility = readable ? 'visible' : 'hidden';
+        label.style.opacity = String(span(landing, .995, 1));
+        label.inert = !readable;
       }
     }
     renderer.render(scene, camera);
@@ -124,18 +149,23 @@ export function createProjectReel(canvas, stage, projects, options) {
     target = distance > 0 ? clamp(-track.getBoundingClientRect().top / distance) : 1;
     schedule();
   }
-  function tick() {
+  function tick(time) {
     frame = 0;
     if (disposed || failed || !visible || document.hidden) return;
-    progress += (target - progress) * .09;
+    // Keep the same easing duration on slow mobile GPUs and high-refresh screens.
+    const delta = lastTick ? Math.min(time - lastTick, 250) : 16.7;
+    lastTick = time;
+    progress += (target - progress) * (1 - Math.exp(-delta / 177));
     if (Math.abs(target - progress) < .00005) progress = target;
     render();
     if (Math.abs(target - progress) > .00005) schedule();
+    else lastTick = 0;
   }
   function schedule() {
     if (!frame && visible && !disposed && !failed && !document.hidden) frame = requestAnimationFrame(tick);
   }
   function resize() {
+    if (disposed || failed) return;
     width = canvas.clientWidth; height = canvas.clientHeight;
     if (!width || !height) return;
     aspect = width / height;
@@ -143,8 +173,16 @@ export function createProjectReel(canvas, stage, projects, options) {
     camera.fov = aspect < 16 / 9 ? Math.atan(.561 / aspect) * 360 / Math.PI : 35;
     camera.updateProjectionMatrix();
     tanH = Math.tan(camera.fov * Math.PI / 360);
-    cols = aspect < .9 ? 2 : 3; rows = Math.ceil(cards.length / cols);
-    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+    cols = width <= 820 && height < 700 ? 3 : aspect < .9 ? 2 : 3; rows = Math.ceil(cards.length / cols);
+    if (width <= 820) {
+      const inset = parseFloat(getComputedStyle(bottom).left) || 24;
+      const top = header.offsetTop + header.offsetHeight + 20, end = bottom.offsetTop - 16;
+      const gap = 12, labelHeight = 44;
+      const w = Math.max(1, Math.min((width - inset * 2 - gap * (cols - 1)) / cols,
+        (end - top - gap * (rows - 1) - labelHeight * rows) / rows * WIDTH / HEIGHT));
+      mobileGrid = { top, end, gap, labelHeight, w, h: w * HEIGHT / WIDTH };
+    } else mobileGrid = undefined;
+    renderer.setPixelRatio(Math.min(devicePixelRatio || 1, width <= 820 ? 1.5 : 2));
     renderer.setSize(width, height, false);
     readScroll();
   }
@@ -157,6 +195,7 @@ export function createProjectReel(canvas, stage, projects, options) {
     return hit ? cards.findIndex(card => card.mesh === hit.object) : -1;
   }
   function pointerMove(event) {
+    if (event.pointerType === 'touch') return;
     const index = hitTest(event);
     canvas.style.cursor = index >= 0 ? 'pointer' : 'auto';
     tooltip.style.opacity = index >= 0 ? '1' : '0';
@@ -213,6 +252,7 @@ export function createProjectReel(canvas, stage, projects, options) {
   });
   if (preference.matches) unavailable();
   resize();
+  document.fonts.ready.then(() => { if (!disposed) resize(); });
   function dispose() {
     if (disposed) return;
     disposed = true; cancelAnimationFrame(frame); observer.disconnect(); sizes.disconnect();
@@ -226,6 +266,12 @@ export function createProjectReel(canvas, stage, projects, options) {
     canvas.removeEventListener('webglcontextlost', contextLost);
     cards.forEach(card => { card.texture?.dispose(); card.material.dispose(); card.geometry.dispose(); });
     scene.clear(); renderer.dispose(); renderer.forceContextLoss();
+    // A context loss or motion-preference change switches to the DOM gallery.
+    // Its heading must not inherit the ribbon's translated/blurred final pose.
+    lines.forEach(line => ['transform', 'filter', 'opacity'].forEach(property => line.style.removeProperty(property)));
+    caption.style.removeProperty('transform'); caption.style.removeProperty('opacity');
+    rule.style.removeProperty('transform');
+    labels.forEach(label => { label.inert = true; label.style.visibility = 'hidden'; });
     delete stage.dataset.reelProgress;
   }
   return dispose;

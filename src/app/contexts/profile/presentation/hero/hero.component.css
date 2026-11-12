@@ -20,7 +20,7 @@
   justify-content: space-between;
   gap: 48px;
   min-height: calc(100svh - 96px);
-  padding-block: 24px 36px;
+  padding-block: 24px 76px;
   animation: hero-reveal 750ms ease-out both;
 }
 
@@ -98,6 +98,12 @@ h1 { position: relative; isolation: isolate; margin: 0; font-weight: 800; }
 .hero-intro-pending .name-letters, .hero-intro-pending .surname-letters { opacity: 0; clip-path: inset(0 100% 0 0); filter: blur(8px); }
 .hero-intro-pending .hero-meta, .hero-intro-pending .hero-details > * { opacity: 0; transform: translateY(8px); }
 .hero-details { position: relative; }
+.hero-scroll-cue { position: absolute; bottom: -68px; left: 50%; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 60px; transform: translateX(-50%); border-radius: 22px; text-decoration: none; }
+.hero-scroll-cue svg { display: block; pointer-events: none; }
+.hero-scroll-outline { stroke: rgb(255 255 255 / .75); stroke-width: 1.3; }
+.hero-scroll-arrow { stroke: var(--violet); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; animation: hero-scroll-down 1.8s ease-in-out infinite; }
+.hero-intro-pending .hero-scroll-cue { visibility: hidden; }
+.hero-intro-pending .hero-scroll-arrow { animation-play-state: paused; }
 
 @keyframes hero-reveal { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
@@ -107,10 +113,21 @@ h1 { position: relative; isolation: isolate; margin: 0; font-weight: 800; }
   .hero-actions { grid-column: 9 / -1; flex-direction: column; align-items: flex-end; gap: 0; }
 }
 
-@media (max-width: 820px) { :host::before { top: -88px; background-position: 72% center; } }
+@media (max-width: 820px) {
+  /* Safari clips the negative backdrop inset when overflow-x:clip is on this
+     host. The panel already ends at the viewport edge; no clipping is needed. */
+  :host { overflow: visible; }
+  :host::before { top: -88px; background-position: 72% center; }
+}
+@keyframes hero-scroll-down {
+  0% { transform: translateY(-7px); opacity: 0; }
+  30% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateY(7px); opacity: 0; }
+}
 
 @media (max-width: 640px) {
-  .hero { min-height: min(680px, calc(100svh - 88px)); gap: 64px; padding-block: 22px 28px; }
+  .hero { min-height: min(680px, calc(100svh - 88px)); gap: 64px; padding-block: 22px 32px; }
   .hero-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
   .location { grid-column: 1; font-size: 13px; }
   .discipline { grid-column: 2; font-size: 15px; }
@@ -119,13 +136,18 @@ h1 { position: relative; isolation: isolate; margin: 0; font-weight: 800; }
   .hero-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; padding-top: 22px; }
   .specialty { grid-column: 1; }
   .specialty-data { grid-column: 2; justify-self: end; text-align: right; }
-  .hero-actions { grid-column: 1 / -1; flex-direction: row; justify-content: space-between; align-items: center; gap: 28px; }
+  .hero-actions { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr); align-items: center; gap: 12px; }
+  .hero-actions .primary { grid-column: 1; grid-row: 1; justify-self: start; }
+  .hero-actions .secondary { grid-column: 3; grid-row: 1; justify-self: end; }
+  .hero-scroll-cue { position: static; grid-column: 2; grid-row: 1; justify-self: center; transform: none; }
 }
 
 @media (max-height: 650px) and (min-width: 641px) {
-  .hero { gap: 24px; padding-block: 16px 20px; }
+  .hero { gap: 24px; padding-block: 16px 76px; }
   .name { font-size: min(25.5cqw, 36svh); }
   .surname { margin-top: 12px; font-size: min(7.5cqw, 9svh); }
 }
+@media (max-width: 640px) and (max-height: 650px) { .hero { gap: 24px; padding-block: 18px 32px; } }
 
 @media (prefers-reduced-motion: reduce) { .hero, .name::before { animation: none; } .hero-link { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .hero-scroll-arrow { animation: none; opacity: 1; transform: none; } }
