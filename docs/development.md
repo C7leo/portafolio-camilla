@@ -26,7 +26,17 @@ La aplicación conserva el compilador Angular en tiempo de ejecución y el arran
 
 ## Contenido y configuración
 
-Copiar `.env.example` a `.env` y configurar únicamente los destinos públicos de contacto que se quieran mostrar. Las variables `VITE_*` quedan visibles en el navegador; no contienen credenciales privadas. Tras editar el entorno, reiniciar Vite y reconstruir la versión publicada.
+Crear un archivo `.env` local y configurar únicamente los destinos públicos de contacto que se quieran mostrar:
+
+```dotenv
+VITE_CONTACT_EMAIL=
+VITE_CONTACT_LINKEDIN=
+VITE_CONTACT_GITHUB=
+```
+
+Las variables `VITE_*` quedan visibles en el navegador; no deben contener credenciales privadas. Los destinos vacíos se omiten. Tras editar el entorno, reiniciar Vite y reconstruir la versión publicada. `VITE_GA_MEASUREMENT_ID` está reservada para una integración futura; no activa seguimiento por sí sola.
+
+Los archivos `.env*`, la carpeta `.agents/` y `skills-lock.json` permanecen locales y están excluidos de Git.
 
 Las traducciones están en `src/app/shared/i18n/`. La selección ES/EN mantiene las claves de almacenamiento existentes y el PDF elegido en el navbar. No se necesita un sistema de traducciones adicional.
 
