@@ -1,8 +1,0 @@
-export const technologies = [
-  { name: 'Software development', label: 'ACADEMIC STUDY & PRACTICE', tech: 'Angular · Java · Spring Boot · C# · Vue.js · Python · Android · Flutter · Kotlin', description: 'Technologies worked with or studied across my software learning journey. Project-level contributions and proficiency are still to be documented.' },
-  { name: 'Data & governance', label: 'PROFESSIONAL EXPERIENCE', tech: 'Data validation · Structured datasets · Technical documentation', description: 'Supporting information management and reporting at BCP, while learning about data quality, traceability and ownership.' },
-  { name: 'Reporting', label: 'PROFESSIONAL EXPERIENCE / CONTINUED LEARNING', tech: 'Power BI · Reporting · Data transformation', description: 'Working with reports, indicators and structured information. Continuing to develop my understanding of DAX, data modeling and automation.' },
-  { name: 'Databases', label: 'ACADEMIC STUDY & PRACTICE', tech: 'SQL · PostgreSQL · Relational design', description: 'Studying how to structure, query and connect information to applications. Specific project implementations have not been provided.' },
-  { name: 'Cloud & automation', label: 'CURRENT LEARNING', tech: 'Azure · Microsoft Fabric · Lakehouse concepts · Power Automate', description: 'Exploring cloud data platforms and opportunities to automate repetitive workflows. These are learning areas, not claims of production delivery.' },
-  { name: 'Intelligent systems', label: 'EXPLORATION INTEREST', tech: 'RAG · Embeddings · Document processing · Vector retrieval', description: 'Interested in how applications retrieve useful context from documents. No completed implementation is claimed.' },
-];

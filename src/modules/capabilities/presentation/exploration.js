@@ -1,4 +1,0 @@
-export function renderExploration() {
-  return `<section class="exploring section-pad"><div class="exploring-layout"><div><span class="eyebrow"><span class="section-number">06</span> THE NEXT QUESTIONS</span><h2>STILL<br><span data-es="APRENDIENDO.">LEARNING.</span></h2><span class="exploring-outline" aria-hidden="true">ALWAYS.</span></div><div class="exploring-questions">${[['01','How can data become more reliable?','Data quality, traceability and better pipelines.'],['02','What can we make simpler?','Thoughtful automation and clearer application design.'],['03','What becomes possible next?','Cloud data platforms and context-aware applications.']].map(([n,t,d])=>`<article><span>${n}</span><div><h3>${t}</h3><p>${d}</p></div><span aria-hidden="true">↗</span></article>`).join('')}</div></div></section>`;
-}
-

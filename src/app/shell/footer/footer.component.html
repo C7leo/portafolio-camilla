@@ -1,0 +1,48 @@
+<footer id="contacto" class="site-footer" role="contentinfo" tabindex="-1">
+  <app-editorial-grid [rules]="[{ anchor: '.brand-logo', offset: -24 }, { anchor: '.footer-content', edge: 'bottom', offset: 24 }]" />
+  <div class="footer-stage" aria-hidden="true"></div>
+  <p class="footer-glass-wordmark" aria-hidden="true" appReveal="focus" [motionDuration]="1200">Camilla.</p>
+  <div class="footer-fog" aria-hidden="true"></div>
+
+  <div class="footer-content">
+    <div class="footer-brand">
+      <a class="brand-logo" href="#inicio" [attr.aria-label]="'Camilla. Ir al inicio' | t">Camilla.</a>
+      <h2 class="brand-title" appReveal="focus" [motionDuration]="1000">{{ 'Tecnología con propósito.' | t }}</h2>
+      <p class="brand-description">{{ 'Desarrollo, datos y tecnología para crear soluciones con propósito.' | t }}</p>
+      @if (contacts.length) { <a class="brand-cta" [href]="contacts[0].href" [attr.target]="contacts[0].external ? '_blank' : null" [attr.rel]="contacts[0].external ? 'noopener noreferrer' : null">{{ 'Conversemos' | t }}</a> }
+      <p class="brand-copy">© 2026 Camilla Espinoza · {{ 'Lima, Perú' | t }}</p>
+      <p class="brand-credit">{{ 'DESIGNED & DEVELOPED BY CAMILLA' | t }}</p>
+      <ul class="brand-disciplines" [attr.aria-label]="'Habilidades' | t">
+        <li>{{ 'Desarrollo' | t }}</li><li>{{ 'Datos' | t }}</li><li>Cloud</li>
+      </ul>
+    </div>
+
+    <nav class="footer-column" [attr.aria-label]="'Navegación del pie de página' | t">
+      <h3>{{ 'Explorar' | t }}</h3>
+      <ul>
+        @for (link of navigation; track link.href) { <li><a [href]="link.href">{{ link.label | t }}</a></li> }
+      </ul>
+    </nav>
+    <nav class="footer-column" [attr.aria-label]="'Proyectos' | t">
+      <h3>{{ 'Proyectos' | t }}</h3>
+      <ul>
+        @for (project of projects; track project.id) {
+          <li><a [href]="project.landingUrl" target="_blank" rel="noopener noreferrer">{{ project.name }}<span class="sr-only"> {{ '(se abre en otra pestaña)' | t }}</span></a></li>
+        }
+      </ul>
+    </nav>
+    <nav class="footer-column" [attr.aria-label]="'Canales de contacto' | t">
+      <h3>{{ 'Contacto' | t }}</h3>
+      <ul>
+        @for (link of contacts; track link.id) {
+          <li><a [href]="link.href" [attr.target]="link.external ? '_blank' : null" [attr.rel]="link.external ? 'noopener noreferrer' : null">
+            {{ link.id === 'linkedin' ? 'LinkedIn' : link.id === 'github' ? 'GitHub' : ('Email' | t) }}
+            @if (link.external) { <span class="sr-only">{{ '(se abre en otra pestaña)' | t }}</span> }
+          </a></li>
+        }
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+

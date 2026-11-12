@@ -1,0 +1,43 @@
+﻿:host { display: block; background: #FFFFFF; color: #202020; }
+.about { scroll-margin-top: 84px; }
+.about:focus { outline: none; }
+.editorial-scene { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; gap: clamp(48px, 9vw, 144px); padding-block: 64px 96px; }
+.visual { min-width: 0; margin: 0; }
+.portrait { max-width: 580px; }
+.portrait-mask { overflow: clip; }
+.visual img { display: block; width: 100%; height: auto; }
+.portrait img { filter: grayscale(1); }
+.process { max-width: 340px; width: 82%; }
+.process img { filter: grayscale(1); }
+figcaption { margin-top: 12px; font-size: 11px; line-height: 1.5; }
+.editorial-notes { display: grid; justify-items: start; gap: 32px; padding-top: clamp(32px, 6vw, 88px); }
+.section-index { margin: 0 0 18px; font-size: 12px; font-weight: 500; line-height: 1.5; }
+h2 { margin: 0; font-size: clamp(28px, 3.1vw, 44px); font-weight: 500; line-height: 1.08; letter-spacing: -.045em; }
+h2 span { display: block; }
+h2 span:last-child { margin-left: .32em; }
+.editorial-copy { max-width: 390px; }
+.editorial-copy p { margin: 0; text-wrap: pretty; }
+.introduction { font-size: 17px; font-weight: 500; line-height: 1.55; letter-spacing: -.015em; }
+.background { margin-top: 16px !important; font-size: 14px; line-height: 1.65; }
+.manifesto { justify-self: end; width: min(78%, 260px); aspect-ratio: 1; container-type: inline-size; display: flex; align-items: center; padding: 24px; background: #E2F4A6; }
+.manifesto p { margin: 0; font-size: 23cqw; font-weight: 700; line-height: .98; letter-spacing: -.045em; }
+.manifesto span { display: block; }
+.manifesto span:nth-child(2) { padding-left: .22em; }
+.image-space { display: flex; align-items: end; width: 100%; padding: 16px; border: 1px solid #D8D8D8; font-size: 12px; }
+.portrait-space { aspect-ratio: 3 / 4; }
+.process-space { aspect-ratio: 3 / 2; }
+:host-context(html[lang='es']) .manifesto p { font-size: 15cqw; }
+@media (max-width: 1050px) {
+  .editorial-scene { gap: 48px; }
+  .editorial-notes { padding-top: 40px; gap: 26px; }
+  .process { width: 100%; }
+}
+@media (max-width: 640px) {
+  .editorial-scene { grid-template-columns: minmax(0, 1fr); gap: 48px; padding-block: 32px 56px; }
+  .portrait { width: 90%; }
+  .editorial-notes { width: 88%; justify-self: end; padding-top: 0; gap: 28px; }
+  h2 { font-size: clamp(26px, 7vw, 34px); }
+  .process { width: 100%; }
+  .introduction { font-size: 16px; }
+  .manifesto { width: 82%; padding: 22px; }
+}
