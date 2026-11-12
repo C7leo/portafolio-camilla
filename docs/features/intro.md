@@ -2,8 +2,8 @@
 
 The independent intro is mounted by AppComponent before the existing navbar/main.
 This placement is necessary: StoryChapters reparents/pins the Hero host, which
-would interrupt a native modal nested inside Hero. No navbar or chapter animation
-files are changed. CinematicIntroState coordinates completion with Hero and keeps
+would interrupt a native modal nested inside Hero. The navbar remains independent.
+CinematicIntroState coordinates completion with Hero and keeps
 the optional session decision in one place, with browser/platform/storage guards.
 
 Assets use their actual existing paths:
@@ -43,3 +43,28 @@ symbol, pastel hover and a visible keyboard focus state.
 Verified in Chrome: natural end, skip/Escape, repeat visits, blocked autoplay,
 failed video, unavailable storage, initial/live reduced motion, direct section
 links and mobile without horizontal overflow.
+
+## Mobile frame continuity
+
+The original PNG is 1672×941; the encoded film is 1280×720. They depict the same
+flower but are distinct frames. Matching `cover` alone does not align their
+effective crop: the mobile film starts centered in the dynamic viewport while
+the Hero background is cropped at 72% inside its stable, sometimes shorter frame.
+
+At natural completion on screens up to 820 px, the final floral shot smoothly
+adopts the Hero's actual background rectangle and focal position. It then
+dissolves to the original PNG, with its exact gradient and crop, holds that still,
+and removes the overlay. Hero text begins only afterward. The last visible intro
+image is therefore the same image and geometry as the Hero, rather than a claim
+that two different source frames are pixel-identical. Resize continues to align
+the still and the registered film. Desktop and skip timing retain their paths.
+
+`tests/cinematic-continuity.spec.js` compares both images before text annotations
+at 375, 390, 393 and 430 px in Chrome and WebKit, checks their geometry, and verifies
+continuous forward/reverse pin release between Home and About. A translated
+scroll link appears after Hero construction on phones, tablets and desktops.
+Its visible indicator is a fine mouse-shaped outline with a violet arrow moving
+downward in a loop. The translated label is available to screen readers. Reduced
+motion keeps the arrow static. On phones, the icon occupies the center column
+of the same row as the two Hero links, with separation from the section edge.
+On tablets and desktops, it is centered below the links in reserved bottom space.

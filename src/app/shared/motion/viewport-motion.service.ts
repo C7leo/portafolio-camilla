@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, NgZone, OnDestroy, PLATFORM_ID } from '@angular/core';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 type Progress = (bounds: DOMRectReadOnly, viewportHeight: number, reduced: boolean) => void;
 
@@ -22,6 +23,9 @@ export class ViewportMotionService implements OnDestroy {
   constructor() {
     this.supported = isPlatformBrowser(inject(PLATFORM_ID)) && typeof IntersectionObserver !== 'undefined';
     if (!this.supported) return;
+    // Browser chrome on touch devices must not refresh pinned scenes mid-gesture.
+    // Actual element/orientation changes are observed by their scene owners.
+    ScrollTrigger.config({ ignoreMobileResize: true });
     this.zone.runOutsideAngular(() => {
       this.media = matchMedia('(prefers-reduced-motion: reduce)');
       this.lastReduced = this.reduced;

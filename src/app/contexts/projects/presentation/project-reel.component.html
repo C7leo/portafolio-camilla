@@ -26,6 +26,13 @@
   }
   </div>
   @if (!fallback()) {
+    <nav class="reel-card-labels" [attr.aria-label]="'Proyectos' | t">
+      @for (project of projects; track project.id) {
+        <button class="reel-card-label" type="button" inert (click)="openProject($index)">{{ project.name }}</button>
+      }
+    </nav>
+  }
+  @if (!fallback()) {
     <div class="reel-bottom">
       <p class="reel-hint">{{ 'Desplázate para descubrir los proyectos' | t }}</p>
       <nav class="reel-project-links" [attr.aria-label]="'Proyectos' | t">

@@ -21,6 +21,7 @@ export class StoryChaptersDirective implements AfterViewInit, OnDestroy {
   private frame = 0;
   private destroyed = false;
   private short = false;
+  private viewportWidth = innerWidth;
   private scrollMargin = '';
   private refreshFocus?: HTMLElement;
 
@@ -92,9 +93,6 @@ export class StoryChaptersDirective implements AfterViewInit, OnDestroy {
         // caches its former height on resize and lets Experience cover the canvas.
         if (outgoing.name === 'projects' && outgoing.surface.querySelector('app-project-reel')) continue;
         const surface = incoming.surface;
-        const clearReleasedPin = (self: ScrollTrigger): void => {
-          if (self.progress >= 1 && !self.isActive) gsap.set(outgoing.host, { clearProps: 'transform' });
-        };
         surface.dataset.storyTransition = incoming.name === 'about' ? 'slide-over' : incoming.name === 'experience' ? 'cinematic' : 'editorial';
         const timeline = gsap.timeline({
           defaults: { ease: 'none' },
@@ -107,11 +105,9 @@ export class StoryChaptersDirective implements AfterViewInit, OnDestroy {
               surface.dataset.storyProgress = self.progress.toFixed(4);
               this.updateFocusVisibility(incoming);
             },
-            onLeave: clearReleasedPin,
             onRefresh: self => {
               surface.dataset.storyStart = String(self.start);
               surface.dataset.storyEnd = String(self.end);
-              clearReleasedPin(self);
             },
           },
         });
@@ -133,6 +129,12 @@ export class StoryChaptersDirective implements AfterViewInit, OnDestroy {
     }, 120);
   };
   private readonly onResize = (): void => {
+    // Address-bar motion changes innerHeight but not the svh chapter surfaces.
+    // Their ResizeObserver handles actual height changes; width/orientation must
+    // still rebuild the relevant pin configuration.
+    const widthChanged = this.viewportWidth !== innerWidth;
+    this.viewportWidth = innerWidth;
+    if (!widthChanged && matchMedia('(pointer: coarse)').matches) return;
     if ((innerHeight <= 500) !== this.short) this.setup();
     else this.queueRefresh();
   };
