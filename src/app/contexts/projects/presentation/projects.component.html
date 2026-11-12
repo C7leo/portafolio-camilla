@@ -1,0 +1,22 @@
+<section id="proyectos" class="projects" [class.is-detail]="detailProject()" aria-labelledby="projects-title" tabindex="-1">
+  @if (detailProject(); as project) {
+    <app-editorial-grid [rules]="[{ at: 'calc(var(--section-entry-space) - 32px)' }]" />
+    <article class="project-detail container">
+      <a class="back-link" href="#proyectos">{{ 'Volver al archivo' | t }}</a>
+      <header class="detail-header">
+        <p class="section-index">{{ '03 / PROJECT ARCHIVE' | t }}</p>
+        <h2 id="projects-title"><span id="project-detail-title" tabindex="-1">{{ project.name }}</span></h2>
+        <p class="detail-description">{{ project.description | t }}</p>
+      </header>
+      <div class="detail-art"><app-project-art [project]="project" /></div>
+      @if (project.technologies.length) {
+        <p class="detail-technologies">{{ project.technologies.join(' / ') }}</p>
+      }
+      @if (!project.image) {
+        <p class="detail-note">{{ 'La imagen y la documentación detallada de este proyecto aún no están disponibles.' | t }}</p>
+      }
+    </article>
+  } @else {
+    <app-project-reel [projects]="projects" />
+  }
+</section>

@@ -1,0 +1,63 @@
+:host { display: block; }
+.reel-track { position: relative; height: 700svh; background: #000000; color: #FFFFFF; }
+.reel-stage { position: sticky; top: 0; isolation: isolate; width: 100%; height: 100svh; overflow: hidden; background: #000000; }
+.reel-header { position: absolute; z-index: 3; top: 108px; left: max(56px, calc((100% - 1200px) / 2)); pointer-events: none; }
+.reel-index { margin: 0; font-size: var(--editorial-label-size); font-weight: 500; line-height: 1.5; }
+.reel-title { position: absolute; inset: 0; margin: 0; font-size: clamp(56px, 8.5vw, 136px); font-weight: 500; line-height: 1; letter-spacing: -0.055em; pointer-events: none; }
+.reel-title span { position: absolute; left: 0; right: 0; text-align: center; white-space: nowrap; will-change: transform; }
+.reel-title span:first-child { top: calc(50% - 1.1em); padding-right: 15vw; }
+.reel-title span:last-child { top: calc(50% + .15em); padding-left: 15vw; }
+.reel-caption { position: absolute; top: 50%; left: 50%; width: 16em; margin: 0; transform: translate(-50%, -50%); font-size: 12px; font-weight: 500; line-height: 1.4; text-align: center; pointer-events: none; }
+.reel-rule { position: absolute; top: 50%; left: 8%; right: 8%; height: 1px; background: rgb(255 255 255 / 14%); transform: scaleX(0); transform-origin: left; }
+.reel-gallery, .reel-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+.reel-canvas { display: block; touch-action: pan-y; }
+.reel-canvas:focus-visible { outline: 2px solid #E2F4A6; outline-offset: -8px; }
+.reel-bottom { position: absolute; z-index: 3; bottom: max(26px, env(safe-area-inset-bottom)); left: var(--editorial-rail-inset); right: var(--editorial-rail-inset); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 3fr); gap: 20px 40px; align-items: center; pointer-events: none; }
+.reel-hint { margin: 0; max-width: 190px; font-size: 12px; line-height: 1.4; color: rgb(255 255 255 / 68%); }
+.reel-project-links { display: grid; grid-template-columns: repeat(7, minmax(max-content, 1fr)); gap: 0 20px; min-width: 0; pointer-events: auto; }
+.reel-project-links button:first-child { text-align: left; }
+.reel-project-links button:last-child { text-align: right; }
+.reel-project-links button { padding: 10px 0; min-height: 44px; border: 0; background: transparent; color: #FFFFFF; font: inherit; font-size: 12px; cursor: pointer; transition: color 200ms ease; }
+.reel-project-links button:hover, .reel-project-links button.is-active { color: #E2F4A6; }
+.reel-tooltip { position: absolute; z-index: 4; padding: 8px 12px; background: #FFFFFF; color: #202020; font-size: 12px; line-height: 1.2; pointer-events: none; opacity: 0; transition: opacity 160ms ease; }
+.reel-track.is-fallback { height: auto; }
+.reel-stage.is-fallback { position: relative; height: auto; min-height: 100svh; padding: 112px var(--editorial-rail-inset) 96px; }
+.is-fallback .reel-header { position: static; margin-bottom: 36px; }
+.is-fallback .reel-title { position: static; margin-bottom: 40px; font-size: var(--editorial-title-size); }
+.is-fallback .reel-title span { position: static; display: block; padding: 0; text-align: left; }
+.is-fallback .reel-title span:last-child { margin-left: .5em; }
+.is-fallback .reel-caption, .is-fallback .reel-rule { display: none; }
+.is-fallback .reel-gallery { position: static; height: auto; }
+.reel-fallback { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px 24px; }
+.reel-fallback figure { min-width: 0; margin: 0; }
+.reel-fallback img { display: block; width: 100%; aspect-ratio: 3 / 2; object-fit: contain; object-position: center; background: #FFFFFF; }
+.reel-fallback figcaption { margin-top: 12px; font-size: 13px; line-height: 1.5; }
+.fallback-project { display: block; width: 100%; padding: 0; border: 0; background: transparent; cursor: pointer; }
+.project-dialog { width: min(440px, calc(100vw - 40px)); box-sizing: border-box; max-height: calc(100svh - 48px); padding: 44px 32px 32px; border: 1px solid #202020; background: #FFFFFF; color: #202020; font: inherit; }
+.project-dialog::backdrop { background: rgb(0 0 0 / 60%); }
+.project-dialog h3 { margin: 0 0 12px; font-size: 32px; font-weight: 600; letter-spacing: -0.04em; }
+.project-dialog p { margin: 0; font-size: 16px; line-height: 1.5; }
+.dialog-close { position: absolute; top: 4px; right: 4px; width: 44px; height: 44px; border: 0; background: transparent; color: inherit; font: inherit; font-size: 26px; cursor: pointer; }
+.dialog-links { display: flex; flex-wrap: wrap; gap: 16px 24px; margin-top: 28px; }
+.dialog-links a { display: inline-flex; align-items: center; min-height: 44px; color: inherit; text-underline-offset: 6px; transition: color 200ms ease; }
+.dialog-links a:hover { color: #5A4EFF; }
+.project-dialog :focus-visible, .fallback-project:focus-visible { outline: 2px solid #5A4EFF; outline-offset: 3px; }
+@media (max-width: 1050px) { .reel-header { left: 40px; } .reel-bottom { gap: 16px; } }
+@media (max-width: 640px) {
+  .reel-track { height: 600svh; }
+  .reel-track.is-fallback { height: auto; }
+  .reel-header { top: 104px; left: 24px; }
+  .reel-title { font-size: clamp(40px, 10vw, 64px); }
+  .reel-caption { font-size: 11px; }
+  .reel-bottom { left: 24px; right: 24px; bottom: 20px; display: block; }
+  .reel-hint { margin-bottom: 8px; font-size: 11px; }
+  .reel-project-links { grid-template-columns: repeat(4, minmax(max-content, 1fr)); gap: 0 12px; }
+  .reel-project-links button { text-align: left; }
+  .reel-project-links button:last-child { text-align: left; }
+  .reel-project-links button { font-size: 11px; min-height: 40px; padding-block: 6px; }
+  .reel-fallback { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dialog-links a, .reel-project-links button, .reel-tooltip { transition: none; }
+  .reel-title span { will-change: auto; }
+}

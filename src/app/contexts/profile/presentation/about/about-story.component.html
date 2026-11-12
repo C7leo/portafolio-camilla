@@ -1,0 +1,53 @@
+<section class="about-story" [attr.aria-label]="language.translate('My approach to technology')" [attr.lang]="language.language()">
+  <div class="story-stage">
+    <app-editorial-grid [rules]="[{ at: '32px' }, { at: 'calc(100% - 32px)', mobile: false }]" />
+    <app-about-horizon-bloom class="story-horizon" />
+    <div class="story-canvas container">
+      <div class="story-copy">
+      @for (passage of passages(); track $index) {
+        <p class="story-passage">
+          @for (line of passage; track $index) {
+            <span class="story-line">@for (word of line; track $index) {<span class="story-word">{{ word }}</span>{{ ' ' }}}</span>
+          }
+        </p>
+      }
+      </div>
+    </div>
+  </div>
+</section>
+<div class="editorial-transition">
+  <app-editorial-grid [rules]="[{ at: '24px' }]" />
+  <ng-content />
+</div>
+
+<section class="technology-marquee" [attr.aria-label]="language.language() === 'es' ? 'Tecnologías con las que creo' : 'Technologies I build with'">
+  <app-editorial-grid [rules]="[{ at: '24px', mobile: false }, { at: 'calc(100% - 32px)' }]" />
+  <div class="marquee-header container">
+    <p>{{ language.language() === 'es' ? 'Ideas en movimiento. Herramientas para crearlas.' : 'Ideas in motion. Tools to bring them to life.' }}</p>
+    <button class="marquee-toggle" type="button" [attr.aria-pressed]="paused()" (click)="toggleMarquee()">
+      {{ language.language() === 'es' ? (paused() ? 'Reanudar movimiento' : 'Pausar movimiento') : (paused() ? 'Resume motion' : 'Pause motion') }}
+    </button>
+  </div>
+  <div class="marquee-rows">
+    @for (row of technologies; track $index) {
+      <div class="marquee-row">
+        <div class="marquee-track">
+          @for (copy of [0, 1]; track copy) {
+            <ul class="marquee-group" [attr.aria-hidden]="copy === 1 ? 'true' : null">
+              @for (technology of row; track technology.name) {
+                <li class="technology-pill">
+                  @if (technology.icon) {
+                    <img [src]="technology.icon" [class.is-dotnet]="technology.name === '.NET'" width="24" height="24" alt="" decoding="async" />
+                  } @else {
+                    <span class="technology-symbol" [attr.data-tech-icon]="technology.symbol" aria-hidden="true"></span>
+                  }
+                  <span>{{ technology.name }}</span>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</section>

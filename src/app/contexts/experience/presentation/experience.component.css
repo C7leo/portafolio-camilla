@@ -1,0 +1,66 @@
+﻿:host { display: block; }
+.experience { position: relative; isolation: isolate; overflow: clip; scroll-margin-top: 92px; background: #000000; color: #FFFFFF; }
+.experience:focus { outline: none; }
+.experience-grid { position: sticky; top: 0; height: 100svh; margin-bottom: -100svh; z-index: 4; pointer-events: none; mix-blend-mode: difference; }
+.experience-reveal { display: none; position: relative; z-index: 1; isolation: isolate; overflow: clip; }
+.experience[data-zoom-enabled] .experience-reveal { display: block; }
+.experience-backdrop { position: sticky; top: 0; width: 100%; height: 100svh; margin-bottom: -100svh; overflow: hidden; background: #FFFFFF; pointer-events: none; }
+.experience-photo { position: absolute; inset: 0; right: auto; bottom: auto; width: 100%; height: 100%; background: #000; filter: grayscale(1); contain: layout paint; }
+.experience-valley-preview { position: absolute; inset: 0; display: block; width: 100%; height: 100%; object-fit: cover; opacity: .7; pointer-events: none; }
+.experience-aperture-line { position: absolute; inset: 0; background: #a9a9a6; }
+.experience-opening { position: absolute; inset: 0; color: #212121; }
+.experience-opening-word { position: absolute; top: 50%; left: 0; right: 0; margin: 0; font-size: min(12vw, 16svh); font-weight: 800; line-height: .8; letter-spacing: -.045em; }
+.experience-opening-word span { position: absolute; top: 0; white-space: nowrap; }
+.opening-left { right: 50%; transform: translate(calc(var(--opening-width, 1.5px) * -.5), -50%); }
+.opening-right { left: 50%; transform: translate(calc(var(--opening-width, 1.5px) * .5), -50%); }
+/* Reserve the zoom distance plus a full viewport and a brief viewing interval. */
+.experience-visual-intro { height: 300svh; pointer-events: none; }
+
+.experience-content { position: relative; z-index: 3; }
+/* Start the pinned journey at the end of the 125svh zoom, overlapping the
+   remaining 175svh of the aperture's existing 300svh exit surface. */
+.experience[data-journey-enabled] .experience-content { margin-top: -175svh; }
+.experience-stage { position: relative; min-height: 100svh; }
+.journey-composition { padding-block: 132px 104px; }
+.experience-header { text-align: center; max-width: 760px; margin-inline: auto; }
+.section-index { margin: 0 0 24px; font-size: var(--editorial-label-size); line-height: 1.5; }
+.title-composition { width: fit-content; margin-inline: auto; position: relative; isolation: isolate; }
+.title-composition::before { content: ''; position: absolute; z-index: -1; left: 0; bottom: .02em; width: 1.15em; height: .14em; background: var(--pink); font-size: var(--editorial-title-size); }
+h2 { margin: 0; font-size: var(--editorial-title-size); font-weight: var(--editorial-title-weight); line-height: 1.05; letter-spacing: var(--editorial-title-tracking); }
+.experience-intro { margin: 30px auto 0; max-width: 40ch; font-size: var(--editorial-copy-size); line-height: 1.5; }
+.experience-list { margin: 80px 0 0; padding: 0; list-style: none; }
+.experience-entry { max-width: 640px; margin: 0 auto 100px; text-align: center; min-width: 0; }
+.entry-information { width: 100%; margin-inline: auto; max-width: 610px; }
+.company-name { margin: 0; font-size: clamp(25px, 2.55vw, 38px); line-height: 1.12; font-weight: 500; letter-spacing: -.035em; text-wrap: balance; }
+.role { margin: 14px auto 0; max-width: 48ch; font-size: clamp(12px, 1.1vw, 15px); line-height: 1.5; }
+.period { margin: 10px 0 0; color: #E2F4A6; font-size: 12px; line-height: 1.5; font-variant-numeric: tabular-nums; }
+.description { max-width: 55ch; margin: 18px auto 0; color: rgb(255 255 255 / .85); font-size: clamp(13px, 1.15vw, 15px); line-height: 1.65; text-wrap: pretty; }
+.technologies { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 0; margin: 18px 0 0; padding: 0; list-style: none; color: rgb(255 255 255 / .6); }
+.technologies li { font-size: 11px; line-height: 1.5; }
+.technologies li + li::before { content: '/'; margin-inline: 8px; }
+.journey-mode { display: none; position: absolute; bottom: 52px; right: var(--editorial-rail-inset); padding: 4px 0; border: 0; border-bottom: 1px solid rgb(255 255 255 / .25); background: transparent; color: #fff; font: inherit; font-size: 11px; cursor: pointer; }
+.journey-mode:focus-visible { outline: 2px solid #E2F4A6; outline-offset: 6px; }
+.experience[data-can-animate] .journey-mode { display: block; }
+.experience[data-journey-enabled] .experience-stage { height: 100svh; min-height: 0; overflow: clip; visibility: hidden; }
+.experience[data-journey-enabled] .journey-composition { height: 100%; padding-block: 104px; position: relative; }
+.experience[data-journey-enabled] .experience-header { position: absolute; inset: 104px 0 76px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+.experience[data-journey-enabled] .experience-list { position: relative; height: 100%; margin: 0; }
+.experience[data-journey-enabled] .experience-entry { position: absolute; inset: 0; margin: auto; max-width: 640px; display: flex; flex-direction: column; justify-content: center; align-items: center; pointer-events: none; }
+.experience[data-journey-enabled] .entry-information { will-change: opacity; }
+@media (max-width: 640px) {
+  .journey-composition { padding-block: 120px 96px; }
+  .section-index { margin-bottom: 20px; }
+  .experience-intro { font-size: 16px; }
+  .experience-entry { margin-bottom: 72px; }
+  .company-name { font-size: clamp(23px, 6vw, 29px); }
+  .description { font-size: 13px; line-height: 1.6; }
+  .role { font-size: 12px; }
+  .technologies li { font-size: 10px; }
+  .journey-mode { bottom: 48px; font-size: 10px; }
+}
+@media (max-height: 700px) {
+  .experience[data-journey-enabled] .journey-composition { padding-block: 90px; }
+  .company-name { font-size: 24px; }
+  .role, .period { margin-top: 8px; }
+  .description, .technologies { margin-top: 12px; }
+}

@@ -1,0 +1,44 @@
+﻿<section id="sobre-mi" class="about" aria-labelledby="about-title" tabindex="-1">
+  <app-about-story>
+    <div class="editorial-scene container">
+      <figure class="portrait visual">
+        <div class="portrait-mask">
+          @if (photoSrc && !photoFailed()) {
+            <img [src]="photoSrc" [alt]="'Fotografía personal' | t" width="600" height="800"
+              loading="lazy" decoding="async" (error)="photoFailed.set(true)" />
+          } @else {
+            <div class="image-space portrait-space" role="img" [attr.aria-label]="'Espacio para incorporar una fotografía personal' | t">
+              <span>{{ 'Fotografía por incorporar' | t }}</span>
+            </div>
+          }
+        </div>
+        <figcaption>{{ 'Retrato' | t }}</figcaption>
+      </figure>
+
+      <div class="editorial-notes">
+        <header class="about-header">
+          <p class="section-index">{{ '02 / ABOUT' | t }}</p>
+          <h2 id="about-title"><span>{{ 'TECNOLOGÍA' | t }}</span><span>{{ 'CON PROPÓSITO.' | t }}</span></h2>
+        </header>
+        <figure class="process visual">
+          @if (workSrc && !workFailed()) {
+            <img [src]="workSrc" [alt]="workAlt | t" width="1536" height="1024"
+              loading="lazy" decoding="async" (error)="workFailed.set(true)" />
+          } @else {
+            <div class="image-space process-space" role="img" [attr.aria-label]="'Espacio para incorporar una captura real de un proyecto o del proceso de trabajo' | t">
+              <span>{{ 'Captura real por incorporar' | t }}</span>
+            </div>
+          }
+          <figcaption>{{ 'Proceso' | t }}</figcaption>
+        </figure>
+        <div class="editorial-copy">
+          <p class="introduction">{{ profile.introduction | t }}</p>
+          <p class="background">{{ profile.background | t }}</p>
+        </div>
+        <div class="manifesto">
+          <p><span>{{ 'CREATE.' | t }}</span><span>{{ 'BUILD.' | t }}</span><span>{{ 'EVOLVE.' | t }}</span></p>
+        </div>
+      </div>
+    </div>
+  </app-about-story>
+</section>

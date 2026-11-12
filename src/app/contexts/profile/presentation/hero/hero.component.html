@@ -1,0 +1,19 @@
+<app-editorial-grid [rules]="[{ anchor: '.hero-meta', edge: 'bottom', offset: 18, mobile: false }, { anchor: '.hero-details' }]" />
+<section #heroScene class="hero container hero-intro-managed" [class.hero-intro-pending]="building()" aria-labelledby="hero-title" appScrollEffect="hero-exit">
+  <div class="hero-meta">
+    <p class="location"><span>{{ profile.location | t }}</span></p>
+    <p class="discipline">{{ profile.discipline | t }}</p>
+  </div>
+  <h1 id="hero-title" [attr.aria-label]="profile.displayName">
+    <span class="name"><span class="name-letters">{{ profile.givenName.toUpperCase() }}</span></span>
+    <span class="surname"><span class="surname-letters">{{ profile.familyName.toUpperCase() }}</span></span>
+  </h1>
+  <div class="hero-details">
+    <p class="specialty">{{ 'Desarrollo de aplicaciones.' | t }}</p>
+    <p class="specialty specialty-data">{{ 'Análisis de datos.' | t }}</p>
+    <div class="hero-actions" role="group" [attr.aria-label]="'Explora mi portafolio' | t">
+      <a class="hero-link primary" href="#proyectos">{{ 'Ver proyectos' | t }}</a>
+      <a class="hero-link secondary" href="#sobre-mi">{{ 'Conóceme' | t }}</a>
+    </div>
+  </div>
+</section>
