@@ -34,7 +34,7 @@ export class ExperienceComponent implements AfterViewInit, OnDestroy {
   private readonly onResize = (): void => {
     cancelAnimationFrame(this.resizeFrame);
     this.resizeFrame = requestAnimationFrame(() => {
-      if (this.shortViewport !== (innerHeight < 560)) this.setup();
+      if (this.shortViewport !== (this.scene.nativeElement.querySelector<HTMLElement>('.experience-grid')!.clientHeight < 560)) this.setup();
     });
   };
   get english(): boolean { return this.language.language() === 'en'; }
@@ -79,7 +79,10 @@ export class ExperienceComponent implements AfterViewInit, OnDestroy {
     section.querySelectorAll<HTMLElement>('.experience-entry, .experience-header, .journey-mode').forEach(element => {
       element.inert = false; element.removeAttribute('aria-hidden');
     });
-    this.shortViewport = innerHeight < 560;
+    // CSS uses svh, which stays stable while mobile browser bars expand. Use
+    // that same measured height for all distances and aperture coordinates.
+    const viewportHeight = (): number => section.querySelector<HTMLElement>('.experience-grid')!.clientHeight;
+    this.shortViewport = viewportHeight() < 560;
     const canAnimate = !this.motion.reduced && this.motion.supported && !this.graphicsUnavailable && !this.shortViewport;
     if (canAnimate) section.dataset.canAnimate = '';
     if (!canAnimate || this.readingMode()) {
@@ -96,7 +99,7 @@ export class ExperienceComponent implements AfterViewInit, OnDestroy {
       const opening = section.querySelector<HTMLElement>('.experience-opening')!;
       const hairline = section.querySelector<HTMLElement>('.experience-aperture-line')!;
       const stage = section.querySelector<HTMLElement>('.experience-stage')!;
-      const typeSize = (): number => Math.min(innerWidth * .12, innerHeight * .16);
+      const typeSize = (): number => Math.min(section.clientWidth * .12, viewportHeight() * .16);
       const circle = (): number => typeSize() * 1.81;
       const pillWidth = (): number => innerWidth <= 720 ? section.clientWidth - 48 : typeSize() * 3.62;
       const pillHeight = (): number => innerWidth <= 720 ? pillWidth() / 1.85 : circle();
@@ -104,19 +107,19 @@ export class ExperienceComponent implements AfterViewInit, OnDestroy {
         defaults: { ease: 'none' },
         scrollTrigger: {
           id: 'experience-image-zoom', trigger: section, start: 'top top',
-          end: () => `+=${Math.round(innerHeight * 1.25)}`, scrub: .35, invalidateOnRefresh: true,
+          end: () => `+=${Math.round(viewportHeight() * 1.25)}`, scrub: .35, invalidateOnRefresh: true,
           onUpdate: self => { section.dataset.zoomProgress = self.progress.toFixed(4); },
         },
       });
       timeline.fromTo(photo, {
         opacity: 1,
         width: 1.5, height: circle, left: () => (section.clientWidth - 1.5) / 2,
-        top: () => (innerHeight - circle()) / 2, borderRadius: 999, clipPath: 'inset(50% 0)',
+        top: () => (viewportHeight() - circle()) / 2, borderRadius: 999, clipPath: 'inset(50% 0)',
       }, { clipPath: 'inset(0%)', duration: .1 }, 0)
         .to(photo, { width: () => typeSize() * .16, left: () => (section.clientWidth - typeSize() * .16) / 2, duration: .18 }, .1)
         .to(photo, { width: circle, left: () => (section.clientWidth - circle()) / 2, duration: .22 }, .28)
-        .to(photo, { width: pillWidth, height: pillHeight, left: () => (section.clientWidth - pillWidth()) / 2, top: () => (innerHeight - pillHeight()) / 2, duration: .22 }, .5)
-        .to(photo, { width: () => section.clientWidth, height: () => innerHeight, left: 0, top: 0, borderRadius: 0, duration: .28 }, .72)
+        .to(photo, { width: pillWidth, height: pillHeight, left: () => (section.clientWidth - pillWidth()) / 2, top: () => (viewportHeight() - pillHeight()) / 2, duration: .22 }, .5)
+        .to(photo, { width: () => section.clientWidth, height: viewportHeight, left: 0, top: 0, borderRadius: 0, duration: .28 }, .72)
         .fromTo(section, { '--opening-width': '1.5px' }, { '--opening-width': () => `${typeSize() * .16}px`, duration: .18 }, .1)
         .to(section, { '--opening-width': () => `${circle()}px`, duration: .22 }, .28)
         .to(section, { '--opening-width': () => `${pillWidth()}px`, duration: .22 }, .5)
@@ -126,13 +129,15 @@ export class ExperienceComponent implements AfterViewInit, OnDestroy {
         .fromTo(photo, { filter: 'grayscale(1) saturate(1) contrast(1) brightness(1)' }, {
           filter: 'grayscale(0) saturate(1) contrast(1) brightness(1)', duration: .38,
         }, .62)
-        .set(stage, { visibility: 'visible' }, 1);
+        // Fractional scroll positions can settle just below 1 in WebKit. Reveal
+        // once the aperture is effectively full, instead of leaving a blank world.
+        .set(stage, { visibility: 'visible' }, .98);
 
       // Move the aperture away, but keep its landscape aligned with the fixed valley.
       gsap.timeline({ scrollTrigger: {
         id: 'experience-world-entry', trigger: section,
-        start: () => `top+=${innerHeight * 1.65} top`,
-        end: () => `top+=${innerHeight * 2.65} top`,
+        start: () => `top+=${viewportHeight() * 1.65} top`,
+        end: () => `top+=${viewportHeight() * 2.65} top`,
         scrub: .35, invalidateOnRefresh: true,
       } })
         .to(backdrop, { yPercent: -100, ease: 'none', duration: 1 }, 0)
@@ -173,7 +178,7 @@ export class ExperienceComponent implements AfterViewInit, OnDestroy {
         },
         scrollTrigger: {
           id: 'experience-journey', trigger: content, start: 'top top',
-          end: () => `+=${Math.round(innerHeight * 8.5)}`, pin: stage, pinSpacing: true,
+          end: () => `+=${Math.round(viewportHeight() * 8.5)}`, pin: stage, pinSpacing: true,
           scrub: .6, invalidateOnRefresh: true, anticipatePin: 1,
         },
       });

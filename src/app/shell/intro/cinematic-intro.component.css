@@ -1,6 +1,6 @@
 ﻿:host { display: contents; }
 .cinematic-screen {
-  position: fixed; inset: 0; width: 100%; max-width: none; height: 100svh; max-height: none;
+  position: fixed; inset: 0; width: 100%; max-width: none; height: 100dvh; max-height: none;
   margin: 0; padding: 0; border: 0; overflow: hidden; overscroll-behavior: none; touch-action: none;
   background: transparent;
   color: #FFFFFF;
@@ -21,5 +21,6 @@
 .skip-intro:hover svg { transform: translateX(2px); }
 .skip-intro:focus-visible { outline: 2px solid #E2F4A6; outline-offset: 4px; }
 @media (max-width: 820px) { .cinematic-film, .cinematic-still { background-position: 72% center; object-position: 72% center; } }
+@media (max-width: 820px) { .cinematic-film { object-position: center; } }
 @media (max-width: 640px) { .skip-intro { right: 24px; bottom: max(24px, env(safe-area-inset-bottom)); } }
 @media (prefers-reduced-motion: reduce) { .skip-intro, .skip-intro svg { transition: none; } .skip-intro:hover svg { transform: none; } }

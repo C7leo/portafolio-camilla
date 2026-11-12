@@ -98,6 +98,7 @@ export function mountExperienceValley(host, options) {
   let disposed = false, visible = false;
   let renderer, scene, camera, flowers, leaves, dust, terrain;
   let frame = 0, lastTime = 0, lastDraw = 0;
+  let landscapeScale = 1;
   const pointer = { x: 0, y: 0, targetX: 0, targetY: 0, active: 0, targetActive: 0 };
   const resources = [];
   const uniforms = {
@@ -125,8 +126,8 @@ export function mountExperienceValley(host, options) {
     pointer.active += (pointer.targetActive - pointer.active) * blend;
     const progress = Math.max(0, Math.min(1, options.state.progress));
     const z = reduced ? -28 : 12 - progress * 92;
-    camera.position.set(pathX(z), 1.8, z);
-    camera.lookAt(pathX(z - 20), 1.8, z - 20);
+    camera.position.set(pathX(z) * landscapeScale, 1.8, z);
+    camera.lookAt(pathX(z - 20) * landscapeScale, 1.8, z - 20);
     uniforms.uTime.value = reduced ? 4 : progress * 80;
     uniforms.uScatter.value = 0;
     uniforms.uPointer.value.set(pointer.x, pointer.y);
@@ -156,7 +157,11 @@ export function mountExperienceValley(host, options) {
     renderer.setPixelRatio(Math.min(devicePixelRatio || 1, width < 641 ? 1.2 : 1.5));
     renderer.setSize(width, height, false);
     camera.aspect = width / height;
-    camera.fov = width < 641 ? 76 : 54;
+    // Fit the two valley banks into portrait without widening vertical FOV,
+    // which reduced the landscape to a narrow horizon and clipped foreground.
+    landscapeScale = width <= 820 ? Math.min(1, width / height / .9) : 1;
+    scene.scale.x = landscapeScale;
+    camera.fov = 54;
     camera.updateProjectionMatrix();
     flowers.geometry.instanceCount = width < 641 ? 3200 : 7800;
     leaves.geometry.instanceCount = flowers.geometry.instanceCount;

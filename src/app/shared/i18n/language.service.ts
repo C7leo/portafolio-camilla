@@ -22,6 +22,7 @@ const ES: Record<string, string> = {
   'CREATE.': 'CREA.', 'BUILD.': 'CONSTRUYE.', 'EVOLVE.': 'EVOLUCIONA.',
 };
 const EN: Record<string, string> = {
+  'Desliza para explorar': 'Scroll to explore',
   'Descargar CV': 'Download CV', 'Descargar CV en PDF': 'Download CV as PDF',
   'Desarrollo, datos y tecnología para crear soluciones con propósito.': 'Development, data and technology to build purposeful digital solutions.',
   'Conversemos': 'Let’s connect', 'Explorar': 'Explore',

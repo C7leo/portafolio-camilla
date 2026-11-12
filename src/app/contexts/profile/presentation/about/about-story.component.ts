@@ -88,7 +88,7 @@ export class AboutStoryComponent implements AfterViewInit, OnDestroy {
     const timeline = gsap.timeline({
       scrollTrigger: {
         id: 'about-narrative', trigger: stage, start: 'top 84px',
-        end: () => `+=${Math.round(innerHeight * (mobile ? 3.6 : 4.2))}`,
+        end: () => `+=${Math.round((stage.clientHeight + 84) * (mobile ? 3.6 : 4.2))}`,
         pin: stage, scrub: .65, invalidateOnRefresh: true,
         refreshPriority: 4,
       },

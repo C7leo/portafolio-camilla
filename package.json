@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "check:architecture": "node scripts/check-architecture.mjs",
     "test": "playwright test",
+    "test:mobile": "playwright test --config playwright.mobile.config.js",
     "cv:export": "node scripts/export-cv.mjs"
   },
   "dependencies": {

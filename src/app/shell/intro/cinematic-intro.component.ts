@@ -26,6 +26,7 @@ export class CinematicIntroComponent implements AfterViewInit, OnDestroy {
   private safetyTimer?: ReturnType<typeof setTimeout>;
   private ending = false;
   private destroyed = false;
+  private aligned = false;
 
   ngAfterViewInit(): void {
     if (!this.browser) { this.finished.emit('unavailable'); return; }
@@ -66,7 +67,17 @@ export class CinematicIntroComponent implements AfterViewInit, OnDestroy {
       backgroundImage: backdrop.backgroundImage, backgroundPosition: backdrop.backgroundPosition,
       backgroundSize: backdrop.backgroundSize,
     });
+    if (this.aligned) this.alignFilm();
   };
+  /** Match the actual background rectangle, not the dialog's dynamic viewport. */
+  private alignFilm(): void {
+    const frame = this.still.nativeElement.style;
+    Object.assign(this.film.nativeElement.style, {
+      left: frame.left, top: frame.top, width: frame.width, height: frame.height,
+      right: 'auto', bottom: 'auto',
+      objectPosition: frame.backgroundPosition.split(',').at(-1)!.trim(),
+    });
+  }
   waiting(): void {
     if (this.ending) return;
     clearTimeout(this.loadingTimer);
@@ -89,6 +100,28 @@ export class CinematicIntroComponent implements AfterViewInit, OnDestroy {
     };
     if (reason === 'reduced' || reason === 'unavailable') { complete(); return; }
     this.zone.runOutsideAngular(() => {
+      if (reason === 'ended' && matchMedia('(max-width: 820px)').matches) {
+        const film = this.film.nativeElement;
+        const frame = this.still.nativeElement.style;
+        this.screen.nativeElement.dataset.handoff = 'aligning';
+        // The PNG and encoded final shot have slightly different compositions.
+        // First register their viewport crop, then dissolve to the original PNG.
+        // The last visible intro image is thus exactly the Hero's backdrop.
+        this.fade = gsap.timeline({ onComplete: complete })
+          .to(this.screen.nativeElement.querySelector('.skip-intro'), { opacity: 0, duration: .2 }, 0)
+          .to(film, {
+            left: () => frame.left, top: () => frame.top,
+            width: () => frame.width, height: () => frame.height,
+            objectPosition: () => frame.backgroundPosition.split(',').at(-1)!.trim(),
+            duration: .85, ease: 'sine.inOut',
+            onComplete: () => { this.aligned = true; this.syncStillFrame(); film.pause(); },
+          }, 0)
+          .to(film, { opacity: 0, duration: .65, ease: 'sine.inOut' }, .85)
+          .call(() => { this.screen.nativeElement.dataset.handoff = 'still'; }, [], 1.5)
+          .to({}, { duration: .25 }, 1.5)
+          .to(this.screen.nativeElement, { opacity: 0, duration: .4, ease: 'sine.inOut' }, 1.75);
+        return;
+      }
       const dissolve = reason === 'skipped' ? .4 : 1.25;
       this.fade = gsap.timeline({ onComplete: complete })
         .to(this.film.nativeElement, { opacity: 0, filter: 'blur(2px)', duration: dissolve, ease: 'sine.inOut', onComplete: () => this.film.nativeElement.pause() }, 0)
