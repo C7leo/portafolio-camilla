@@ -1,5 +1,5 @@
 :host {
-  --grid-ink: 255 255 255;
+  --grid-ink: var(--editorial-line-ink, 255 255 255);
   --grid-inset: var(--editorial-rail-inset);
   position: absolute;
   inset: 0;
@@ -7,7 +7,7 @@
   z-index: 8;
   pointer-events: none;
   user-select: none;
-  mix-blend-mode: difference;
+  mix-blend-mode: var(--editorial-line-blend, difference);
 }
 :host([data-tone='light']) { --grid-ink: 32 32 32; mix-blend-mode: normal; }
 :host([data-tone='dark']) { mix-blend-mode: normal; }

@@ -16,7 +16,7 @@ export class FooterComponent {
   readonly projects = inject(ProjectCatalogService).projects;
   readonly navigation = [
     { label: 'Inicio', href: '#inicio' }, { label: 'Sobre mí', href: '#sobre-mi' },
-    { label: 'Experiencia', href: '#experiencia' },
+    { label: 'Servicios', href: '#servicios' }, { label: 'Experiencia', href: '#experiencia' },
     { label: 'Contacto', href: '#contacto' },
   ];
 }

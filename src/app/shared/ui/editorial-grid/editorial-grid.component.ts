@@ -27,7 +27,7 @@ export interface EditorialRule {
     '[style.--grid-inset]': 'inset',
   },
   template: `
-    @if (viewport) { <div class="grid-rails"><i class="grid-rail left"></i><i class="grid-rail right"></i></div> }
+    @if (viewport || rails) { <div class="grid-rails"><i class="grid-rail left"></i><i class="grid-rail right"></i></div> }
     @for (rule of rules; track $index) {
       <div class="grid-rule" [class.no-line]="rule.line === false" [class.desktop-detail]="rule.mobile === false"
         [style.top]="rule.at || '0px'" [attr.data-grid-rule]="$index">
@@ -40,6 +40,9 @@ export interface EditorialRule {
 })
 export class EditorialGridComponent implements AfterViewInit, OnDestroy {
   @Input() viewport = false;
+  @Input() rails = false;
+  /** Local rails replace the viewport rails on these surfaces only. */
+  @Input() railExclusions: readonly string[] = [];
   @Input() rules: readonly EditorialRule[] = [];
   @Input() tone: 'auto' | 'light' | 'dark' = 'auto';
   @Input() opacity = .13;
@@ -55,11 +58,15 @@ export class EditorialGridComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     if (!this.browser) return;
-    if (this.viewport && !this.rules.length) return;
+    if (this.viewport && !this.rules.length && !this.railExclusions.length) return;
     this.zone.runOutsideAngular(() => {
       const scene = this.host.parentElement!;
       this.resize = new ResizeObserver(this.scheduleLayout);
       this.resize.observe(scene);
+      this.railExclusions.forEach(selector => {
+        const target = document.querySelector(selector);
+        if (target) this.resize!.observe(target);
+      });
       this.rules.forEach(rule => {
         const target = rule.anchor && scene.querySelector(rule.anchor);
         if (target) this.resize!.observe(target);
@@ -77,6 +84,7 @@ export class EditorialGridComponent implements AfterViewInit, OnDestroy {
       } else this.host.querySelectorAll('.grid-rule').forEach(rule => rule.classList.add('is-seen'));
       ScrollTrigger.addEventListener('refresh', this.scheduleLayout);
       window.addEventListener('resize', this.scheduleLayout, { passive: true });
+      if (this.viewport && this.railExclusions.length) window.addEventListener('scroll', this.scheduleLayout, { passive: true });
       document.fonts.ready.then(() => { if (!this.destroyed) this.scheduleLayout(); });
       this.scheduleLayout();
     });
@@ -85,6 +93,17 @@ export class EditorialGridComponent implements AfterViewInit, OnDestroy {
   private readonly scheduleLayout = (): void => {
     cancelAnimationFrame(this.frame);
     this.frame = requestAnimationFrame(() => {
+      if (this.viewport && this.railExclusions.length) {
+        const stops = ['#000 0px'];
+        const ranges = this.railExclusions.flatMap(selector => {
+          const bounds = document.querySelector(selector)?.getBoundingClientRect();
+          return bounds && bounds.bottom > 0 && bounds.top < innerHeight
+            ? [{ top: Math.max(0, bounds.top), bottom: Math.min(innerHeight, bounds.bottom) }] : [];
+        }).sort((a, b) => a.top - b.top);
+        ranges.forEach(({ top, bottom }) => stops.push(`#000 ${top}px`, `transparent ${top}px`, `transparent ${bottom}px`, `#000 ${bottom}px`));
+        stops.push('#000 100%');
+        this.host.querySelector<HTMLElement>('.grid-rails')!.style.maskImage = `linear-gradient(to bottom, ${stops.join(', ')})`;
+      }
       const scene = this.host.parentElement!;
       this.host.querySelectorAll<HTMLElement>('.grid-rule').forEach((element, index) => {
         const rule = this.rules[index];
@@ -112,5 +131,6 @@ export class EditorialGridComponent implements AfterViewInit, OnDestroy {
     this.visibility?.disconnect();
     ScrollTrigger.removeEventListener('refresh', this.scheduleLayout);
     window.removeEventListener('resize', this.scheduleLayout);
+    window.removeEventListener('scroll', this.scheduleLayout);
   }
 }

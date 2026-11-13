@@ -81,7 +81,7 @@ export class AboutStoryComponent implements AfterViewInit, OnDestroy {
     const stage = story.querySelector<HTMLElement>('.story-stage')!;
     const passages = gsap.utils.toArray<HTMLElement>('.story-passage', story);
     story.classList.add('is-enhanced');
-    gsap.set(story.querySelectorAll('.story-word'), { color: '#202020' });
+    gsap.set(story.querySelectorAll('.story-word'), { color: 'inherit' });
     gsap.set(passages, { autoAlpha: 0, y: 8, filter: 'blur(10px)' });
     gsap.set(passages[0], { autoAlpha: 1, y: 0, filter: 'blur(0px)' });
 
@@ -132,7 +132,7 @@ export class AboutStoryComponent implements AfterViewInit, OnDestroy {
     const fillers: Element[] = [];
     let previousWidth = 0;
     const fillRows = () => {
-      const width = this.host.clientWidth;
+      const width = this.host.querySelector<HTMLElement>('.marquee-row')!.clientWidth;
       if (!width || width === previousWidth) return;
       previousWidth = width;
       fillers.splice(0).forEach(element => element.remove());
@@ -150,7 +150,7 @@ export class AboutStoryComponent implements AfterViewInit, OnDestroy {
     };
     fillRows();
     const resize = new ResizeObserver(fillRows);
-    resize.observe(this.host);
+    resize.observe(this.host.querySelector('.marquee-rows')!);
     const tracks = gsap.utils.toArray<HTMLElement>('.marquee-track', this.host);
     this.loops = tracks.map((track, index) => gsap.fromTo(track,
       { xPercent: index === 0 ? 0 : -50 },

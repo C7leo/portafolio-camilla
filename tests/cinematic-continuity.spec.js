@@ -10,13 +10,13 @@ for (const [width, height] of [[375, 667], [390, 844], [393, 852], [430, 932]]) 
     await expect(page.locator('.cinematic-screen')).toBeVisible();
     // Hide annotations only for the pixel comparison: the image geometry and
     // actual production transition continue running unchanged.
-    const annotations = await page.addStyleTag({ content: '.hero > *, .floating-header, app-editorial-grid, .skip-intro { visibility:hidden !important; }' });
-    await page.waitForFunction(() => document.querySelector('video')?.readyState >= 2);
-    await page.locator('video').evaluate(video => { video.currentTime = video.duration - 1.15; });
+    const annotations = await page.addStyleTag({ content: '.hero > *, .floating-header, app-editorial-grid, app-floating-controls, .skip-intro { visibility:hidden !important; }' });
+    await page.waitForFunction(() => document.querySelector('.cinematic-film')?.readyState >= 2);
+    await page.locator('.cinematic-film').evaluate(video => { video.currentTime = video.duration - 1.15; });
     await expect(page.locator('.cinematic-screen')).toHaveAttribute('data-handoff', 'still', { timeout: 15000 });
     const geometry = await page.evaluate(() => {
       const frame = document.querySelector('.cinematic-still');
-      const film = document.querySelector('video');
+      const film = document.querySelector('.cinematic-film');
       const hero = document.querySelector('app-hero');
       const backdrop = getComputedStyle(hero, '::before');
       const bounds = hero.getBoundingClientRect();
@@ -55,12 +55,13 @@ for (const [width, height] of [[375, 667], [390, 844], [393, 852], [430, 932]]) 
     await testInfo.attach('first-hero-flower', { body: firstHero, contentType: 'image/png' });
     await annotations.evaluate(element => element.remove());
     await expect(page.locator('.hero')).not.toHaveClass(/hero-intro-pending/, { timeout: 10000 });
-    await expect(page.locator('.hero-scroll-cue')).toBeVisible();
+    await expect(page.locator('.floating-scroll-cue')).toBeVisible();
+    await page.locator('.floating-scroll-cue').click();
+    await expect(page.locator('.floating-header')).toBeVisible();
     for (const [language, text] of [['es', 'Desliza para explorar'], ['en', 'Scroll to explore']]) {
       await page.locator(`.language-choice[lang="${language}"]`).click();
-      await expect(page.locator('.hero-scroll-cue')).toContainText(text);
+      await expect(page.locator('.floating-scroll-cue')).toHaveAttribute('aria-label', text);
     }
-    await page.locator('.hero-scroll-cue').click();
     await expect(page.locator('.story-copy')).toBeInViewport();
   });
 }
@@ -82,6 +83,6 @@ for (const [width, height] of [[390, 844], [1440, 900]]) {
       expect(Math.abs(sample.story - 84)).toBeLessThan(1);
     }
     for (let i = 1; i < positions.length; i++) expect(Math.abs(positions[i].hero - positions[i - 1].hero)).toBeLessThanOrEqual(5);
-    await expect(page.locator('.hero-scroll-cue')).toBeVisible();
+    await expect(page.locator('.floating-scroll-cue')).toBeVisible();
   });
 }

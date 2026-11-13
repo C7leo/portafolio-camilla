@@ -12,7 +12,13 @@ Inputs:
 - `inset`: optional CSS override for the shared rail position.
 - `rules`: horizontal positions described by `at` (CSS length), or `anchor` (an existing element selector), `edge` (`top`/`bottom`) and `offset` (px). `line: false` adds only intersection marks to an existing divider. `intersections: false` omits squares; `mobile: false` hides a secondary rule on phones.
 
-Anchor measurements use layout offsets, ignoring text reveal transforms. ResizeObserver, font readiness and GSAP ScrollTrigger refresh handle responsive changes, translations and pin spacers. No work runs on ordinary scroll. IntersectionObserver reveals rules and squares once; subsequent visits preserve their state. Reduced motion displays them immediately. Mobile hides secondary horizontals and the right intersection marks. Observers, listeners and pending frames are cleaned up on destruction.
+Anchor measurements use layout offsets, ignoring text reveal transforms. ResizeObserver, font readiness and GSAP ScrollTrigger refresh handle responsive changes, translations and pin spacers. Outside explicit viewport rail exclusions, no work runs on ordinary scroll. IntersectionObserver reveals rules and squares once; subsequent visits preserve their state. Reduced motion displays them immediately. Mobile hides secondary horizontals and the right intersection marks. Observers, listeners and pending frames are cleaned up on destruction.
 
 Validation: `npx playwright test tests/editorial-grid.spec.js tests/about-story.spec.js tests/hero-intro.spec.js --workers=1` and `npm run build`.
 - `viewport`: draws the continuous vertical rails in a fixed layer below navigation. Set only on the root instance; its default is false.
+
+## Contextual lines in Projects
+
+Projects defines `--editorial-line-ink: 255 255 255` and `--editorial-line-blend: normal`. Its lime contact surface overrides the ink to `33 33 33`. The shared grid consumes these variables; row separators and decorative number borders use the same ink without changing their widths. Text, image and button colors are independent.
+
+`rails: true` draws local rails with the same inset as the viewport rails. The root grid?s `railExclusions` masks only the `.project-showcase` span, so local rails are never doubled or inverted by the global difference blend. This mask updates in one animation frame on scroll, resize and ScrollTrigger refresh. Other sections retain their original auto blend. The local grids retain the existing line reveal animations and reduced-motion behavior.

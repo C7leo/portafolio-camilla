@@ -1,0 +1,18 @@
+<div #returnVeil class="return-veil" aria-hidden="true"></div>
+<button #scrollButton class="floating-scroll-cue" type="button" (click)="scrollFurther()"
+  [class.points-up]="atEnd()" [disabled]="returning()" [attr.aria-busy]="returning()"
+  [class.is-hidden]="!cueVisible()" [class.on-dark]="darkSurface()" [class.at-home]="atHome()"
+  [style.--home-cue-top]="homeTop() + 'px'" [style.--home-cue-left]="homeLeft() + 'px'"
+  [attr.aria-label]="(atEnd() ? 'Volver al inicio' : 'Desliza para explorar') | t" [attr.aria-hidden]="!cueVisible() ? 'true' : null"
+  [attr.tabindex]="cueVisible() ? 0 : -1">
+  <span class="scroll-capsule" aria-hidden="true"><span class="scroll-direction"><span #arrowIcon class="scroll-arrow"></span></span></span>
+</button>
+<button #themeButton class="floating-theme-toggle" type="button" (click)="theme.toggle()"
+  [class.is-hidden]="!themeVisible()" [attr.aria-hidden]="!themeVisible() ? 'true' : null" [attr.tabindex]="themeVisible() ? 0 : -1"
+  [class.on-dark-surface]="themeDarkSurface()"
+  [attr.aria-pressed]="theme.theme() === 'dark'"
+  [attr.aria-label]="(theme.theme() === 'light' ? 'Activar tema oscuro' : 'Activar tema claro') | t"
+  [attr.title]="(theme.theme() === 'light' ? 'Activar tema oscuro' : 'Activar tema claro') | t">
+  <span #sunIcon class="theme-icon sun-icon" [hidden]="theme.theme() !== 'light'"></span>
+  <span #moonIcon class="theme-icon moon-icon" [hidden]="theme.theme() !== 'dark'"></span>
+</button>

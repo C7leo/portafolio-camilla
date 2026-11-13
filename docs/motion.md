@@ -6,9 +6,9 @@ El movimiento se implementa en presentación y en `src/app/shared/motion/`. Los 
 
 - **Introducción y Hero:** `shell/intro/` presenta el vídeo original; `shared/motion/cinematic-intro-state.service.ts` coordina fin, omisión y fallback con el Hero de Perfil. El nombre y los metadatos mantienen su entrada y salida existentes.
 - **Sobre mí:** la narrativa de tres frases y la transición editorial usan sus timelines de GSAP/ScrollTrigger. El horizonte es un renderer de presentación; el marquee conserva sus direcciones opuestas, pausa e iconos.
-- **Proyectos:** `contexts/projects/presentation/graphics/project-reel.js` implementa el recorrido Three.js y su fallback. El modal y la vista por hash conservan sus rutas, selección y retorno de foco.
-- **Experiencia:** una timeline reversible coordina el valle, la frase inicial, BCP, BanBif y el flash blanco final. La apertura muestra el mismo paisaje mediante una copia del canvas; la cuadrícula compartida permanece estable. El contenido profesional se mantiene centrado.
-- **Footer:** `RevealDirective` utiliza Web Animations API para sus revelados existentes sobre el fondo floral con degradado blanco. La sección sigue directamente a Experiencia.
+- **Proyectos:** galería curva con perspectiva CSS sobre una escena de mar, en flujo normal y sin canvas ni pin de scroll. Admite arrastre horizontal, controles anterior/siguiente y pausa; el scroll vertical sigue disponible. La animación y el video se pausan fuera de pantalla y el movimiento reducido muestra un catálogo estático. El modal y las vistas por hash conservan sus rutas.
+- **Experiencia:** una timeline reversible coordina el valle, la frase inicial, BCP, BanBif y la salida a negro final. La apertura muestra el mismo paisaje mediante una copia del canvas; la cuadrícula compartida permanece estable. El contenido profesional se mantiene centrado.
+- **Footer:** `RevealDirective` utiliza Web Animations API para sus revelados existentes sobre el fondo floral con degradado negro, conectado con la salida de Experiencia. La sección sigue directamente a Experiencia.
 
 ## Coordinación compartida
 

@@ -1,4 +1,4 @@
-﻿<section id="sobre-mi" class="about" aria-labelledby="about-title" tabindex="-1">
+﻿<section data-control-surface="neutral" id="sobre-mi" class="about" aria-labelledby="about-title" tabindex="-1">
   <app-about-story>
     <div class="editorial-scene container">
       <figure class="portrait visual">
@@ -35,7 +35,7 @@
           <p class="introduction">{{ profile.introduction | t }}</p>
           <p class="background">{{ profile.background | t }}</p>
         </div>
-        <div class="manifesto">
+        <div class="manifesto" data-control-surface="light">
           <p><span>{{ 'CREATE.' | t }}</span><span>{{ 'BUILD.' | t }}</span><span>{{ 'EVOLVE.' | t }}</span></p>
         </div>
       </div>

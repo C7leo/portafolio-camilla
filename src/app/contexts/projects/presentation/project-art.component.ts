@@ -42,9 +42,10 @@ import type { Project } from '../domain/project.model';
   styles: `
     :host { display: block; width: 100%; height: 100%; }
     img { display: block; width: 100%; height: 100%; object-fit: contain; }
-    .editorial-placeholder { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--white); color: var(--ink); }
+    .editorial-placeholder { position: relative; width: 100%; height: 100%; overflow: hidden; background: var(--surface); color: var(--text-primary); }
     .editorial-placeholder svg { display: block; width: 100%; height: 100%; opacity: 0.32; }
-    .placeholder-status, .placeholder-name { position: absolute; left: 14px; max-width: calc(100% - 28px); padding: 6px 8px; background: rgba(255,255,255,0.96); }
+    .editorial-placeholder svg [stroke] { stroke: currentColor; }
+    .placeholder-status, .placeholder-name { position: absolute; left: 14px; max-width: calc(100% - 28px); padding: 6px 8px; background: var(--glass-solid); }
     .placeholder-status { top: 14px; font-size: 10px; font-weight: 400; line-height: 1.4; }
     .placeholder-name { bottom: 14px; font-size: clamp(12px, 1.5vw, 18px); font-weight: 500; line-height: 1.2; }
     @media (max-width:640px) { .placeholder-status { font-size: 9px; } }

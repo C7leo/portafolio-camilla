@@ -7,6 +7,7 @@ test.beforeEach(async ({ page }) => {
 });
 
 async function navigate(page, section) {
+  if (await page.locator('.floating-header').getAttribute('inert') !== null) await page.locator('.floating-scroll-cue').click();
   const menu = page.locator('.menu-toggle');
   if (await menu.isVisible()) await menu.click();
   await page.locator(`.nav-link[href="#${section}"]`).click();
@@ -35,7 +36,7 @@ for (const [width, height] of [[1440, 900], [768, 900], [390, 844], [864, 531]])
     expect(heroRule.height).toBe(1);
     await expect(page.locator('.hero-details')).toHaveCSS('border-top-color', 'rgba(0, 0, 0, 0)');
     const grids = page.locator('main app-editorial-grid');
-    await expect(grids).toHaveCount(6);
+    await expect(grids).toHaveCount(7);
     const dimensions = await grids.evaluateAll(elements => elements.flatMap(element => {
       const crossing = Array.from(element.querySelectorAll('.grid-crossings')).map(node => node.getBoundingClientRect()).find(rect => rect.width > 0);
       return crossing ? [{ left: crossing.x, right: crossing.right, pointer: getComputedStyle(element).pointerEvents, hidden: element.getAttribute('aria-hidden') }] : [];
@@ -124,8 +125,8 @@ test('project controls remain interactive and Contact closes the shared rails', 
   await page.setViewportSize({ width: 1440, height: 900 });
   await page.goto(url);
   await page.locator('.hero-link.primary').click();
-  await expect(page.locator('.reel-stage')).toBeInViewport();
-  await page.locator('.reel-project-links button').first().click();
+  await expect(page.locator('.showcase-header')).toBeInViewport();
+  await page.locator('.project-open').first().click();
   await expect(page.locator('.project-dialog')).toBeVisible();
   await page.locator('.dialog-close').click();
   await expect(page.locator('.project-dialog')).not.toBeVisible();
