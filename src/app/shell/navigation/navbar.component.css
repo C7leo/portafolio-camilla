@@ -1,6 +1,6 @@
-:host { display: block; height: 96px; position: relative; z-index: 20; }
+:host { display: block; height: var(--header-reserve); position: relative; z-index: 20; }
 
-.floating-header { position: fixed; z-index: 20; top: 18px; left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 32px); color: var(--text-primary); font-family: 'Urbanist', sans-serif; }
+.floating-header { position: fixed; z-index: 20; top: max(18px, calc(var(--safe-area-top) + 8px)); left: 50%; transform: translateX(-50%); width: max-content; max-width: calc(100% - 2 * max(16px, var(--safe-area-left), var(--safe-area-right))); color: var(--text-primary); font-family: 'Urbanist', sans-serif; }
 .navbar { position: relative; display: grid; grid-template-columns: repeat(5, auto); align-items: center; gap: 12px; height: 48px; padding: 5px 6px 5px 20px; border: 1px solid var(--border-neutral); border-radius: 999px; isolation: isolate; }
 .glass-surface { position: absolute; inset: 0; z-index: 0; border-radius: inherit; clip-path: inset(0 round 999px); pointer-events: none; background: var(--glass-surface); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); box-shadow: inset 0 1px 0 var(--glass-highlight); }
 /* Keep the glass in the navbar's stacking context, behind every control.
@@ -32,8 +32,7 @@
 @supports not ((backdrop-filter: blur(18px)) or (-webkit-backdrop-filter: blur(18px))) { .glass-surface { background: var(--glass-solid); } }
 
 @media (max-width: 820px) {
-  :host { height: 88px; }
-  .floating-header { top: 16px; width: min(400px, calc(100% - 32px)); }
+  .floating-header { top: max(16px, calc(var(--safe-area-top) + 8px)); width: min(400px, calc(100% - 2 * max(16px, var(--safe-area-left), var(--safe-area-right)))); }
   .navbar { grid-template-columns: 1fr repeat(4, auto); gap: 8px; padding: 1px 4px 1px 16px; }
   .brand { min-height: 44px; font-size: 16px; justify-self: start; }
   .menu-toggle { display: inline-flex; align-items: center; justify-content: center; width: 44px; min-width: 44px; min-height: 44px; padding: 0 12px; border: 0; border-radius: 999px; background: transparent; color: var(--text-primary); font: inherit; cursor: pointer; }
@@ -73,7 +72,7 @@
 
 .floating-header { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 250ms ease, visibility 250ms, color var(--theme-duration); }
 .floating-header.is-visible { opacity: 1; visibility: visible; pointer-events: auto; }
-.floating-header.is-home { top: calc(var(--hero-marquee-height) + 4px); }
+.floating-header.is-home { top: calc(var(--safe-area-top) + var(--hero-marquee-height) + 4px); }
 .is-home .navbar { --text-primary: #FFFFFF; border-color: transparent; }
 .is-home .glass-surface { opacity: 0; }
 .glass-surface { transition: opacity var(--theme-duration), background-color var(--theme-duration), box-shadow var(--theme-duration); }

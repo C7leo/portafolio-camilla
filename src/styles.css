@@ -18,6 +18,14 @@
   --logo-surface: transparent;
   --theme-duration: 350ms;
   --hero-marquee-height: 36px;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --header-reserve: calc(96px + var(--safe-area-top));
+  --floating-control-size: 44px;
+  --floating-control-edge: 10px;
+  --floating-control-gap: 4px;
+  --floating-control-clearance: 0px;
   --technology-icon-filter: grayscale(1) brightness(0);
   --technology-dotnet-filter: grayscale(1) contrast(10);
   font-synthesis: none;
@@ -76,6 +84,8 @@ main:focus { outline: none; }
 .skip-link:focus { transform: translateY(0); }
 ::selection { color: var(--ink); background: var(--lime); }
 @media (max-width: 1050px) { :root { --editorial-rail-inset: 40px; } }
+@media (max-width: 1050px) { :root { --floating-control-clearance: max(0px, calc(var(--floating-control-size) + var(--floating-control-edge) + var(--floating-control-gap) + var(--safe-area-right) - var(--editorial-rail-inset))); } }
+@media (max-width: 820px) { :root { --header-reserve: calc(88px + var(--safe-area-top)); } }
 @media (max-width: 640px) { :root { --editorial-rail-inset: 24px; --hero-marquee-height: 30px; } }
 @media (max-width: 1050px) { :root { --section-entry-space: 192px; } }
 @media (max-width: 640px) { :root { --section-entry-space: 144px; } }

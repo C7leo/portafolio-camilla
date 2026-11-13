@@ -1,8 +1,9 @@
-:host { --hero-top-reserve: 96px; display: block; position: relative; isolation: isolate; overflow-x: clip; background: #0B0B12; color: #FFFFFF; }
-.hero-marquee { position: absolute; top: calc(-1 * var(--hero-top-reserve)); left: 0; z-index: 9; width: 100%; height: var(--hero-marquee-height); overflow: hidden; background: var(--lime); color: #111111; transition: opacity 350ms ease, visibility 350ms; }
+:host { --hero-top-reserve: var(--header-reserve); display: block; position: relative; isolation: isolate; overflow-x: clip; background: #0B0B12; color: #FFFFFF; }
+.hero-marquee { position: absolute; top: calc(-1 * var(--hero-top-reserve)); left: 0; z-index: 9; width: 100%; height: calc(var(--hero-marquee-height) + var(--safe-area-top)); padding-top: var(--safe-area-top); overflow: hidden; background: var(--lime); color: #111111; transition: opacity 350ms ease, visibility 350ms; }
 .hero-marquee-track { display: flex; width: max-content; height: 100%; animation: hero-editorial-marquee 30s linear infinite; }
 .hero-marquee-group { display: flex; flex: 0 0 auto; align-items: center; min-width: 100vw; }
-.hero-marquee-copy { flex: 1 0 auto; padding-right: 32px; white-space: nowrap; font-size: 12px; font-weight: 500; line-height: 1; letter-spacing: .1em; }
+.hero-marquee-copy { display: inline-flex; flex: 1 0 auto; align-items: center; gap: 20px; padding-right: 32px; white-space: nowrap; font-size: 12px; font-weight: 500; line-height: 1; letter-spacing: .1em; }
+.marquee-separator { flex-shrink: 0; width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; }
 .hero-marquee.is-pending { opacity: 0; visibility: hidden; }
 @keyframes hero-editorial-marquee { to { transform: translate3d(-50%, 0, 0); } }
 /* Extend only the backdrop behind the navbar's existing reserved space. */
@@ -10,7 +11,7 @@
   content: '';
   position: absolute;
   z-index: -1;
-  inset: -96px 0 0;
+  inset: calc(-1 * var(--hero-top-reserve)) 0 0;
   background-color: #0B0B12;
   background-image: linear-gradient(90deg, rgba(11, 11, 18, 0.16), rgba(11, 11, 18, 0.04)), url('../../../../shared/assets/night-lily.png');
   background-size: cover;
@@ -25,7 +26,7 @@
   flex-direction: column;
   justify-content: space-between;
   gap: 48px;
-  min-height: calc(100svh - 96px);
+  min-height: calc(100svh - var(--header-reserve));
   /* The cue now has its own layout slot rather than a viewport padding guess. */
   padding-block: 24px 28px;
 }
@@ -121,8 +122,8 @@ h1 { position: relative; isolation: isolate; margin: 0; font-weight: 800; }
 @media (max-width: 820px) {
   /* Safari clips the negative backdrop inset when overflow-x:clip is on this
      host. The panel already ends at the viewport edge; no clipping is needed. */
-  :host { --hero-top-reserve: 88px; overflow: visible; }
-  :host::before { top: -88px; background-position: 72% center; }
+  :host { overflow: visible; }
+  :host::before { background-position: 72% center; }
 }
 
 
@@ -131,7 +132,7 @@ h1 { position: relative; isolation: isolate; margin: 0; font-weight: 800; }
   .hero-scroll-mobile { display: block; height: 54px; grid-column: 2; grid-row: 1; }
   .hero-micro-cta { width: 100%; max-width: none; justify-content: space-between; gap: 16px; }
   .hero-marquee-copy { font-size: 11px; padding-right: 24px; letter-spacing: .08em; }
-  .hero { min-height: min(680px, calc(100svh - 88px)); gap: 64px; padding-block: 22px 32px; }
+  .hero { min-height: calc(100svh - var(--header-reserve)); gap: clamp(24px, 5svh, 48px); padding-block: 22px max(28px, env(safe-area-inset-bottom, 0px)); }
   .hero-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
   .location { grid-column: 1; font-size: 13px; }
   .discipline { grid-column: 2; font-size: 15px; }
@@ -143,6 +144,7 @@ h1 { position: relative; isolation: isolate; margin: 0; font-weight: 800; }
   .hero-actions { grid-column: 1 / -1; min-height: 60px; display: grid; grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr); align-items: center; gap: 12px; }
   .hero-actions .primary { grid-column: 1; grid-row: 1; justify-self: start; }
   .hero-actions .secondary { grid-column: 3; grid-row: 1; justify-self: end; }
+  .hero-actions .secondary { margin-inline-end: var(--floating-control-clearance); }
 }
 
 @media (max-height: 800px) and (min-width: 641px) {

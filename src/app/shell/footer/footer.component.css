@@ -55,6 +55,7 @@ ul.brand-disciplines { margin-top: calc(16 * var(--u)); }
   .footer-stage::after { background: linear-gradient(to bottom, var(--paper) 0%, rgb(0 0 0 / .96) 50%, rgb(0 0 0 / .9) 80%, rgb(0 0 0 / 0) 100%); }
   .footer-content { width: 100%; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 36px 12px; margin-bottom: max(34vw, 150px); padding: 88px var(--editorial-rail-inset) 0; }
   .footer-brand { grid-column: 1 / -1; }
+  .footer-content { padding-inline-end: calc(var(--editorial-rail-inset) + var(--floating-control-clearance)); }
   .brand-title { font-size: 21px; }
   .brand-description { max-width: 34em; font-size: 14px; }
   .brand-copy { font-size: 12px; }
