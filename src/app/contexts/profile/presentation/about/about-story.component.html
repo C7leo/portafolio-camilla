@@ -1,9 +1,9 @@
 <section class="about-story" [attr.aria-label]="language.translate('My approach to technology')" [attr.lang]="language.language()">
-  <div class="story-stage">
-    <app-editorial-grid [rules]="[{ at: '32px' }, { at: 'calc(100% - 32px)', mobile: false }]" />
+  <div class="story-stage" data-control-boundary>
+    <app-editorial-grid [rules]="[{ at: '32px' }, { at: 'calc(100% - var(--editorial-bottom-inset))', mobile: false }]" />
     <app-about-horizon-bloom class="story-horizon" />
     <div class="story-canvas container">
-      <div class="story-copy">
+      <div class="story-copy" data-control-avoid>
       @for (passage of passages(); track $index) {
         <p class="story-passage">
           @for (line of passage; track $index) {
@@ -15,20 +15,20 @@
     </div>
   </div>
 </section>
-<div class="editorial-transition">
+<div class="editorial-transition" data-control-boundary>
   <app-editorial-grid [rules]="[{ at: '24px' }]" />
   <ng-content />
 </div>
 
-<section class="technology-marquee" [attr.aria-label]="language.language() === 'es' ? 'Tecnologías con las que creo' : 'Technologies I build with'">
-  <app-editorial-grid [rules]="[{ at: '24px', mobile: false }, { at: 'calc(100% - 32px)' }]" />
+<section class="technology-marquee" data-control-boundary [attr.aria-label]="language.language() === 'es' ? 'Tecnologías con las que creo' : 'Technologies I build with'">
+  <app-editorial-grid [rules]="[{ at: '24px', mobile: false }, { at: 'calc(100% - var(--editorial-bottom-inset))' }]" />
   <div class="marquee-header container">
     <p>{{ language.language() === 'es' ? 'Ideas en movimiento. Herramientas para crearlas.' : 'Ideas in motion. Tools to bring them to life.' }}</p>
     <button class="marquee-toggle" type="button" [attr.aria-pressed]="paused()" (click)="toggleMarquee()">
       {{ language.language() === 'es' ? (paused() ? 'Reanudar movimiento' : 'Pausar movimiento') : (paused() ? 'Resume motion' : 'Pause motion') }}
     </button>
   </div>
-  <div class="marquee-rows">
+  <div class="marquee-rows container" data-control-avoid>
     @for (row of technologies; track $index) {
       <div class="marquee-row">
         <div class="marquee-track">

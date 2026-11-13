@@ -5,7 +5,7 @@ for (const width of [1440, 390, 320]) {
   test(`CV download keeps its document and language at ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
     await page.addInitScript(() => sessionStorage.setItem('camilla-cinematic-intro-seen', '1'));
-    await page.goto(url);
+    await page.goto(`${url}/#sobre-mi`);
     const link = page.locator('.cv-download');
     for (const language of ['es', 'en']) {
       await page.locator(`.language-choice[lang="${language}"]`).click();

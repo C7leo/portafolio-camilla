@@ -1,11 +1,11 @@
-<footer id="contacto" class="site-footer" role="contentinfo" tabindex="-1">
+<footer id="contacto" class="site-footer" data-control-boundary data-control-surface="dark" role="contentinfo" tabindex="-1">
   <app-editorial-grid [rules]="[{ anchor: '.brand-logo', offset: -24 }, { anchor: '.footer-content', edge: 'bottom', offset: 24 }]" />
   <div class="footer-stage" aria-hidden="true"></div>
   <p class="footer-glass-wordmark" aria-hidden="true" appReveal="focus" [motionDuration]="1200">Camilla.</p>
   <div class="footer-fog" aria-hidden="true"></div>
 
   <div class="footer-content">
-    <div class="footer-brand">
+    <div class="footer-brand" data-control-avoid>
       <a class="brand-logo" href="#inicio" [attr.aria-label]="'Camilla. Ir al inicio' | t">Camilla.</a>
       <h2 class="brand-title" appReveal="focus" [motionDuration]="1000">{{ 'Tecnología con propósito.' | t }}</h2>
       <p class="brand-description">{{ 'Desarrollo, datos y tecnología para crear soluciones con propósito.' | t }}</p>
@@ -17,13 +17,13 @@
       </ul>
     </div>
 
-    <nav class="footer-column" [attr.aria-label]="'Navegación del pie de página' | t">
+    <nav class="footer-column" data-control-avoid [attr.aria-label]="'Navegación del pie de página' | t">
       <h3>{{ 'Explorar' | t }}</h3>
       <ul>
         @for (link of navigation; track link.href) { <li><a [href]="link.href">{{ link.label | t }}</a></li> }
       </ul>
     </nav>
-    <nav class="footer-column" [attr.aria-label]="'Proyectos' | t">
+    <nav class="footer-column" data-control-avoid [attr.aria-label]="'Proyectos' | t">
       <h3>{{ 'Proyectos' | t }}</h3>
       <ul>
         @for (project of projects; track project.id) {
@@ -31,7 +31,7 @@
         }
       </ul>
     </nav>
-    <nav class="footer-column" [attr.aria-label]="'Canales de contacto' | t">
+    <nav class="footer-column" data-control-avoid [attr.aria-label]="'Canales de contacto' | t">
       <h3>{{ 'Contacto' | t }}</h3>
       <ul>
         @for (link of contacts; track link.id) {

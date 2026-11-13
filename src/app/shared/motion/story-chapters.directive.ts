@@ -28,7 +28,7 @@ export class StoryChaptersDirective implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.scrollMargin = this.main.style.scrollMarginTop;
     this.main.style.scrollMarginTop = '96px';
-    const names = ['home', 'about', 'projects', 'experience'];
+    const names = ['home', 'about', 'projects', 'services', 'experience'];
     this.chapters = Array.from(this.main.children).flatMap((node, index) => {
       if (!(node instanceof HTMLElement)) return [];
       const surface = node.querySelector<HTMLElement>('section');
@@ -74,24 +74,20 @@ export class StoryChaptersDirective implements AfterViewInit, OnDestroy {
       delete chapter.surface.dataset.storyFocus;
     });
     if (this.motion.reduced || !this.motion.supported || this.short) return;
-    // Keep element entrances; replace only the former time-based surface reveals.
-    this.chapters.forEach(chapter => {
-      if (chapter.surface.dataset.motion?.endsWith('surface')) this.motion.finishEntrance(chapter.surface);
-    });
     this.context = gsap.context(() => {
       this.chapters.forEach((chapter, index) => {
         chapter.host.dataset.storyChapter = chapter.name;
         gsap.set(chapter.host, { position: 'relative', zIndex: index + 1 });
-        if (chapter.name === 'about') gsap.set(chapter.host, { backgroundColor: '#FFFFFF' });
       });
       for (let index = 1; index < this.chapters.length; index++) {
         const outgoing = this.chapters[index - 1];
         const incoming = this.chapters[index];
         // These sections enter in natural document flow, without a chapter transition.
         if (incoming.name === 'projects') continue;
-        // The viewport-sized reel must also leave in normal flow. Pinning its host
-        // caches its former height on resize and lets Experience cover the canvas.
-        if (outgoing.name === 'projects' && outgoing.surface.querySelector('app-project-reel')) continue;
+        // Services is a reading section in natural flow on either side.
+        if (incoming.name === 'services' || outgoing.name === 'services') continue;
+        // The project catalogue leaves in normal flow before Experience starts.
+        if (outgoing.name === 'projects' && outgoing.surface.querySelector('app-project-showcase')) continue;
         const surface = incoming.surface;
         surface.dataset.storyTransition = incoming.name === 'about' ? 'slide-over' : incoming.name === 'experience' ? 'cinematic' : 'editorial';
         const timeline = gsap.timeline({

@@ -11,12 +11,12 @@ for (const [width, height] of [[1440, 900], [768, 900], [390, 844]]) {
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.setViewportSize({ width, height });
-    await page.goto(url);
+    await page.goto(`${url}/#sobre-mi`);
     await page.evaluate(() => document.fonts.ready);
     await expect(page.locator('app-skills, app-contact, #habilidades, a[href="#habilidades"]')).toHaveCount(0);
     await expect(page.locator('main > app-experience:last-child')).toHaveCount(1);
     await expect(page.locator('main + app-footer')).toHaveCount(1);
-    await expect(page.locator('.nav-link')).toHaveCount(4);
+    await expect(page.locator('.nav-link')).toHaveCount(5);
     for (const language of ['es', 'en']) {
       await page.locator(`.language-choice[lang="${language}"]`).click();
       await page.locator('.contact').click();

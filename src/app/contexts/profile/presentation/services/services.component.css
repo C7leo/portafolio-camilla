@@ -1,0 +1,52 @@
+:host { display: block; }
+.services { position: relative; isolation: isolate; background: var(--surface); color: var(--text-primary); padding-block: 104px 0; scroll-margin-top: 84px; --editorial-line-ink: var(--neutral-line-ink); --editorial-line-blend: normal; --service-card-bg: #F2F2F2; transition: background-color var(--theme-duration), color var(--theme-duration); }
+:host-context([data-theme='dark']) .services { --service-card-bg: var(--surface-raised); }
+.services:focus { outline: none; }
+.services-meta { padding-block: 24px; }
+.services-meta p { margin: 0; font-size: var(--editorial-label-size); font-weight: 500; line-height: 1.5; }
+.services-intro { display: grid; grid-template-columns: 1.6fr 1fr; align-items: end; gap: 64px; padding-block: 24px 56px; }
+h2 { max-width: 23ch; margin: 0; font-size: var(--editorial-title-size); font-weight: var(--editorial-title-weight); line-height: var(--editorial-title-leading); letter-spacing: var(--editorial-title-tracking); text-wrap: balance; }
+.services-intro > p { max-width: 36ch; margin: 0; color: var(--text-muted); font-size: var(--editorial-copy-size); line-height: var(--editorial-copy-leading); }
+.services-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--editorial-grid-gap); margin: 0; padding: 0 0 40px; list-style: none; }
+.service { display: flex; flex-direction: column; justify-content: space-between; gap: 56px; min-width: 0; min-height: 360px; padding: 28px; border-radius: 16px; background: var(--service-card-bg); color: var(--text-primary); transition: transform 200ms ease, background-color var(--theme-duration), color var(--theme-duration); }
+.service-featured { background: var(--violet); color: var(--white); }
+.service-icon { display: flex; align-items: center; width: 24px; height: 24px; flex-shrink: 0; }
+.service-number { display: block; margin-bottom: 16px; font-size: 11px; font-weight: 500; line-height: 1.5; letter-spacing: .06em; }
+h3 { min-height: 2.3em; margin: 0 0 12px; font-size: clamp(24px, 2.1vw, 30px); font-weight: 500; line-height: 1.15; letter-spacing: -.025em; text-wrap: balance; }
+.service p { min-height: 4.95em; margin: 0; font-size: 15px; line-height: 1.65; opacity: .8; }
+.services-cta { display: flex; align-items: center; justify-content: space-between; gap: var(--editorial-grid-gap); padding-block: 32px; }
+.services-cta-copy { min-width: 0; }
+.services-cta-label { margin: 0 0 10px; color: var(--text-muted); font-size: 11px; font-weight: 500; line-height: 1.5; letter-spacing: .06em; }
+.services-cta-title { margin: 0; font-size: clamp(24px, 2.3vw, 32px); font-weight: 500; line-height: 1.2; letter-spacing: -.025em; text-wrap: balance; }
+.services-contact { display: inline-flex; justify-content: center; align-items: center; gap: 24px; flex-shrink: 0; min-height: 44px; padding: 0 24px; border-radius: 999px; background: var(--lime); color: var(--ink); font-size: 14px; font-weight: 500; text-decoration: none; transition: background-color 200ms ease; }
+.services-contact svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; transition: transform 200ms ease; }
+.services-contact:focus-visible { outline: 2px solid var(--violet); outline-offset: 5px; }
+@media (hover: hover) {
+  .service:hover { transform: translateY(-3px); }
+  .services-contact:hover { background: #EDF9CC; }
+  .services-contact:hover svg { transform: translate(2px, -2px); }
+}
+@media (max-width: 1050px) {
+  .services-intro { gap: 32px; }
+  .service { padding: 24px; }
+}
+@media (max-width: 900px) {
+  .services-intro { grid-template-columns: 1fr; gap: 24px; padding-block: 24px 40px; }
+  .services-intro > p { max-width: 50ch; }
+  .services-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .service:last-child { grid-column: 1 / -1; min-height: 280px; }
+  h3 { font-size: 28px; }
+  .service:last-child h3, .service:last-child p { min-height: 0; }
+  .service-copy { max-width: 48ch; }
+}
+@media (max-width: 640px) {
+  .services { padding-block: 88px 0; }
+  .services-grid { grid-template-columns: 1fr; gap: 16px; padding-bottom: 32px; }
+  .service, .service:last-child { min-height: 320px; gap: 48px; }
+  h3, .service p { min-height: 0; }
+  .services-cta { align-items: flex-start; flex-direction: column; gap: 20px; padding-block: 28px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .services, .service, .services-contact, .services-contact svg { transition: none; }
+  .service:hover, .services-contact:hover svg { transform: none; }
+}

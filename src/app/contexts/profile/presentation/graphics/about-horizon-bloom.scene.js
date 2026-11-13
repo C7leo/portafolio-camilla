@@ -14,6 +14,7 @@ const fragmentShader = `
   uniform float uTime;
   uniform float uIntro;
   uniform float uScroll;
+  uniform vec3 uSurface;
 
   float hash21(vec2 p) {
     p = fract(p * vec2(123.34, 456.21));
@@ -62,7 +63,7 @@ const fragmentShader = `
     glowAlpha += rim * 0.9 + sun * 0.72 + flare * 0.08 + aurora;
     vec3 glowColor = mix(atmosphereColor, rimColor, clamp(rim + sun, 0.0, 1.0));
     glowColor = mix(glowColor, white, sun * 0.24);
-    vec3 color = mix(glowColor, white, planetAlpha);
+    vec3 color = mix(glowColor, uSurface, planetAlpha);
     color = mix(color, warm, clouds);
 
     float alpha = max(planetAlpha, clamp(glowAlpha, 0.0, 0.94));
@@ -85,6 +86,7 @@ export function mountHorizonBloom(host, options) {
   let visible = false;
   let frame = 0;
   let renderer, material, geometry;
+  let surfaceColor;
   let startTime = performance.now();
   let lastTime = 0;
   const pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
@@ -106,6 +108,10 @@ export function mountHorizonBloom(host, options) {
     material.uniforms.uScroll.value = scrollProgress;
     material.uniforms.uTime.value = preference.matches ? 8 : elapsed;
     material.uniforms.uIntro.value = 1;
+    if (surfaceColor) {
+      if (preference.matches) material.uniforms.uSurface.value.copy(surfaceColor);
+      else material.uniforms.uSurface.value.lerp(surfaceColor, 1 - Math.exp(-12 * delta));
+    }
     renderer.render(renderer.__scene, renderer.__camera);
     if (!preference.matches || Math.abs(pointer.targetX - pointer.x) > .001 || Math.abs(pointer.targetY - pointer.y) > .001) {
       frame = requestAnimationFrame(draw);
@@ -157,6 +163,13 @@ export function mountHorizonBloom(host, options) {
   observer.observe(host);
   const sizes = new ResizeObserver(resize);
   sizes.observe(host);
+  // Only change the neutral planet uniform. Keep the renderer, time, pointer,
+  // scroll and brand-colored atmospheric effects alive through theme changes.
+  const themeObserver = new MutationObserver(() => {
+    surfaceColor?.set(getComputedStyle(host).getPropertyValue('--surface').trim()).convertLinearToSRGB();
+    requestDraw();
+  });
+  themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   window.addEventListener('pointermove', onPointer, { passive: true });
   window.addEventListener('scroll', onScroll, { passive: true });
   document.addEventListener('pointerleave', onPointerLeave);
@@ -167,7 +180,7 @@ export function mountHorizonBloom(host, options) {
     if (disposed) return;
     disposed = true;
     cancelAnimationFrame(frame);
-    observer.disconnect(); sizes.disconnect();
+    observer.disconnect(); sizes.disconnect(); themeObserver.disconnect();
     window.removeEventListener('pointermove', onPointer);
     window.removeEventListener('scroll', onScroll);
     document.removeEventListener('pointerleave', onPointerLeave);
@@ -193,6 +206,7 @@ export function mountHorizonBloom(host, options) {
 
       const scene = new THREE.Scene();
       const camera = new THREE.Camera();
+      surfaceColor = new THREE.Color(getComputedStyle(host).getPropertyValue('--surface').trim()).convertLinearToSRGB();
       geometry = new THREE.PlaneGeometry(2, 2);
       material = new THREE.ShaderMaterial({
         vertexShader, fragmentShader, transparent: true, depthWrite: false,
@@ -200,6 +214,7 @@ export function mountHorizonBloom(host, options) {
           uResolution: { value: new THREE.Vector2(1, 1) },
           uPointer: { value: new THREE.Vector2() },
           uTime: { value: 0 }, uIntro: { value: 0 }, uScroll: { value: 0 },
+          uSurface: { value: surfaceColor.clone() },
         },
       });
       scene.add(new THREE.Mesh(geometry, material));

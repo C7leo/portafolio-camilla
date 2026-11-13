@@ -4,6 +4,15 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#FFFFFF" />
+    <script>
+      (() => {
+        let theme = 'light';
+        try { if (localStorage.getItem('portfolio-theme') === 'dark') theme = 'dark'; } catch {}
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#09090B' : '#FFFFFF';
+      })();
+    </script>
+    <style>html{background:#fff;color:#212121}html[data-theme="dark"]{background:#09090b;color:#fff;color-scheme:dark}</style>
     <meta name="description" content="Transformo necesidades de negocio en soluciones tecnológicas, combinando desarrollo de software, análisis de datos y mejora de procesos." />
     <title>Camilla Espinoza — Desarrollo &amp; Datos</title>
     <link rel="icon" href="/src/app/shared/assets/logo.png" type="image/png" />

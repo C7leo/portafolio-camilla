@@ -1,0 +1,31 @@
+:host { position: fixed; inset: 0; z-index: 21; pointer-events: none; --control-bottom: var(--floating-controls-bottom); }
+button { position: absolute; bottom: var(--control-bottom); display: flex; align-items: center; justify-content: center; width: 44px; padding: 0; cursor: pointer; pointer-events: auto; -webkit-tap-highlight-color: transparent; }
+.floating-scroll-cue { left: max(10px, calc(var(--editorial-rail-inset) - 56px)); height: 60px; border: 0; border-radius: 24px; background: transparent; color: var(--ink); transition: opacity 300ms ease, color var(--theme-duration); }
+.scroll-capsule { display: flex; justify-content: center; align-items: flex-end; width: 32px; height: 56px; padding-bottom: 8px; border: 1px solid currentColor; border-radius: 999px; opacity: .85; }
+.scroll-arrow { display: flex; color: var(--violet); animation: scroll-invitation 1.8s ease-in-out infinite; }
+.scroll-direction { display: flex; transition: transform 300ms ease; }
+.points-up .scroll-direction { transform: rotate(180deg); }
+.return-veil { position: absolute; inset: 0; opacity: 0; background: rgb(9 9 11 / .12); backdrop-filter: blur(0px); pointer-events: none; }
+.floating-scroll-cue:disabled { cursor: progress; }
+.on-dark { color: var(--white); }
+.on-dark .scroll-arrow { color: var(--lime); }
+.floating-scroll-cue.at-home { left: var(--home-cue-left); top: var(--home-cue-top); bottom: auto; color: var(--white); }
+.at-home .scroll-arrow { color: var(--lime); }
+.floating-theme-toggle { right: max(10px, calc(var(--editorial-rail-inset) - 56px)); height: 44px; border: 1px solid rgb(var(--neutral-line-ink) / .06); border-radius: 999px; background: var(--surface); color: var(--text-muted); box-shadow: 0 3px 16px rgb(0 0 0 / .04); transition: background-color var(--theme-duration), color var(--theme-duration), border-color var(--theme-duration), opacity 300ms ease; }
+.theme-icon { display: flex; align-items: center; justify-content: center; }
+.theme-icon[hidden] { display: none; }
+button:focus-visible { outline: 2px solid var(--violet); outline-offset: 4px; }
+.on-dark:focus-visible { outline-color: var(--lime); }
+.floating-theme-toggle.on-dark-surface:focus-visible { outline-color: var(--white); }
+.is-hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+:host(.intro-visible) button { opacity: 0; visibility: hidden; pointer-events: none; }
+@keyframes scroll-invitation { 0%, 100% { transform: translateY(-5px); opacity: .45; } 55% { transform: translateY(3px); opacity: 1; } }
+@media (max-width: 640px) {
+  .floating-scroll-cue { height: 54px; }
+  .scroll-capsule { width: 28px; height: 48px; padding-bottom: 6px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-arrow { animation: none; transform: none; opacity: 1; }
+  .floating-scroll-cue, .floating-theme-toggle { transition: none; }
+  .scroll-direction { transition: none; }
+}

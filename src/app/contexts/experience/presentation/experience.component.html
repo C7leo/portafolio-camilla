@@ -1,10 +1,10 @@
-﻿<section #experienceScene id="experiencia" class="experience" aria-labelledby="experience-title" tabindex="-1">
+﻿<section data-control-surface="dark" #experienceScene id="experiencia" class="experience" aria-labelledby="experience-title" tabindex="-1">
   <app-experience-valley #valley [preview]="valleyPreview" (unavailable)="onGraphicsUnavailable()" />
-  <div class="experience-grid" aria-hidden="true">
-    <app-editorial-grid tone="dark" [rules]="[{ at: '84px' }, { at: 'calc(100% - 32px)' }]" />
+  <div class="experience-grid" data-control-boundary aria-hidden="true">
+    <app-editorial-grid tone="dark" [rules]="[{ at: '84px' }, { at: 'calc(100% - var(--editorial-bottom-inset))' }]" />
   </div>
   <div class="experience-reveal">
-    <div class="experience-backdrop" aria-hidden="true">
+    <div class="experience-backdrop" data-control-surface="neutral" aria-hidden="true">
       <div class="experience-photo">
         <canvas #valleyPreview class="experience-valley-preview"></canvas>
         <div class="experience-aperture-line"></div>
@@ -20,6 +20,7 @@
     <div class="experience-stage">
       <div class="container journey-composition">
         <header class="experience-header">
+          <p class="section-index">{{ '05 / EXPERIENCE' | t }}</p>
           <div class="title-composition"><h2 id="experience-title">{{ 'Cada experiencia abre un nuevo mundo.' | t }}</h2></div>
         </header>
         <ol class="experience-list" [attr.aria-label]="'Trayectoria profesional' | t">

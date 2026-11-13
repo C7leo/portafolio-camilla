@@ -18,6 +18,7 @@ src/
         infrastructure/           # Perfil estático y contactos desde VITE_*
         presentation/
           hero/                   # Portada
+          services/               # Servicios freelance y CTA de WhatsApp
           about/                  # Biografía, narrativa y marquee
           graphics/               # Shader y contrato del horizonte
       projects/
@@ -26,7 +27,7 @@ src/
         infrastructure/
           assets/                 # Imágenes de los siete proyectos
         presentation/
-          graphics/               # Renderizador Three.js del recorrido
+                                  # Galería CSS 3D, escena de mar, modal y detalles por hash
       experience/
         domain/                   # Experiencia y contrato de repositorio
         application/              # Catálogo profesional
@@ -34,11 +35,13 @@ src/
         presentation/
           graphics/               # Escena Three.js del valle
     shell/
+      controls/                   # Controles flotantes de scroll y tema
       navigation/                 # Navbar, idiomas y descarga de CV
       intro/                      # Presentación inicial y vídeo
       footer/                     # Cierre y contacto
     shared/
       assets/                     # Logo y fotografía floral compartidos
+      theme/                      # Estado centralizado y persistencia del tema
       i18n/                       # LanguageService y TranslatePipe
       motion/                     # Coordinación de scroll e introducción
       ui/editorial-grid/          # Guías arquitectónicas reutilizables

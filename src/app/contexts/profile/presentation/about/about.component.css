@@ -1,4 +1,4 @@
-﻿:host { display: block; background: #FFFFFF; color: #202020; }
+﻿:host { display: block; background: var(--surface); color: var(--text-editorial); transition: background-color var(--theme-duration), color var(--theme-duration); }
 .about { scroll-margin-top: 84px; }
 .about:focus { outline: none; }
 .editorial-scene { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; gap: clamp(48px, 9vw, 144px); padding-block: 64px 96px; }
@@ -19,11 +19,11 @@ h2 span:last-child { margin-left: .32em; }
 .editorial-copy p { margin: 0; text-wrap: pretty; }
 .introduction { font-size: 17px; font-weight: 500; line-height: 1.55; letter-spacing: -.015em; }
 .background { margin-top: 16px !important; font-size: 14px; line-height: 1.65; }
-.manifesto { justify-self: end; width: min(78%, 260px); aspect-ratio: 1; container-type: inline-size; display: flex; align-items: center; padding: 24px; background: #E2F4A6; }
+.manifesto { justify-self: end; width: min(78%, 260px); aspect-ratio: 1; container-type: inline-size; display: flex; align-items: center; padding: 24px; background: #E2F4A6; color: var(--ink); }
 .manifesto p { margin: 0; font-size: 23cqw; font-weight: 700; line-height: .98; letter-spacing: -.045em; }
 .manifesto span { display: block; }
 .manifesto span:nth-child(2) { padding-left: .22em; }
-.image-space { display: flex; align-items: end; width: 100%; padding: 16px; border: 1px solid #D8D8D8; font-size: 12px; }
+.image-space { display: flex; align-items: end; width: 100%; padding: 16px; border: 1px solid var(--border-neutral); font-size: 12px; }
 .portrait-space { aspect-ratio: 3 / 4; }
 .process-space { aspect-ratio: 3 / 2; }
 :host-context(html[lang='es']) .manifesto p { font-size: 15cqw; }

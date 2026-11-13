@@ -4,6 +4,8 @@ export interface Project {
   readonly name: string;
   readonly category: string;
   readonly description: string;
+  readonly problem: string;
+  readonly solution: string;
   readonly technologies: readonly string[];
   readonly image: string | null;
   readonly imageAlt: string;

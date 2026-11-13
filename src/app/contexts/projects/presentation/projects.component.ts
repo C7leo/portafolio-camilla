@@ -3,13 +3,14 @@ import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import { ChangeDetectionStrategy, Component, ElementRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
 import type { Project } from '../domain/project.model';
 import { ProjectCatalogService } from '../application/project-catalog.service';
-import { ProjectReelComponent } from './project-reel.component';
+import { ProjectShowcaseComponent } from './project-showcase.component';
 import { ProjectArtComponent } from './project-art.component';
+import { ProjectSummaryComponent } from './project-summary.component';
 import template from './projects.component.html?raw';
 import styles from './projects.component.css?inline';
 
 @Component({
-  selector: 'app-projects', standalone: true, imports: [EditorialGridComponent, TranslatePipe, ProjectReelComponent, ProjectArtComponent],
+  selector: 'app-projects', standalone: true, imports: [EditorialGridComponent, TranslatePipe, ProjectShowcaseComponent, ProjectArtComponent, ProjectSummaryComponent],
   template, styles, host: { '(window:hashchange)': 'syncRoute()' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -17,7 +18,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
   private readonly catalog = inject(ProjectCatalogService);
   readonly projects = this.catalog.projects;
   readonly detailProject = signal<Project | null>(null);
-  restoreProject: string | null = null;
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
   private routeFrame = 0;
 
@@ -28,7 +28,6 @@ export class ProjectsComponent implements OnInit, OnDestroy {
     const previous = this.detailProject();
     this.detailProject.set(project);
     const returning = !project && previous && (location.hash === '#proyectos' || location.hash === '');
-    this.restoreProject = returning ? previous.id : null;
     cancelAnimationFrame(this.routeFrame);
     if (!project && !returning) return;
     this.routeFrame = requestAnimationFrame(() => {

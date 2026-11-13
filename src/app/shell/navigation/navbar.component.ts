@@ -1,6 +1,7 @@
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, NgZone, OnDestroy, signal, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, computed, ElementRef, inject, NgZone, OnDestroy, signal, ViewChild } from '@angular/core';
 import { LanguageService } from '../../shared/i18n/language.service';
+import { CinematicIntroState } from '../../shared/motion/cinematic-intro-state.service';
 import template from './navbar.component.html?raw';
 import styles from './navbar.component.css?inline';
 
@@ -18,9 +19,11 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
   get cvUrl(): string { return `${import.meta.env.BASE_URL}cv/${this.cvFilename}`; }
   readonly menuOpen = signal(false);
   readonly activeSection = signal('inicio');
+  private readonly intro = inject(CinematicIntroState);
+  readonly visible = computed(() => !this.intro.visible());
   readonly sections = [
     { id: 'inicio', label: 'Inicio' }, { id: 'sobre-mi', label: 'Sobre mí' },
-    { id: 'proyectos', label: 'Proyectos' }, { id: 'experiencia', label: 'Experiencia' },
+    { id: 'proyectos', label: 'Proyectos' }, { id: 'servicios', label: 'Servicios' }, { id: 'experiencia', label: 'Experiencia' },
   ];
   private readonly zone = inject(NgZone);
   private frame = 0;
@@ -38,11 +41,14 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
       this.frame = 0;
       const threshold = Math.min(180, innerHeight * 0.25);
       let active = 'inicio';
-      for (const id of ['sobre-mi', 'proyectos', 'experiencia', 'contacto']) {
+      for (const id of ['sobre-mi', 'proyectos', 'servicios', 'experiencia', 'contacto']) {
         const section = document.getElementById(id);
         if (section && section.getBoundingClientRect().top <= threshold) active = id;
       }
-      if (active !== this.activeSection()) this.zone.run(() => this.activeSection.set(active));
+      if (active !== this.activeSection()) this.zone.run(() => {
+        this.activeSection.set(active);
+        if (active === 'inicio') this.closeMenu();
+      });
     });
   };
   ngOnDestroy(): void {
