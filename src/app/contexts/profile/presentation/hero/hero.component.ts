@@ -18,7 +18,7 @@ import styles from './hero.component.css?inline';
 export class HeroComponent implements AfterViewInit, OnDestroy {
   readonly profile = inject(ProfileCatalogService).profile;
   readonly whatsappUrl = freelanceWhatsappUrl;
-  readonly marqueeText = 'DESARROLLO WEB ✳ APLICACIONES A MEDIDA ✳ DATOS Y AUTOMATIZACIÓN ✳ SOLUCIONES DIGITALES ✳';
+  readonly marqueeItems = ['DESARROLLO WEB', 'APLICACIONES A MEDIDA', 'DATOS Y AUTOMATIZACIÓN', 'SOLUCIONES DIGITALES'] as const;
   @ViewChild('heroScene') heroScene!: ElementRef<HTMLElement>;
   private readonly browser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly zone = inject(NgZone);

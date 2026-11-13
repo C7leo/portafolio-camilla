@@ -28,7 +28,8 @@ h3 { min-height: 2.3em; margin: 0 0 12px; font-size: clamp(24px, 2.1vw, 30px); f
 }
 @media (max-width: 1050px) {
   .services-intro { gap: 32px; }
-  .service { padding: 24px; }
+  .services-intro, .services-cta { padding-inline-end: var(--floating-control-clearance); }
+  .service { padding: 24px; padding-inline-end: max(24px, var(--floating-control-clearance)); }
 }
 @media (max-width: 900px) {
   .services-intro { grid-template-columns: 1fr; gap: 24px; padding-block: 24px 40px; }

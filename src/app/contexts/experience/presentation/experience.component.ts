@@ -124,8 +124,8 @@ export class ExperienceComponent implements AfterViewInit, OnDestroy {
         .to(section, { '--opening-width': () => `${circle()}px`, duration: .22 }, .28)
         .to(section, { '--opening-width': () => `${pillWidth()}px`, duration: .22 }, .5)
         .to(section, { '--opening-width': () => `${section.clientWidth}px`, duration: .28 }, .72)
-        .fromTo(hairline, { opacity: 1 }, { opacity: 0, duration: .18 }, .1)
-        .fromTo(opening, { opacity: 1, filter: 'blur(0px)' }, { opacity: 0, filter: 'blur(12px)', duration: .18 }, .6)
+        .fromTo(hairline, { autoAlpha: 1 }, { autoAlpha: 0, duration: .18 }, .1)
+        .fromTo(opening, { autoAlpha: 1, filter: 'blur(0px)' }, { autoAlpha: 0, filter: 'blur(12px)', duration: .18 }, .6)
         .fromTo(photo, { filter: 'grayscale(1) saturate(1) contrast(1) brightness(1)' }, {
           filter: 'grayscale(0) saturate(1) contrast(1) brightness(1)', duration: .38,
         }, .62)
@@ -141,7 +141,10 @@ export class ExperienceComponent implements AfterViewInit, OnDestroy {
         scrub: .35, invalidateOnRefresh: true,
       } })
         .to(backdrop, { yPercent: -100, ease: 'none', duration: 1 }, 0)
-        .fromTo(preview, { yPercent: 0 }, { yPercent: 100, ease: 'none', duration: 1 }, 0);
+        .fromTo(preview, { yPercent: 0 }, { yPercent: 100, ease: 'none', duration: 1 }, 0)
+        // Retire the outgoing compositing layer once its exit is complete.
+        // Reverse scrolling restores visibility through the same timeline.
+        .set(backdrop, { visibility: 'hidden' }, 1);
 
       const header = section.querySelector<HTMLElement>('.experience-header')!;
       const entries = [...section.querySelectorAll<HTMLElement>('.experience-entry')];

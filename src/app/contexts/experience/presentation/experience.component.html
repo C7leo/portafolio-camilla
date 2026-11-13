@@ -19,14 +19,14 @@
   <div class="experience-content">
     <div class="experience-stage">
       <div class="container journey-composition">
-        <header class="experience-header">
+        <header class="experience-header" data-control-avoid>
           <p class="section-index">{{ '05 / EXPERIENCE' | t }}</p>
           <div class="title-composition"><h2 id="experience-title">{{ 'Cada experiencia abre un nuevo mundo.' | t }}</h2></div>
         </header>
         <ol class="experience-list" [attr.aria-label]="'Trayectoria profesional' | t">
           @for (entry of experiences; track entry.id) {
             <li class="experience-entry" [attr.data-company]="entry.id" [attr.aria-labelledby]="entry.id + '-company'">
-              <div class="entry-information">
+              <div class="entry-information" data-control-avoid>
                 <h3 class="company-name" [id]="entry.id + '-company'">{{ entry.company }}</h3>
                 <p class="role" [id]="entry.id + '-role'">{{ entry.role | t }}</p>
                 <p class="period" [id]="entry.id + '-period'">{{ entry.period }}</p>
@@ -39,7 +39,7 @@
           }
         </ol>
       </div>
-      <button class="journey-mode" type="button" (click)="toggleReadingMode()" [attr.aria-pressed]="readingMode()">
+      <button class="journey-mode" data-control-avoid type="button" (click)="toggleReadingMode()" [attr.aria-pressed]="readingMode()">
         {{ readingMode() ? (english ? 'Return to journey' : 'Volver al recorrido') : (english ? 'Read without animation' : 'Leer sin animación') }}
       </button>
     </div>

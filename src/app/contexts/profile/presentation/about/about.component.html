@@ -16,7 +16,7 @@
       </figure>
 
       <div class="editorial-notes">
-        <header class="about-header">
+        <header class="about-header" data-control-avoid>
           <p class="section-index">{{ '02 / ABOUT' | t }}</p>
           <h2 id="about-title"><span>{{ 'TECNOLOGÍA' | t }}</span><span>{{ 'CON PROPÓSITO.' | t }}</span></h2>
         </header>
@@ -31,11 +31,11 @@
           }
           <figcaption>{{ 'Proceso' | t }}</figcaption>
         </figure>
-        <div class="editorial-copy">
+        <div class="editorial-copy" data-control-avoid>
           <p class="introduction">{{ profile.introduction | t }}</p>
           <p class="background">{{ profile.background | t }}</p>
         </div>
-        <div class="manifesto" data-control-surface="light">
+        <div class="manifesto" data-control-surface="light" data-control-avoid>
           <p><span>{{ 'CREATE.' | t }}</span><span>{{ 'BUILD.' | t }}</span><span>{{ 'EVOLVE.' | t }}</span></p>
         </div>
       </div>
