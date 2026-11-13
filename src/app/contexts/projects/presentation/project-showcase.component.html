@@ -1,0 +1,70 @@
+<div class="project-showcase" data-control-surface="dark" data-control-boundary>
+  <div class="project-catalogue">
+    <app-editorial-grid [rails]="true" [rules]="[{ anchor: '.showcase-header', offset: -24 }, { anchor: '.project-index' }, { anchor: '.project-index', edge: 'bottom' }]" />
+    <div class="showcase-content container">
+    <header class="showcase-header">
+      <h2 id="projects-title">{{ '03 / Projects' | t }}</h2>
+      <p>{{ 'Soluciones digitales, de la idea al desarrollo.' | t }}</p>
+    </header>
+    <div class="gallery-intro">
+      <p>{{ 'Ideas que se convierten en experiencias digitales.' | t }}</p>
+      <span>{{ projects.length.toString().padStart(2, '0') }} <span>{{ 'proyectos seleccionados' | t }}</span></span>
+    </div>
+    <div class="sea-gallery" data-control-boundary data-control-surface="neutral" [attr.aria-label]="'Archivo visual de proyectos' | t">
+      <div class="gallery-stage">
+      <div #ringWall class="ring-wall" aria-hidden="true">
+        <div class="ring-lens"><div class="ring-center">
+          @for (project of ringSlots; track $index) {
+            <button class="ring-card" data-control-avoid type="button" tabindex="-1" (mousedown)="$event.preventDefault()" (click)="openProject($index % projects.length, $event)" [attr.aria-label]="project.name">
+              <span class="ring-face">
+                <img [src]="project.image" alt="" loading="lazy" width="900" height="600" draggable="false" />
+                <span class="ring-caption"><span>{{ project.name }}</span><span aria-hidden="true">↗</span></span>
+              </span>
+            </button>
+          }
+        </div></div>
+      </div>
+      </div>
+    </div>
+      <div class="gallery-controls" data-control-avoid role="group" [attr.aria-label]="'Controles de proyectos' | t" (focusin)="pauseForFocus(true)" (focusout)="pauseForFocus(false)">
+        <p>{{ 'Arrastra para explorar' | t }}</p>
+        <div class="gallery-buttons">
+          <button type="button" (click)="step(-1)" [attr.aria-label]="'Proyecto anterior' | t">
+            <span class="gallery-control-face" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M19 12H5m7-7-7 7 7 7" /></svg></span>
+          </button>
+          <button class="motion-toggle" type="button" (click)="toggleMotion()" [attr.aria-pressed]="paused()" [attr.aria-label]="(paused() ? 'Reanudar animación' : 'Pausar animación') | t">
+            <span class="gallery-control-face" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false">
+              @if (paused()) { <path d="m9 5 10 7-10 7Z" /> } @else { <path d="M9 5v14M15 5v14" /> }
+            </svg></span>
+          </button>
+          <button class="next-control" type="button" (click)="step(1)" [attr.aria-label]="'Proyecto siguiente' | t">
+            <span class="gallery-control-face" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M5 12h14m-7-7 7 7-7 7" /></svg></span>
+          </button>
+        </div>
+      </div>
+      <ol class="project-index" data-control-avoid [attr.aria-label]="'Seleccionar proyecto' | t" (focusin)="pauseForFocus(true)" (focusout)="pauseForFocus(false)">
+        @for (project of projects; track project.id) {
+          <li class="project-row">
+            <button class="project-open" type="button" (click)="openProject($index, $event)">
+              <img [src]="project.image" alt="" loading="lazy" width="900" height="600" />
+              <span class="index-number" aria-hidden="true">{{ ($index + 1).toString().padStart(2, '0') }}</span>
+              <span>{{ project.name }}</span><span class="index-arrow" aria-hidden="true">↗</span>
+            </button>
+          </li>
+        }
+      </ol>
+    </div>
+  </div>
+  <dialog #projectDialog class="project-dialog" aria-labelledby="reel-project-name" (click)="closeOnBackdrop($event)" (close)="restoreProjectFocus()">
+    <button class="dialog-close" type="button" (click)="closeProject()" [attr.aria-label]="'Cerrar' | t">×</button>
+    @if (openedProject(); as project) {
+      <h3 id="reel-project-name">{{ project.name }}</h3>
+      <p>{{ project.description | t }}</p>
+      <app-project-summary [project]="project" />
+      <div class="dialog-links">
+        <a [href]="project.landingUrl" target="_blank" rel="noopener noreferrer">{{ 'Ver landing page' | t }}<span class="sr-only"> {{ '(se abre en otra pestaña)' | t }}</span></a>
+        <a [href]="project.repositoryUrl" target="_blank" rel="noopener noreferrer">{{ 'Repositorio' | t }}<span class="sr-only"> {{ '(se abre en otra pestaña)' | t }}</span></a>
+      </div>
+    }
+  </dialog>
+</div>

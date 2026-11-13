@@ -61,10 +61,48 @@ the still and the registered film. Desktop and skip timing retain their paths.
 
 `tests/cinematic-continuity.spec.js` compares both images before text annotations
 at 375, 390, 393 and 430 px in Chrome and WebKit, checks their geometry, and verifies
-continuous forward/reverse pin release between Home and About. A translated
-scroll link appears after Hero construction on phones, tablets and desktops.
-Its visible indicator is a fine mouse-shaped outline with a violet arrow moving
-downward in a loop. The translated label is available to screen readers. Reduced
-motion keeps the arrow static. On phones, the icon occupies the center column
-of the same row as the two Hero links, with separation from the section edge.
-On tablets and desktops, it is centered below the links in reserved bottom space.
+continuous forward/reverse pin release between Home and About. The global floating scroll capsule appears outside the intro overlay and keeps the same floral handoff. Its accessible label is translated, its arrow respects reduced motion, and its placement is independent of the Hero content. See [Floating controls and themes](floating-controls.md).
+
+
+## Hero editorial marquee
+
+The full-width lime ribbon occupies the upper 36 px (30 px on phones) of the
+existing navbar reserve. It does not change Hero height, title sizes, editorial
+rules or the floral backdrop rectangle used by the intro registration.
+
+The Hero owns one text value, with visual copies in two equal flex groups. A
+30-second linear CSS transform moves the track by exactly one group width;
+each group is at least a viewport wide, so the seam stays covered on wide screens.
+Only one copy is exposed to assistive technology. Reduced motion removes the
+animation. Brand lime and black remain identical in both themes, and theme
+changes preserve the animation instance. During the intro text reveal, the ribbon
+stays hidden without restarting its loop. No scroll listeners or packages are added.
+
+`tests/hero-marquee.spec.js` checks viewport coverage through a complete loop,
+responsive heights, theme continuity, stable Hero geometry, overflow and reduced
+motion. The cinematic continuity tests retain the floral handoff comparison.
+
+
+## Compact freelance invitation
+
+The Hero contains a small WhatsApp invitation, not an additional section. It uses
+the normal grid flow of the lower Hero layout, immediately before the detail
+row. A 28 px gap separates it from the editorial line anchored to that row. The
+invitation shares the left content guide and keeps its compact copy/button row.
+There are no absolute offsets or negative margins on the CTA. Standard viewport
+heights remain unchanged; very short landscape windows use natural document
+height rather than shrinking the name or overlapping content. The name font
+sizes, original floral asset, marquee, professional specialties and existing
+project/about links are preserved.
+
+`profile/application/freelance-contact.ts` retains the owner-provided number and
+existing prefilled message. The Hero builds the secure new-tab WhatsApp URL from
+that configuration; the footer keeps its original direct contact link. Text uses
+the existing ES/EN dictionary. The existing Hero timeline reveals the CTA with
+the details; repeat visits use one subtle CSS entrance. Reduced motion disables
+it. The former standalone component, reveal variant and translations are removed.
+
+`tests/hero-micro-cta.spec.js` checks alignment with the left guide, a 24-32 px
+gap above the actual editorial rule, stable height at standard viewports, no
+overlap with the name/text/links/scroll control, WhatsApp, accessibility and
+language support.

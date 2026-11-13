@@ -6,6 +6,7 @@ import { gsap } from 'gsap';
 import { ScrollEffectDirective } from '../../../../shared/motion/scroll-effect.directive';
 import { CinematicIntroState, IntroResult } from '../../../../shared/motion/cinematic-intro-state.service';
 import { ProfileCatalogService } from '../../application/profile-catalog.service';
+import { freelanceWhatsappUrl } from '../../application/freelance-contact';
 import template from './hero.component.html?raw';
 import styles from './hero.component.css?inline';
 
@@ -16,6 +17,8 @@ import styles from './hero.component.css?inline';
 })
 export class HeroComponent implements AfterViewInit, OnDestroy {
   readonly profile = inject(ProfileCatalogService).profile;
+  readonly whatsappUrl = freelanceWhatsappUrl;
+  readonly marqueeText = 'DESARROLLO WEB ✳ APLICACIONES A MEDIDA ✳ DATOS Y AUTOMATIZACIÓN ✳ SOLUCIONES DIGITALES ✳';
   @ViewChild('heroScene') heroScene!: ElementRef<HTMLElement>;
   private readonly browser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly zone = inject(NgZone);
@@ -45,7 +48,7 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
         const surname = scene.querySelector<HTMLElement>('.surname-letters')!;
         const cursor = scene.querySelector<HTMLElement>('.surname')!;
         const metadata = scene.querySelector<HTMLElement>('.hero-meta')!;
-        const details = scene.querySelectorAll<HTMLElement>('.hero-details > *');
+        const details = scene.querySelectorAll<HTMLElement>('.hero-micro-cta, .hero-details > *');
         const timeline = gsap.timeline({ onComplete: () => this.finishBuild() });
         timeline.to(scene, { '--name-panel-scale': 1, duration: .55, ease: 'power2.out' }, 0)
           .to(title, { opacity: 1, clipPath: 'inset(0% 0% 0% 0%)', filter: 'blur(0px)', duration: .9, ease: 'steps(7)' }, .38)

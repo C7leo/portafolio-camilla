@@ -27,9 +27,12 @@ async function start(page) {
   await page.goto(`${url}/#experiencia`);
   await expect(page.locator('#experiencia')).toHaveAttribute('data-journey-enabled', '');
   await page.evaluate(() => document.fonts.ready);
-  const base = await page.locator('.experience-content').evaluate(e => e.getBoundingClientRect().top + scrollY);
   return async time => {
-    await page.evaluate(({ base, time }) => scrollTo(0, base + innerHeight * 8.5 * time / 10.3), { base, time });
+    // Translated content above Experience can change its document position.
+    await page.locator('.experience-content').evaluate((content, time) => {
+      const base = content.getBoundingClientRect().top + scrollY;
+      scrollTo(0, base + innerHeight * 8.5 * time / 10.3);
+    }, time);
     await page.waitForTimeout(800); // Allow the scrub to settle, rather than advancing the scene on a timer.
   };
 }
@@ -90,7 +93,7 @@ for (const [width, height] of [[1440, 900], [768, 900], [390, 844], [320, 640]])
     }
     await seek(10.3);
     await expect(page.locator('app-experience-valley')).toHaveCSS('opacity', '0');
-    await expect(page.locator('#experiencia')).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    await expect(page.locator('#experiencia')).toHaveCSS('background-color', 'rgb(0, 0, 0)');
     await page.mouse.wheel(0, height * .65);
     await expect(page.locator('.site-footer')).toBeInViewport();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);

@@ -71,8 +71,6 @@ export class ViewportMotionService implements OnDestroy {
     return () => { this.immediate.delete(element); };
   }
 
-  finishEntrance(element: HTMLElement): void { this.immediate.get(element)?.(); }
-
   onPreferenceChange(callback: (reduced: boolean) => void): () => void {
     this.preferences.add(callback);
     return () => { this.preferences.delete(callback); };

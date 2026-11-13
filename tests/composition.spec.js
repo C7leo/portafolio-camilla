@@ -18,15 +18,16 @@ for (const baseline of viewports) {
     expect(Math.abs(left + right - baseline.width)).toBeLessThanOrEqual(1);
 
     for (const language of ['es', 'en']) {
+      await page.locator('#sobre-mi').evaluate(section => scrollTo(0, section.getBoundingClientRect().top + scrollY - 84));
       await page.locator(`.language-choice[lang="${language}"]`).click();
-      for (const selector of ['.hero', '.story-stage', '.editorial-scene', '.reel-stage', '.experience-content', '.site-footer']) {
+      for (const selector of ['.hero', '.story-stage', '.editorial-scene', '.project-showcase', '.experience-content', '.site-footer']) {
         await page.locator(selector).evaluate(element => scrollTo(0, element.getBoundingClientRect().top + scrollY - 92));
         const violations = await page.locator(selector).evaluate(element => {
           const rail = document.querySelector('.is-viewport .grid-rail.left').getBoundingClientRect().x;
           const right = innerWidth - rail;
           const selectors = [
             '.hero-meta p', '.specialty', '.hero-actions', '.story-copy', '.portrait', '.editorial-notes',
-            '.reel-header', '.reel-bottom', '.reel-project-links button', '.experience-header', '.experience-entry', '.entry-information',
+            '.showcase-header', '.gallery-intro', '.project-index', '.hero-micro-cta', '.experience-header', '.experience-entry', '.entry-information',
             '.footer-brand', '.footer-column', '.brand-disciplines',
           ];
           return Array.from(element.querySelectorAll(selectors.join(','))).flatMap(node => {

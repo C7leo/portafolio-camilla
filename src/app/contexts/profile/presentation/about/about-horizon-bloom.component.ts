@@ -11,7 +11,7 @@ import { mountHorizonBloom } from '../graphics/about-horizon-bloom.scene';
     .horizon-fallback, .horizon-canvas { position: absolute; inset: 0; width: 100%; height: 100%; transition: opacity 500ms ease; }
     .horizon-fallback { opacity: 1; background:
       radial-gradient(ellipse 44% 11% at 54% 42%, rgb(238 160 255 / .17), transparent 72%),
-      radial-gradient(ellipse 75% 62% at 50% 102%, #fff 98.7%, rgb(248 175 237 / .82) 99%, rgb(238 160 255 / .28) 99.35%, transparent 100%); }
+      radial-gradient(ellipse 75% 62% at 50% 102%, var(--surface) 98.7%, rgb(248 175 237 / .82) 99%, rgb(238 160 255 / .28) 99.35%, transparent 100%); }
     .horizon-fallback.is-hidden { opacity: 0; }
     .horizon-canvas { opacity: 0; }
     .horizon-canvas.is-ready { opacity: 1; }

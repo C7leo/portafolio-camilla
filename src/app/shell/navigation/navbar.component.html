@@ -1,4 +1,4 @@
-﻿<header class="floating-header">
+<header class="floating-header" [class.is-home]="activeSection() === 'inicio'" [class.is-visible]="visible()" [attr.inert]="visible() ? null : ''" [attr.aria-hidden]="visible() ? null : 'true'">
   <nav class="navbar" [attr.aria-label]="'Navegación principal' | t">
     <div class="glass-surface" aria-hidden="true"></div>
     <a class="brand" href="#inicio" [attr.aria-label]="'Camilla. Ir al inicio' | t" (click)="closeMenu()"><img class="brand-logo" [src]="logoSrc" alt="" width="36" height="36" /></a>

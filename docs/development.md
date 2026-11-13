@@ -32,11 +32,14 @@ Crear un archivo `.env` local y configurar únicamente los destinos públicos de
 VITE_CONTACT_EMAIL=
 VITE_CONTACT_LINKEDIN=
 VITE_CONTACT_GITHUB=
+VITE_CONTACT_WHATSAPP=
 ```
 
 Las variables `VITE_*` quedan visibles en el navegador; no deben contener credenciales privadas. Los destinos vacíos se omiten. Tras editar el entorno, reiniciar Vite y reconstruir la versión publicada. `VITE_GA_MEASUREMENT_ID` está reservada para una integración futura; no activa seguimiento por sí sola.
 
-Los archivos `.env*`, la carpeta `.agents/` y `skills-lock.json` permanecen locales y están excluidos de Git.
+El número de WhatsApp se configura en `VITE_CONTACT_WHATSAPP`, con código de país y solo dígitos. Hero y Servicios comparten ese destino y el mensaje precargado; si falta el número, sus enlaces de WhatsApp se omiten. El número no se define en el código fuente ni en las pruebas.
+
+Los archivos `.env*`, la carpeta `.agents/` y `skills-lock.json` permanecen locales y están excluidos de Git. `.env.example` es la excepción versionable y solo contiene nombres de variables sin datos personales.
 
 Las traducciones están en `src/app/shared/i18n/`. La selección ES/EN mantiene las claves de almacenamiento existentes y el PDF elegido en el navbar. No se necesita un sistema de traducciones adicional.
 

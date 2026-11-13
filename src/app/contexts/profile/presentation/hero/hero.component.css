@@ -1,4 +1,10 @@
-:host { display: block; position: relative; isolation: isolate; overflow-x: clip; background: #0B0B12; color: #FFFFFF; }
+:host { --hero-top-reserve: 96px; display: block; position: relative; isolation: isolate; overflow-x: clip; background: #0B0B12; color: #FFFFFF; }
+.hero-marquee { position: absolute; top: calc(-1 * var(--hero-top-reserve)); left: 0; z-index: 9; width: 100%; height: var(--hero-marquee-height); overflow: hidden; background: var(--lime); color: #111111; transition: opacity 350ms ease, visibility 350ms; }
+.hero-marquee-track { display: flex; width: max-content; height: 100%; animation: hero-editorial-marquee 30s linear infinite; }
+.hero-marquee-group { display: flex; flex: 0 0 auto; align-items: center; min-width: 100vw; }
+.hero-marquee-copy { flex: 1 0 auto; padding-right: 32px; white-space: nowrap; font-size: 12px; font-weight: 500; line-height: 1; letter-spacing: .1em; }
+.hero-marquee.is-pending { opacity: 0; visibility: hidden; }
+@keyframes hero-editorial-marquee { to { transform: translate3d(-50%, 0, 0); } }
 /* Extend only the backdrop behind the navbar's existing reserved space. */
 :host::before {
   content: '';
@@ -20,8 +26,8 @@
   justify-content: space-between;
   gap: 48px;
   min-height: calc(100svh - 96px);
-  padding-block: 24px 76px;
-  animation: hero-reveal 750ms ease-out both;
+  /* The cue now has its own layout slot rather than a viewport padding guess. */
+  padding-block: 24px 28px;
 }
 
 .hero-meta, .hero-details {
@@ -58,12 +64,8 @@ h1 { position: relative; isolation: isolate; margin: 0; font-weight: 800; }
   background: rgba(238, 160, 255, 0.3);
   pointer-events: none;
   transform-origin: left center;
-  animation: name-panel-reveal 1100ms cubic-bezier(0.22, 0.61, 0.36, 1) 150ms both;
 }
-@keyframes name-panel-reveal {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
+
 .surname {
   display: block;
   margin-top: 20px;
@@ -93,19 +95,22 @@ h1 { position: relative; isolation: isolate; margin: 0; font-weight: 800; }
 .surname { position: relative; }
 .surname-letters { display: inline-block; }
 .surname::after { content: ''; position: absolute; right: -0.09em; top: 0.1em; width: 1px; height: 0.75em; background: #FFFFFF; opacity: var(--surname-cursor, 0); pointer-events: none; }
-.hero-intro-managed, .hero-intro-managed .name::before { animation: none; }
 .hero-intro-pending .name::before { transform: scaleX(var(--name-panel-scale, 0)); }
 .hero-intro-pending .name-letters, .hero-intro-pending .surname-letters { opacity: 0; clip-path: inset(0 100% 0 0); filter: blur(8px); }
-.hero-intro-pending .hero-meta, .hero-intro-pending .hero-details > * { opacity: 0; transform: translateY(8px); }
+.hero-intro-pending .hero-meta, .hero-intro-pending .hero-details > *, .hero-intro-pending .hero-micro-cta { opacity: 0; transform: translateY(8px); }
 .hero-details { position: relative; }
-.hero-scroll-cue { position: absolute; bottom: -68px; left: 50%; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 60px; transform: translateX(-50%); border-radius: 22px; text-decoration: none; }
-.hero-scroll-cue svg { display: block; pointer-events: none; }
-.hero-scroll-outline { stroke: rgb(255 255 255 / .75); stroke-width: 1.3; }
-.hero-scroll-arrow { stroke: var(--violet); stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; animation: hero-scroll-down 1.8s ease-in-out infinite; }
-.hero-intro-pending .hero-scroll-cue { visibility: hidden; }
-.hero-intro-pending .hero-scroll-arrow { animation-play-state: paused; }
+.hero-lower { display: grid; gap: 28px; }
+.hero-scroll-slot { width: 44px; height: 60px; justify-self: center; }
+.hero-scroll-mobile { display: none; }
+.hero-micro-cta { display: flex; align-items: center; justify-self: start; gap: 24px; max-width: calc(50% - 44px); }
+.micro-cta-copy { display: grid; gap: 6px; min-width: 0; font-size: 12px; font-weight: 500; line-height: 1.45; }
+.micro-cta-description { color: rgb(255 255 255 / .75); font-size: 11px; font-weight: 400; line-height: 1.4; }
+.micro-cta-link { display: inline-flex; align-items: center; justify-content: center; gap: 6px; flex-shrink: 0; min-height: 44px; padding: 7px 10px; border-radius: 999px; background: var(--lime); color: #111111; font-size: 12px; font-weight: 500; text-decoration: none; transition: background-color 180ms ease; }
+.micro-cta-link:hover { background: var(--pink); }
+.micro-cta-link:focus-visible { outline: 2px solid var(--lime); outline-offset: 4px; }
+.hero-micro-cta.no-intro { animation: hero-micro-cta-enter 420ms ease-out both; }
+@keyframes hero-micro-cta-enter { from { opacity: 0; translate: 0 6px; } to { opacity: 1; translate: 0 0; } }
 
-@keyframes hero-reveal { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (max-width: 1050px) {
   .hero-meta, .hero-details { column-gap: 16px; }
@@ -116,17 +121,16 @@ h1 { position: relative; isolation: isolate; margin: 0; font-weight: 800; }
 @media (max-width: 820px) {
   /* Safari clips the negative backdrop inset when overflow-x:clip is on this
      host. The panel already ends at the viewport edge; no clipping is needed. */
-  :host { overflow: visible; }
+  :host { --hero-top-reserve: 88px; overflow: visible; }
   :host::before { top: -88px; background-position: 72% center; }
 }
-@keyframes hero-scroll-down {
-  0% { transform: translateY(-7px); opacity: 0; }
-  30% { opacity: 1; }
-  70% { opacity: 1; }
-  100% { transform: translateY(7px); opacity: 0; }
-}
+
 
 @media (max-width: 640px) {
+  .hero-scroll-desktop { display: none; }
+  .hero-scroll-mobile { display: block; height: 54px; grid-column: 2; grid-row: 1; }
+  .hero-micro-cta { width: 100%; max-width: none; justify-content: space-between; gap: 16px; }
+  .hero-marquee-copy { font-size: 11px; padding-right: 24px; letter-spacing: .08em; }
   .hero { min-height: min(680px, calc(100svh - 88px)); gap: 64px; padding-block: 22px 32px; }
   .hero-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
   .location { grid-column: 1; font-size: 13px; }
@@ -136,18 +140,36 @@ h1 { position: relative; isolation: isolate; margin: 0; font-weight: 800; }
   .hero-details { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 20px; padding-top: 22px; }
   .specialty { grid-column: 1; }
   .specialty-data { grid-column: 2; justify-self: end; text-align: right; }
-  .hero-actions { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr); align-items: center; gap: 12px; }
+  .hero-actions { grid-column: 1 / -1; min-height: 60px; display: grid; grid-template-columns: minmax(0, 1fr) 44px minmax(0, 1fr); align-items: center; gap: 12px; }
   .hero-actions .primary { grid-column: 1; grid-row: 1; justify-self: start; }
   .hero-actions .secondary { grid-column: 3; grid-row: 1; justify-self: end; }
-  .hero-scroll-cue { position: static; grid-column: 2; grid-row: 1; justify-self: center; transform: none; }
 }
 
+@media (max-height: 800px) and (min-width: 641px) {
+  .hero { gap: 4px; padding-block: 8px 12px; }
+  .hero-lower { gap: 0; }
+  .hero-details { margin-top: 28px; }
+  .hero-scroll-desktop { margin-top: 12px; }
+  .hero-details { padding-top: 14px; }
+}
 @media (max-height: 650px) and (min-width: 641px) {
-  .hero { gap: 24px; padding-block: 16px 76px; }
+  .hero { gap: 8px; padding-block: 4px 12px; }
+  .hero-scroll-desktop { margin-top: 6px; }
   .name { font-size: min(25.5cqw, 36svh); }
   .surname { margin-top: 12px; font-size: min(7.5cqw, 9svh); }
+  .hero-details { padding-top: 4px; }
+  .hero-actions { flex-direction: row; gap: 16px; }
+}
+@media (max-height: 560px) and (min-width: 641px) {
+  .surname { margin-top: 8px; }
+  .specialty-data { justify-self: end; text-align: right; }
 }
 @media (max-width: 640px) and (max-height: 650px) { .hero { gap: 24px; padding-block: 18px 32px; } }
 
-@media (prefers-reduced-motion: reduce) { .hero, .name::before { animation: none; } .hero-link { transition: none; } }
-@media (prefers-reduced-motion: reduce) { .hero-scroll-arrow { animation: none; opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .hero-link { transition: none; } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-micro-cta.no-intro { animation: none; }
+  .micro-cta-link { transition: none; }
+  .hero-marquee { transition: none; }
+  .hero-marquee-track { animation: none; transform: none; }
+}

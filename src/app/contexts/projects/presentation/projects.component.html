@@ -9,14 +9,12 @@
         <p class="detail-description">{{ project.description | t }}</p>
       </header>
       <div class="detail-art"><app-project-art [project]="project" /></div>
-      @if (project.technologies.length) {
-        <p class="detail-technologies">{{ project.technologies.join(' / ') }}</p>
-      }
+      <app-project-summary [project]="project" />
       @if (!project.image) {
         <p class="detail-note">{{ 'La imagen y la documentación detallada de este proyecto aún no están disponibles.' | t }}</p>
       }
     </article>
   } @else {
-    <app-project-reel [projects]="projects" />
+    <app-project-showcase [projects]="projects" />
   }
 </section>

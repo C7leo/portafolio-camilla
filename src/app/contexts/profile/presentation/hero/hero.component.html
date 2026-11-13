@@ -1,26 +1,47 @@
+<div class="hero-marquee" [class.is-pending]="building()" data-control-surface="light">
+  <p class="sr-only">{{ marqueeText | t }}</p>
+  <div class="hero-marquee-track" aria-hidden="true">
+    @for (group of [0, 1]; track group) {
+      <div class="hero-marquee-group">
+        @for (copy of [0, 1, 2]; track copy) {
+          <span class="hero-marquee-copy">{{ marqueeText | t }}</span>
+        }
+      </div>
+    }
+  </div>
+</div>
 <app-editorial-grid [rules]="[{ anchor: '.hero-meta', edge: 'bottom', offset: 18, mobile: false }, { anchor: '.hero-details' }]" />
-<section #heroScene class="hero container hero-intro-managed" [class.hero-intro-pending]="building()" aria-labelledby="hero-title" appScrollEffect="hero-exit">
+<section data-control-surface="dark" data-control-boundary #heroScene class="hero container hero-intro-managed" [class.hero-intro-pending]="building()" aria-labelledby="hero-title" appScrollEffect="hero-exit">
   <div class="hero-meta">
     <p class="location"><span>{{ profile.location | t }}</span></p>
     <p class="discipline">{{ profile.discipline | t }}</p>
   </div>
-  <h1 id="hero-title" [attr.aria-label]="profile.displayName">
+  <h1 id="hero-title" data-control-avoid [attr.aria-label]="profile.displayName">
     <span class="name"><span class="name-letters">{{ profile.givenName.toUpperCase() }}</span></span>
     <span class="surname"><span class="surname-letters">{{ profile.familyName.toUpperCase() }}</span></span>
   </h1>
-  <div class="hero-details">
-    <p class="specialty">{{ 'Desarrollo de aplicaciones.' | t }}</p>
-    <p class="specialty specialty-data">{{ 'Análisis de datos.' | t }}</p>
-    <div class="hero-actions" role="group" [attr.aria-label]="'Explora mi portafolio' | t">
-      <a class="hero-link primary" href="#proyectos">{{ 'Ver proyectos' | t }}</a>
-      <a class="hero-link secondary" href="#sobre-mi">{{ 'Conóceme' | t }}</a>
-      <a class="hero-scroll-cue" href="#sobre-mi">
-        <span class="sr-only">{{ 'Desliza para explorar' | t }}</span>
-        <svg viewBox="0 0 32 56" width="32" height="56" fill="none" aria-hidden="true" focusable="false">
-          <rect class="hero-scroll-outline" x="1" y="1" width="30" height="54" rx="15" />
-          <g class="hero-scroll-arrow"><path d="M16 34v12m-5-5 5 5 5-5" /></g>
-        </svg>
+  <div class="hero-lower">
+    <aside class="hero-micro-cta" data-control-avoid [class.no-intro]="!introRequired" aria-labelledby="hero-project-question">
+      <div class="micro-cta-copy">
+        <p id="hero-project-question">{{ '¿Tienes un proyecto en mente?' | t }}</p>
+        <p class="micro-cta-description">{{ 'Tu negocio visible en internet.' | t }}</p>
+      </div>
+      @if (whatsappUrl) {
+      <a class="micro-cta-link" [href]="whatsappUrl" target="_blank" rel="noopener noreferrer">
+        {{ 'Hablemos' | t }} <span aria-hidden="true">↗</span>
+        <span class="sr-only">{{ 'Abrir WhatsApp' | t }} {{ '(se abre en otra pestaña)' | t }}</span>
       </a>
+      }
+    </aside>
+    <div class="hero-details">
+      <p class="specialty" data-control-avoid>{{ 'Desarrollo de aplicaciones.' | t }}</p>
+      <p class="specialty specialty-data" data-control-avoid>{{ 'Análisis de datos.' | t }}</p>
+      <div class="hero-actions" role="group" [attr.aria-label]="'Explora mi portafolio' | t">
+        <a class="hero-link primary" data-control-avoid href="#proyectos">{{ 'Ver proyectos' | t }}</a>
+        <div class="hero-scroll-slot hero-scroll-mobile" data-scroll-cue-anchor aria-hidden="true"></div>
+        <a class="hero-link secondary" data-control-avoid href="#sobre-mi">{{ 'Conóceme' | t }}</a>
+      </div>
     </div>
+    <div class="hero-scroll-slot hero-scroll-desktop" data-scroll-cue-anchor aria-hidden="true"></div>
   </div>
 </section>

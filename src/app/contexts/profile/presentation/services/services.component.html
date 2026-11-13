@@ -1,0 +1,38 @@
+<section id="servicios" class="services" data-control-surface="neutral" aria-labelledby="services-title" tabindex="-1">
+  <app-editorial-grid [rails]="true" [rules]="[{ anchor: '.services-meta' }, { anchor: '.services-cta' }, { at: 'calc(100% - 1px)' }]" />
+  <div class="container">
+    <header class="services-meta">
+      <p data-control-avoid>{{ '04 / SERVICIOS' | t }}</p>
+    </header>
+    <div class="services-intro" appReveal="focus" [motionDuration]="600">
+      <h2 id="services-title" data-control-avoid>{{ 'Soluciones digitales para llevar tus ideas más lejos.' | t }}</h2>
+      <p data-control-avoid>{{ 'Desde una presencia web hasta herramientas que optimizan tu negocio.' | t }}</p>
+    </div>
+    <ol class="services-grid">
+      @for (service of services; track service.number; let index = $index) {
+        <li class="service" [class.service-featured]="index === 0" [attr.data-control-surface]="index === 0 ? 'dark' : 'neutral'"
+          appReveal="focus" [motionDuration]="600" [motionDelay]="index * 90">
+          <span #serviceIcon class="service-icon" aria-hidden="true"></span>
+          <div class="service-copy">
+            <span class="service-number">{{ service.label }}</span>
+            <h3 data-control-avoid>{{ service.title | t }}</h3>
+            <p data-control-avoid>{{ service.description | t }}</p>
+          </div>
+        </li>
+      }
+    </ol>
+    <div class="services-cta" data-control-avoid>
+      <div class="services-cta-copy">
+        <p class="services-cta-label">{{ '¿TRABAJAMOS JUNTOS?' | t }}</p>
+        <p class="services-cta-title">{{ 'Hagamos realidad tu próxima idea.' | t }}</p>
+      </div>
+      @if (whatsappUrl) {
+      <a class="services-contact" [href]="whatsappUrl" target="_blank" rel="noopener noreferrer">
+        {{ 'Hablemos' | t }}
+        <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M5 15 15 5M5 5h10v10" /></svg>
+        <span class="sr-only">{{ 'Abrir WhatsApp' | t }} {{ '(se abre en otra pestaña)' | t }}</span>
+      </a>
+      }
+    </div>
+  </div>
+</section>

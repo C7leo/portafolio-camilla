@@ -198,7 +198,7 @@ export class ExperienceComponent implements AfterViewInit, OnDestroy {
         .to([environment, preview], { opacity: .32, duration: .7 }, 5.9)
         .to([environment, preview], { opacity: .85, duration: .6 }, 8.85)
         .to([environment, preview], { opacity: 0, duration: .8 }, 9.5)
-        .to(section, { backgroundColor: '#FFFFFF', duration: .6 }, 9.7)
+        .to(section, { backgroundColor: '#000000', duration: .6 }, 9.7)
         .to(mode, { opacity: 0, duration: .3 }, 9.5);
     }, section);
     ScrollTrigger.refresh();

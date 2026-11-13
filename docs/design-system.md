@@ -33,3 +33,9 @@ aplicaciones.            datos.                Ver proyectos  Conóceme
 ## Comportamiento conservado
 
 Angular standalone y Vite, sin nuevas dependencias. Inicio sigue disponible y las demás secciones mantienen el estado de próximamente. Se conservan menú móvil, Escape, retorno de foco, salto al contenido, anuncios accesibles y movimiento reducido. El nombre completo tiene un nombre accesible explícito.
+
+## Tema y controles flotantes
+
+Las superficies neutras usan variables semánticas de `src/styles.css` y el atributo global `data-theme`. El tema claro es el inicial; el oscuro cambia el blanco por #09090B y adapta textos, bordes y superficies del navbar. Los colores de identidad (#5A4EFF, #EEA0FF y #E2F4A6) no cambian. La preferencia se restaura antes del primer render y las transiciones de color duran 350 ms, sin movimiento con `prefers-reduced-motion`.
+
+El indicador de scroll y el selector de tema viven fuera de las escenas fijadas, junto a los márgenes editoriales y respetando las áreas seguras. Detalles y validación en [Controles flotantes y tema](features/floating-controls.md).
