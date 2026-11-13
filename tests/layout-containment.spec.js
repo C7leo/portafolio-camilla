@@ -48,7 +48,7 @@ for (const [width, height] of [[320, 568], [390, 844], [768, 1024], [1440, 900],
     await expect(page.locator('.gallery-controls')).toHaveCSS('position', 'relative');
     for (const button of await page.locator('.gallery-buttons button').all()) {
       const box = await button.boundingBox();
-      expect(box.y).toBeCloseTo(toolbar.y + 12, 0);
+      expect(box.y + box.height / 2).toBeCloseTo(toolbar.y + toolbar.height / 2, 0);
       expect(box.height).toBeGreaterThanOrEqual(44);
       expect(box.width).toBeGreaterThanOrEqual(44);
       await expect(button).toHaveCSS('background-color', 'rgba(0, 0, 0, 0)');
@@ -60,14 +60,8 @@ for (const [width, height] of [[320, 568], [390, 844], [768, 1024], [1440, 900],
     // Put the exact panel boundary through the fixed theme button.
     const themeBox = await page.locator('.floating-theme-toggle').evaluate(rect);
     await page.locator('.sea-gallery').evaluate((element, y) => scrollTo(0, element.getBoundingClientRect().bottom + scrollY - y), themeBox.y + themeBox.height / 2);
-    const themeOverPanel = themeBox.x < frame.x + frame.width && themeBox.x + themeBox.width > frame.x;
-    if (themeOverPanel) {
-      await expect(page.locator('.floating-theme-toggle')).toBeHidden();
-      await expect(page.locator('.floating-theme-toggle')).toHaveAttribute('tabindex', '-1');
-    } else {
-      // On wide screens the shared container leaves the theme in its own gutter.
-      await expect(page.locator('.floating-theme-toggle')).toBeVisible();
-    }
+    await expect(page.locator('.floating-theme-toggle')).toBeVisible();
+    await expect(page.locator('.floating-theme-toggle')).not.toHaveAttribute('tabindex', '-1');
     await seek(page, '#sobre-mi', 84);
     await expect(page.locator('.floating-theme-toggle')).toBeVisible();
     const restored = await page.locator('.floating-theme-toggle').boundingBox();

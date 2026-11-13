@@ -2,11 +2,11 @@
   <div class="project-catalogue">
     <app-editorial-grid [rails]="true" [rules]="[{ anchor: '.showcase-header', offset: -24 }, { anchor: '.project-index' }, { anchor: '.project-index', edge: 'bottom' }]" />
     <div class="showcase-content container">
-    <header class="showcase-header">
+    <header class="showcase-header" data-control-avoid>
       <h2 id="projects-title">{{ '03 / Projects' | t }}</h2>
       <p>{{ 'Soluciones digitales, de la idea al desarrollo.' | t }}</p>
     </header>
-    <div class="gallery-intro">
+    <div class="gallery-intro" data-control-avoid>
       <p>{{ 'Ideas que se convierten en experiencias digitales.' | t }}</p>
       <span>{{ projects.length.toString().padStart(2, '0') }} <span>{{ 'proyectos seleccionados' | t }}</span></span>
     </div>
@@ -18,7 +18,7 @@
             <button class="ring-card" data-control-avoid type="button" tabindex="-1" (mousedown)="$event.preventDefault()" (click)="openProject($index % projects.length, $event)" [attr.aria-label]="project.name">
               <span class="ring-face">
                 <img [src]="project.image" alt="" loading="lazy" width="900" height="600" draggable="false" />
-                <span class="ring-caption"><span>{{ project.name }}</span><span aria-hidden="true">↗</span></span>
+                <span class="ring-caption"><span>{{ project.name }}</span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10" /></svg></span>
               </span>
             </button>
           }
@@ -48,7 +48,7 @@
             <button class="project-open" type="button" (click)="openProject($index, $event)">
               <img [src]="project.image" alt="" loading="lazy" width="900" height="600" />
               <span class="index-number" aria-hidden="true">{{ ($index + 1).toString().padStart(2, '0') }}</span>
-              <span>{{ project.name }}</span><span class="index-arrow" aria-hidden="true">↗</span>
+              <span>{{ project.name }}</span><svg class="index-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10" /></svg>
             </button>
           </li>
         }

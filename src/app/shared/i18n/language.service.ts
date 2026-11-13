@@ -24,7 +24,8 @@ const ES: Record<string, string> = {
 const EN: Record<string, string> = {
   '¿TRABAJAMOS JUNTOS?': 'SHALL WE WORK TOGETHER?',
   'Hagamos realidad tu próxima idea.': 'Let’s bring your next idea to life.',
-  'DESARROLLO WEB ✳ APLICACIONES A MEDIDA ✳ DATOS Y AUTOMATIZACIÓN ✳ SOLUCIONES DIGITALES ✳': 'WEB DEVELOPMENT ✳ CUSTOM APPLICATIONS ✳ DATA & AUTOMATION ✳ DIGITAL SOLUTIONS ✳',
+  'DESARROLLO WEB': 'WEB DEVELOPMENT', 'APLICACIONES A MEDIDA': 'CUSTOM APPLICATIONS',
+  'DATOS Y AUTOMATIZACIÓN': 'DATA & AUTOMATION', 'SOLUCIONES DIGITALES': 'DIGITAL SOLUTIONS',
   'Tu negocio visible en internet.': 'Your business, easy to find online.',
   'Problema': 'Problem', 'Solución': 'Solution',
   'Gastos compartidos del hogar, organizados en un solo lugar.': 'Shared household expenses, organized in one place.',

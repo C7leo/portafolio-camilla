@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { SITE_URL } from './support/site.js';
 
-const text = 'DESARROLLO WEB ✳ APLICACIONES A MEDIDA ✳ DATOS Y AUTOMATIZACIÓN ✳ SOLUCIONES DIGITALES ✳';
+const text = 'DESARROLLO WEB, APLICACIONES A MEDIDA, DATOS Y AUTOMATIZACIÓN, SOLUCIONES DIGITALES';
 
 for (const [width, height] of [[320, 568], [390, 844], [768, 1024], [1440, 900], [2560, 1440]]) {
   test(`editorial marquee fills Home and loops without gaps at ${width}px`, async ({ page }) => {
@@ -71,7 +71,7 @@ for (const [width, height] of [[320, 568], [390, 844], [768, 1024], [1440, 900],
     const heroAfter = await page.locator('.hero').boundingBox();
     expect(heroAfter).toEqual(heroBefore);
     await page.locator('.language-choice[lang="en"]').click();
-    await expect(bar.locator('.sr-only')).toHaveText('WEB DEVELOPMENT ✳ CUSTOM APPLICATIONS ✳ DATA & AUTOMATION ✳ DIGITAL SOLUTIONS ✳');
+    await expect(bar.locator('.sr-only')).toHaveText('WEB DEVELOPMENT, CUSTOM APPLICATIONS, DATA & AUTOMATION, DIGITAL SOLUTIONS');
     await expect(page.locator('.micro-cta-description')).toHaveText('Your business, easy to find online.');
     expect(await bar.evaluate(bar => window.marqueeAnimation === bar.querySelector('.hero-marquee-track').getAnimations()[0])).toBe(true);
     await page.locator('.language-choice[lang="es"]').click();

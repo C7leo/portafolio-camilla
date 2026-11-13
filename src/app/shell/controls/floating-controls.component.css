@@ -1,6 +1,6 @@
-:host { position: fixed; inset: 0; z-index: 21; pointer-events: none; --control-bottom: var(--floating-controls-bottom); }
-button { position: absolute; bottom: var(--control-bottom); display: flex; align-items: center; justify-content: center; width: 44px; padding: 0; cursor: pointer; pointer-events: auto; -webkit-tap-highlight-color: transparent; }
-.floating-scroll-cue { left: max(10px, calc(var(--editorial-rail-inset) - 56px)); height: 60px; border: 0; border-radius: 24px; background: transparent; color: var(--ink); transition: opacity 300ms ease, color var(--theme-duration); }
+:host { position: fixed; inset: 0; z-index: 21; pointer-events: none; --control-bottom: calc(var(--floating-controls-bottom) + var(--viewport-bottom-gap, 0px)); }
+button { position: absolute; bottom: var(--control-bottom); display: flex; align-items: center; justify-content: center; width: var(--floating-control-size); padding: 0; cursor: pointer; pointer-events: auto; -webkit-tap-highlight-color: transparent; }
+.floating-scroll-cue { left: max(calc(10px + var(--safe-area-left)), calc(var(--editorial-rail-inset) - 56px)); height: 60px; border: 0; border-radius: 24px; background: transparent; color: var(--ink); transition: opacity 300ms ease, color var(--theme-duration); }
 .scroll-capsule { display: flex; justify-content: center; align-items: flex-end; width: 32px; height: 56px; padding-bottom: 8px; border: 1px solid currentColor; border-radius: 999px; opacity: .85; }
 .scroll-arrow { display: flex; color: var(--violet); animation: scroll-invitation 1.8s ease-in-out infinite; }
 .scroll-direction { display: flex; transition: transform 300ms ease; }
@@ -11,9 +11,12 @@ button { position: absolute; bottom: var(--control-bottom); display: flex; align
 .on-dark .scroll-arrow { color: var(--lime); }
 .floating-scroll-cue.at-home { left: var(--home-cue-left); top: var(--home-cue-top); bottom: auto; color: var(--white); }
 .at-home .scroll-arrow { color: var(--lime); }
-.floating-theme-toggle { right: max(10px, calc(var(--editorial-rail-inset) - 56px)); height: 44px; border: 1px solid rgb(var(--neutral-line-ink) / .06); border-radius: 999px; background: var(--surface); color: var(--text-muted); box-shadow: 0 3px 16px rgb(0 0 0 / .04); transition: background-color var(--theme-duration), color var(--theme-duration), border-color var(--theme-duration), opacity 300ms ease; }
+.floating-theme-toggle { right: max(calc(10px + var(--safe-area-right)), calc(var(--editorial-rail-inset) - 56px)); height: 44px; border: 1px solid rgb(var(--neutral-line-ink) / .06); border-radius: 999px; background: var(--surface); color: var(--text-muted); box-shadow: 0 3px 16px rgb(0 0 0 / .04); transition: background-color var(--theme-duration), color var(--theme-duration), border-color var(--theme-duration), opacity 300ms ease; }
 .theme-icon { display: flex; align-items: center; justify-content: center; }
 .theme-icon[hidden] { display: none; }
+/* Keep this fixed control in its own paint layer: at high DPR, long 3D
+   scroll scenes can otherwise leave its unchanged SVG unpainted. */
+.floating-theme-toggle { transform: translateZ(0); }
 button:focus-visible { outline: 2px solid var(--violet); outline-offset: 4px; }
 .on-dark:focus-visible { outline-color: var(--lime); }
 .floating-theme-toggle.on-dark-surface:focus-visible { outline-color: var(--white); }

@@ -32,6 +32,8 @@ export class FloatingControlsComponent implements AfterViewInit, OnDestroy {
   @ViewChild('moonIcon') moonIcon!: ElementRef<HTMLElement>;
   @ViewChild('returnVeil') returnVeil!: ElementRef<HTMLElement>;
   private readonly zone = inject(NgZone);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private visualBottomGap = 0;
   private frame = 0;
   private ready = false;
   private destroyed = false;
@@ -127,27 +129,39 @@ export class FloatingControlsComponent implements AfterViewInit, OnDestroy {
     this.frame = requestAnimationFrame(() => {
       this.frame = 0;
       const root = document.documentElement;
+      const viewportTop = window.visualViewport?.offsetTop ?? 0;
+      const viewportBottom = viewportTop + (window.visualViewport?.height ?? root.clientHeight);
+      const visualBottomGap = Math.max(0, root.clientHeight - viewportBottom);
+      if (Math.abs(visualBottomGap - this.visualBottomGap) > .5) {
+        this.visualBottomGap = visualBottomGap;
+        this.host.nativeElement.style.setProperty('--viewport-bottom-gap', `${visualBottomGap}px`);
+        this.queueLayout();
+        return;
+      }
       const remaining = root.scrollHeight - root.clientHeight - scrollY;
       const atEnd = remaining <= 40;
       const blocked = !!document.querySelector('dialog[open], .navigation.is-open');
       const about = this.about?.getBoundingClientRect();
       const hero = this.hero?.getBoundingClientRect();
       const anchor = this.homeAnchors.map(element => element.getBoundingClientRect()).find(box => box.width > 0);
-      const atHome = !atEnd && !!anchor && !!about && about.top >= anchor.bottom + 12;
+      const atHome = !atEnd && !!hero && hero.bottom > viewportTop && !!anchor && anchor.top >= viewportTop
+        && !!about && about.top >= anchor.bottom + 12;
       const themeBox = this.themeButton.nativeElement.getBoundingClientRect();
       const homeTop = anchor?.top ?? 0, homeLeft = anchor?.left ?? 0;
       const cue = new DOMRect(
-        atHome ? homeLeft : Math.max(10, (this.rail?.getBoundingClientRect().left ?? 24) - 56),
+        atHome ? homeLeft : Math.max(10 + (parseFloat(getComputedStyle(root).getPropertyValue('--safe-area-left')) || 0), (this.rail?.getBoundingClientRect().left ?? 24) - 56),
         atHome ? homeTop : themeBox.bottom - this.scrollButton.nativeElement.offsetHeight,
         44, this.scrollButton.nativeElement.offsetHeight,
       );
       const inHome = atHome && !!hero && cue.top >= hero.top && cue.bottom <= hero.bottom - 12;
       const afterHome = !atHome && !!about && cue.top >= about.top + 12;
-      const cueVisible = !blocked && cue.top >= 0 && cue.bottom <= root.clientHeight
+      const cueVisible = !blocked && cue.top >= viewportTop && cue.bottom <= viewportBottom
         && (inHome || afterHome || atEnd) && this.targets!.isClear(cue);
       this.targets!.watchControl(themeBox);
       this.targets!.watchControl(cue, 'scroll');
-      const themeVisible = !blocked && this.targets!.isClear(themeBox);
+      // Theme remains available in every chapter. The shared clearance token
+      // reserves its narrow-screen gutter instead of hiding it over content.
+      const themeVisible = !blocked;
       const x = cue.x + cue.width / 2, y = cue.y + cue.height / 2;
       const surfaces = this.targets!.readSurfaces();
       const isDark = (x: number, y: number): boolean => {
