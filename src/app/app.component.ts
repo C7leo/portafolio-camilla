@@ -19,4 +19,4 @@ import { ServicesComponent } from './contexts/profile/presentation/services/serv
   template: '@if (intro.visible()) { <app-cinematic-intro (finished)="intro.complete($event)" /> }<app-editorial-grid [viewport]="true" [railExclusions]="localRailExclusions" /><app-navbar /><main id="inicio" tabindex="-1" appStoryChapters><app-hero data-control-region /><app-about data-control-region /><app-projects data-control-region /><app-services data-control-region /><app-experience data-control-region /></main><app-footer data-control-region /><app-floating-controls />',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AppComponent { readonly theme = inject(ThemeService); readonly intro = inject(CinematicIntroState); readonly localRailExclusions = ['.project-showcase', '.services']; }
+export class AppComponent { readonly theme = inject(ThemeService); readonly intro = inject(CinematicIntroState); readonly localRailExclusions = ['.project-showcase', '.services', '.contact-section']; }

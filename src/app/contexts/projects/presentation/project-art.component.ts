@@ -1,5 +1,6 @@
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
-import { ChangeDetectionStrategy, Component, Input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input, signal } from '@angular/core';
+import { CinematicIntroState } from '../../../shared/motion/cinematic-intro-state.service';
 import type { Project } from '../domain/project.model';
 
 @Component({
@@ -7,7 +8,7 @@ import type { Project } from '../domain/project.model';
   imports: [TranslatePipe],
   template: `
     @if (project.image && !imageFailed()) {
-      <img [src]="project.image" [alt]="project.imageAlt | t" [style.object-fit]="fit" width="1200" height="750"
+      <img [attr.src]="intro.backgroundReady() ? project.image : null" [attr.srcset]="intro.backgroundReady() ? project.imageSrcset : null" sizes="(max-width: 640px) 90vw, (max-width: 1050px) 45vw, 700px" [alt]="project.imageAlt | t" [style.object-fit]="fit" [attr.width]="project.imageWidth || 1536" [attr.height]="project.imageHeight || 1024"
         loading="lazy" decoding="async" (error)="imageFailed.set(true)" />
     } @else {
       <div class="editorial-placeholder" role="img" [attr.aria-label]="('Placeholder editorial de ' + project.name + ', sin captura real') | t">
@@ -53,6 +54,7 @@ import type { Project } from '../domain/project.model';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectArtComponent {
+  readonly intro = inject(CinematicIntroState);
   @Input() fit: 'cover' | 'contain' = 'contain';
   readonly imageFailed = signal(false);
   private currentProject!: Project;

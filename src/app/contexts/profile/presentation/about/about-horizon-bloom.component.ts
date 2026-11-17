@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, NgZone, OnDestroy, PLATFORM_ID, signal } from '@angular/core';
-import { mountHorizonBloom } from '../graphics/about-horizon-bloom.scene';
+import { CinematicIntroState } from '../../../../shared/motion/cinematic-intro-state.service';
 
 @Component({
   selector: 'app-about-horizon-bloom', standalone: true,
@@ -26,15 +26,29 @@ export class AboutHorizonBloomComponent implements AfterViewInit, OnDestroy {
   private readonly browser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly zone = inject(NgZone);
   private dispose?: () => void;
+  private observer?: IntersectionObserver;
+  private destroyed = false;
+  private readonly intro = inject(CinematicIntroState);
+  private stopIntro?: () => void;
 
   ngAfterViewInit(): void {
     if (!this.browser) return;
-    this.zone.runOutsideAngular(() => {
-      this.dispose = mountHorizonBloom(this.host.querySelector<HTMLElement>('.horizon-canvas')!, {
-        ready: value => this.zone.run(() => this.ready.set(value)),
-      });
-    });
+    this.stopIntro = this.intro.afterIntro(() => this.zone.runOutsideAngular(() => {
+      this.observer = new IntersectionObserver(entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        this.observer?.disconnect();
+        void import('../graphics/about-horizon-bloom.scene').then(({ mountHorizonBloom }) => {
+          if (this.destroyed) return;
+          this.zone.runOutsideAngular(() => {
+            this.dispose = mountHorizonBloom(this.host.querySelector<HTMLElement>('.horizon-canvas')!, {
+              ready: value => this.zone.run(() => this.ready.set(value)),
+            });
+          });
+        }).catch(() => { /* Keep the CSS fallback if the optional scene cannot load. */ });
+      }, { rootMargin: '300px 0px' });
+      this.observer.observe(this.host);
+    }));
   }
 
-  ngOnDestroy(): void { this.dispose?.(); }
+  ngOnDestroy(): void { this.destroyed = true; this.stopIntro?.(); this.observer?.disconnect(); this.dispose?.(); }
 }

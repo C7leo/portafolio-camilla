@@ -20,7 +20,7 @@ for (const [width, height] of [[1920, 1080], [1366, 768], [768, 1024], [390, 844
       const hero = await page.locator('.hero').boundingBox();
       expect(hero.y + hero.height).toBeCloseTo(height, 0);
     }
-    await expect(page.locator('.hero-marquee .marquee-separator')).toHaveCount(24);
+    await expect(page.locator('.hero-marquee')).toHaveCount(0);
     await expect(page.locator('.project-index .index-arrow')).toHaveCount(7);
     expect((await page.locator('.hero-marquee, .project-index').allTextContents()).join('')).not.toMatch(/[↗✳]/);
     await page.screenshot({ path: testInfo.outputPath('home.png') });
@@ -92,17 +92,16 @@ test.describe('high density rendering', () => {
   });
 });
 
-test('scroll cue yields to the Projects title while theme stays available', async ({ page }, testInfo) => {
+test('scroll cue stays available over the Projects title alongside theme', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(SITE_URL);
   await page.evaluate(() => document.fonts.ready);
   await page.waitForTimeout(600);
   const cue = page.locator('.floating-scroll-cue');
-  // The corner cue sits just outside the 24px guide, overlapping its inner
-  // edge. Protect the title through the existing obstacle registry.
+  // Text crossing the corner must not disable a global navigation control.
   await page.locator('.gallery-intro').evaluate(el => scrollTo(0, el.getBoundingClientRect().top + scrollY - 760));
-  await expect(cue).toBeHidden();
-  await expect(cue).toHaveAttribute('tabindex', '-1');
+  await expect(cue).toBeVisible();
+  await expect(cue).toHaveAttribute('tabindex', '0');
   await expect(page.locator('.floating-theme-toggle')).toBeVisible();
   await page.screenshot({ path: testInfo.outputPath('projects-title-clear.png') });
   // Restore it over the empty section entrance, outside the moving cards.

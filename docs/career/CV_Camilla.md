@@ -1,7 +1,7 @@
 # CAMILLA LEONOR ESPINOZA VIVAS
 **Ingeniería de Software | Ciencia de Datos | Arquitectura de Software**
 
-Lima, Perú | cleo.espivas@gmail.com
+Lima, Perú | https://portafolio-camilla.vercel.app/#contacto
 LinkedIn: https://www.linkedin.com/in/camilla-leonor-espinoza-vivas-4ba5b2361/
 GitHub: https://github.com/C7leo
 

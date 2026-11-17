@@ -3,6 +3,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, 
 import { ProjectRing } from './project-ring';
 import { ProjectSummaryComponent } from './project-summary.component';
 import type { Project } from '../domain/project.model';
+import { CinematicIntroState } from '../../../shared/motion/cinematic-intro-state.service';
 import { TranslatePipe } from '../../../shared/i18n/translate.pipe';
 import template from './project-showcase.component.html?raw';
 import styles from './project-showcase.component.css?inline';
@@ -12,7 +13,14 @@ import styles from './project-showcase.component.css?inline';
   template, styles, changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectShowcaseComponent implements AfterViewInit, OnDestroy {
-  @Input({ required: true }) projects: readonly Project[] = [];
+  readonly intro = inject(CinematicIntroState);
+  private currentProjects: readonly Project[] = [];
+  ringSlots: readonly Project[] = [];
+  @Input({ required: true }) set projects(value: readonly Project[]) {
+    this.currentProjects = value;
+    this.ringSlots = [...value, ...value];
+  }
+  get projects(): readonly Project[] { return this.currentProjects; }
   @ViewChild('projectDialog') projectDialog!: ElementRef<HTMLDialogElement>;
   @ViewChild('ringWall') ringWall!: ElementRef<HTMLElement>;
   readonly paused = signal(false);
@@ -21,8 +29,6 @@ export class ProjectShowcaseComponent implements AfterViewInit, OnDestroy {
   private ring?: ProjectRing;
   readonly openedProject = signal<Project | null>(null);
   private returnFocus?: HTMLElement;
-
-  get ringSlots(): readonly Project[] { return [...this.projects, ...this.projects]; }
 
   ngAfterViewInit(): void {
     this.zone.runOutsideAngular(() => {

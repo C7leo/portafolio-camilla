@@ -97,12 +97,19 @@ export class ExperienceComponent implements AfterViewInit, OnDestroy {
       const backdrop = section.querySelector<HTMLElement>('.experience-backdrop')!;
       const content = section.querySelector<HTMLElement>('.experience-content')!;
       const opening = section.querySelector<HTMLElement>('.experience-opening')!;
+      const label = opening.querySelector<HTMLElement>('.editorial-section-label')!;
+      const word = opening.querySelector<HTMLElement>('.experience-opening-word')!;
       const hairline = section.querySelector<HTMLElement>('.experience-aperture-line')!;
       const stage = section.querySelector<HTMLElement>('.experience-stage')!;
       const typeSize = (): number => Math.min(section.clientWidth * .12, viewportHeight() * .16);
       const circle = (): number => typeSize() * 1.81;
       const pillWidth = (): number => innerWidth <= 720 ? section.clientWidth - 48 : typeSize() * 3.62;
       const pillHeight = (): number => innerWidth <= 720 ? pillWidth() / 1.85 : circle();
+      // Introduce the label first; the existing scroll-driven split and aperture
+      // still animate their original parent independently.
+      gsap.timeline({ scrollTrigger: { trigger: section, start: 'top 85%', once: true } })
+        .fromTo(label, { opacity: 0 }, { opacity: 1, duration: .26, ease: 'sine.out' }, 0)
+        .fromTo(word, { opacity: 0 }, { opacity: 1, duration: .4, ease: 'sine.out' }, .14);
       const timeline = gsap.timeline({
         defaults: { ease: 'none' },
         scrollTrigger: {
@@ -131,7 +138,10 @@ export class ExperienceComponent implements AfterViewInit, OnDestroy {
         }, .62)
         // Fractional scroll positions can settle just below 1 in WebKit. Reveal
         // once the aperture is effectively full, instead of leaving a blank world.
-        .set(stage, { visibility: 'visible' }, .98);
+        .set(stage, { visibility: 'visible' }, .98)
+        // The full-size live valley takes over without a moving clipping edge
+        // leaking the aperture's light backing. Reverse restores the opening.
+        .set(backdrop, { opacity: 0 }, 1);
 
       // Move the aperture away, but keep its landscape aligned with the fixed valley.
       gsap.timeline({ scrollTrigger: {

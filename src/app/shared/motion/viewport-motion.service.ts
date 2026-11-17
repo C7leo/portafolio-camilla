@@ -102,6 +102,12 @@ export class ViewportMotionService implements OnDestroy {
   private revealAncestors(target: HTMLElement): void {
     for (let current: HTMLElement | null = target; current; current = current.parentElement) this.immediate.get(current)?.();
   }
+  /** A covering navigation presents its destination fully composed, once. */
+  revealWithin(target: HTMLElement): void {
+    [...this.immediate].forEach(([element, finish]) => {
+      if (element === target || target.contains(element)) finish();
+    });
+  }
   private readonly onFocus = (event: FocusEvent): void => {
     this.syncPreference();
     if (event.target instanceof HTMLElement) this.revealAncestors(event.target);

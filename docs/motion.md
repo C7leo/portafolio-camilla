@@ -10,6 +10,8 @@ El movimiento se implementa en presentación y en `src/app/shared/motion/`. Los 
 - **Experiencia:** una timeline reversible coordina el valle, la frase inicial, BCP, BanBif y la salida a negro final. La apertura muestra el mismo paisaje mediante una copia del canvas; la cuadrícula compartida permanece estable. El contenido profesional se mantiene centrado.
 - **Footer:** `RevealDirective` utiliza Web Animations API para sus revelados existentes sobre el fondo floral con degradado negro, conectado con la salida de Experiencia. La sección sigue directamente a Experiencia.
 
+Al completarse la apertura de Experiencia, la timeline establece `opacity: 0` en `.experience-backdrop`: el canvas principal idéntico continúa visible. Esto evita que su fondo claro (`background: var(--surface)`), recortado con `overflow: hidden`, se filtre como una línea horizontal cuando el borde se desplaza entre píxeles. El scroll inverso restaura la copia y su fondo temático mediante la misma timeline. No se eliminan las dos reglas editoriales del encuadre ni el acento rosa del título. `tests/experience-seam.spec.js` reproduce un desplazamiento de medio píxel y compara la franja del borde con el canvas principal.
+
 ## Coordinación compartida
 
 `ViewportMotionService` comparte observación de visibilidad, preferencias y actualizaciones de scroll. `StoryChaptersDirective` coordina las transiciones entre las secciones activas. `ScrollEffectDirective` controla la salida del Hero. El estado de la introducción se comparte con el Hero para evitar entradas duplicadas.

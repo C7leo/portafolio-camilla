@@ -16,8 +16,9 @@ export class CinematicIntroComponent implements AfterViewInit, OnDestroy {
   @ViewChild('still') still!: ElementRef<HTMLElement>;
   @Output() readonly finished = new EventEmitter<IntroResult>();
   readonly language = inject(LanguageService);
-  readonly videoSrc = new URL('./assets/cinematic-intro.mp4', import.meta.url).href;
-  readonly posterSrc = new URL('../../shared/assets/night-lily.png', import.meta.url).href;
+  readonly videoSrc = new URL('./assets/cinematic-intro.optimized.mp4', import.meta.url).href;
+  readonly webmSrc = new URL('./assets/cinematic-intro.webm', import.meta.url).href;
+  readonly posterSrc = new URL('./assets/cinematic-intro-poster.webp', import.meta.url).href;
   private readonly browser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly zone = inject(NgZone);
   private preference?: MediaQueryList;
@@ -27,6 +28,7 @@ export class CinematicIntroComponent implements AfterViewInit, OnDestroy {
   private ending = false;
   private destroyed = false;
   private aligned = false;
+  private readonly attemptedSources = new Set<string>();
 
   ngAfterViewInit(): void {
     if (!this.browser) { this.finished.emit('unavailable'); return; }
@@ -34,7 +36,9 @@ export class CinematicIntroComponent implements AfterViewInit, OnDestroy {
     if (this.preference.matches) { this.finished.emit('reduced'); return; }
     try { sessionStorage.setItem(INTRO_SESSION_KEY, '1'); } catch { /* Session storage is optional. */ }
     const dialog = this.screen.nativeElement;
-    try { dialog.showModal(); } catch { this.finished.emit('unavailable'); return; }
+    try { dialog.showModal(); } catch { delete document.documentElement.dataset.introPending; this.finished.emit('unavailable'); return; }
+    // The native fullscreen layer takes over the startup poster before it is removed.
+    delete document.documentElement.dataset.introPending;
     this.syncStillFrame();
     window.addEventListener('resize', this.syncStillFrame, { passive: true });
     this.preference.addEventListener('change', this.onPreference);
@@ -46,11 +50,37 @@ export class CinematicIntroComponent implements AfterViewInit, OnDestroy {
     this.safetyTimer = setTimeout(() => this.finish('unavailable'), 60000);
     const video = this.film.nativeElement;
     video.muted = true;
-    video.src = this.videoSrc;
-    void video.play().catch(() => this.finish('unavailable'));
+    video.defaultMuted = true;
+    // Prefer the widely hardware-decoded H.264 path. Some WebKit versions
+    // advertise VP9 but stall before producing a first frame.
+    this.startPlayback(video.canPlayType('video/mp4; codecs="avc1.64001f"') ? this.videoSrc : this.webmSrc);
   }
 
   playing(): void { clearTimeout(this.loadingTimer); }
+  private startPlayback(source: string): void {
+    const video = this.film.nativeElement;
+    this.attemptedSources.add(source);
+    video.src = source;
+    void video.play().catch((error: unknown) => {
+      // Replacing a failed source rejects its old play promise. It must not
+      // cancel the fallback that has already started loading.
+      if (this.destroyed || this.ending || video.src !== source) return;
+      if (error instanceof DOMException && error.name === 'NotAllowedError') this.finish('unavailable');
+      else if (error instanceof DOMException && error.name === 'NotSupportedError') this.tryNextSource();
+      else if (video.error) this.mediaError();
+      else this.finish('unavailable');
+    });
+  }
+  mediaError(): void {
+    const video = this.film.nativeElement;
+    if (this.ending || this.destroyed || !video.error) return;
+    this.tryNextSource();
+  }
+  private tryNextSource(): void {
+    const next = [this.videoSrc, this.webmSrc].find(source => !this.attemptedSources.has(source));
+    if (next) this.startPlayback(next);
+    else this.finish('unavailable');
+  }
   nearEnd(): void {
     const video = this.film.nativeElement;
     if (!video.seeking && Number.isFinite(video.duration) && video.duration - video.currentTime <= 1.35) this.finish('ended');
@@ -98,7 +128,17 @@ export class CinematicIntroComponent implements AfterViewInit, OnDestroy {
       this.screen.nativeElement.close();
       this.zone.run(() => this.finished.emit(reason));
     };
-    if (reason === 'reduced' || reason === 'unavailable') { complete(); return; }
+    if (reason === 'reduced') { complete(); return; }
+    if (reason === 'unavailable') {
+      // Playback can be blocked by policy or fail on a slow connection. Dissolve
+      // the coherent poster into the readable Hero rather than leaving a dead layer.
+      this.zone.runOutsideAngular(() => {
+        this.fade = gsap.timeline({ onComplete: complete })
+          .to(this.film.nativeElement, { opacity: 0, duration: .3 }, 0)
+          .to(this.screen.nativeElement, { opacity: 0, duration: .3 }, .3);
+      });
+      return;
+    }
     this.zone.runOutsideAngular(() => {
       if (reason === 'ended' && matchMedia('(max-width: 820px)').matches) {
         const film = this.film.nativeElement;

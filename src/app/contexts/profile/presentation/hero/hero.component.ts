@@ -4,21 +4,19 @@ import { TranslatePipe } from '../../../../shared/i18n/translate.pipe';
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, NgZone, OnDestroy, PLATFORM_ID, signal, ViewChild } from '@angular/core';
 import { gsap } from 'gsap';
 import { ScrollEffectDirective } from '../../../../shared/motion/scroll-effect.directive';
+import { ContactLinkDirective } from '../../../../shared/motion/contact-link.directive';
 import { CinematicIntroState, IntroResult } from '../../../../shared/motion/cinematic-intro-state.service';
 import { ProfileCatalogService } from '../../application/profile-catalog.service';
-import { freelanceWhatsappUrl } from '../../application/freelance-contact';
 import template from './hero.component.html?raw';
 import styles from './hero.component.css?inline';
 
 @Component({
   selector: 'app-hero', standalone: true,
-  imports: [EditorialGridComponent, TranslatePipe, ScrollEffectDirective], template, styles,
+  imports: [ContactLinkDirective, EditorialGridComponent, TranslatePipe, ScrollEffectDirective], template, styles,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeroComponent implements AfterViewInit, OnDestroy {
   readonly profile = inject(ProfileCatalogService).profile;
-  readonly whatsappUrl = freelanceWhatsappUrl;
-  readonly marqueeItems = ['DESARROLLO WEB', 'APLICACIONES A MEDIDA', 'DATOS Y AUTOMATIZACIÓN', 'SOLUCIONES DIGITALES'] as const;
   @ViewChild('heroScene') heroScene!: ElementRef<HTMLElement>;
   private readonly browser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly zone = inject(NgZone);
@@ -69,6 +67,7 @@ export class HeroComponent implements AfterViewInit, OnDestroy {
       // the finished content becomes hidden again until Angular's next render.
       this.changeDetector.detectChanges();
       this.context?.revert(); this.context = undefined;
+      this.intro.releaseBackgroundResources();
     });
   }
   private readonly onPreference = (): void => { if (this.preference?.matches) this.finishBuild(); };

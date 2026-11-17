@@ -6,7 +6,7 @@ for (const [width, height] of [[375, 667], [390, 844], [393, 852], [430, 932]]) 
   test(`mobile intro hands the same floral frame to Hero at ${width}px`, async ({ page }, testInfo) => {
     test.setTimeout(60000);
     await page.setViewportSize({ width, height });
-    await page.goto(SITE_URL);
+    await page.goto(SITE_URL, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('.cinematic-screen')).toBeVisible();
     // Hide annotations only for the pixel comparison: the image geometry and
     // actual production transition continue running unchanged.
@@ -70,14 +70,16 @@ for (const [width, height] of [[390, 844], [1440, 900]]) {
   test(`Home to About releases its pin continuously and reverses at ${width}px`, async ({ page }) => {
     await page.addInitScript(() => sessionStorage.setItem('camilla-cinematic-intro-seen', '1'));
     await page.setViewportSize({ width, height });
-    await page.goto(SITE_URL);
+    await page.goto(SITE_URL, { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => document.fonts.ready);
     await expect(page.locator('app-about .about')).toHaveAttribute('data-story-end');
     const end = Number(await page.locator('app-about .about').getAttribute('data-story-end'));
     const positions = [];
     for (const offset of [-8, -4, 0, 4, 8, 4, 0, -4, -8]) {
       await page.evaluate(y => scrollTo(0, y), end + offset);
-      await page.waitForTimeout(100);
+      // Font/layout refresh and pin updates can land in different frames.
+      // Wait for the actual pinned state instead of sampling after 100 ms.
+      await expect.poll(() => page.locator('.story-stage').evaluate(stage => Math.abs(stage.getBoundingClientRect().y - 84))).toBeLessThan(1);
       const sample = await page.evaluate(() => ({ hero: document.querySelector('app-hero').getBoundingClientRect().y, story: document.querySelector('.story-stage').getBoundingClientRect().y }));
       positions.push(sample);
       expect(Math.abs(sample.story - 84)).toBeLessThan(1);

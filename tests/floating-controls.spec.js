@@ -62,7 +62,7 @@ for (const [width, height] of [[1042, 531], [1440, 900], [390, 844]]) {
       await page.locator('.project-showcase').evaluate((section, fraction) => {
         scrollTo(0, section.getBoundingClientRect().top + scrollY + section.clientHeight * fraction);
       }, fraction);
-      // Include the delayed collision check after scrubbed animations settle.
+      // Include the delayed surface check after scrubbed animations settle.
       await page.waitForTimeout(950);
       const box = await cue.evaluate(el => el.getBoundingClientRect().toJSON());
       expect(box.x).toBeCloseTo(initial.x, 0);
@@ -146,8 +146,7 @@ for (const [width, height] of [[375, 667], [390, 844], [393, 852], [430, 932], [
     await expect(page.locator('.project-dialog')).toHaveCSS('background-color', 'rgb(9, 9, 11)');
     await page.keyboard.press('Escape');
     await expect(page.locator('.project-dialog')).not.toBeVisible();
-    // The theme intentionally leaves the tab order on boundaries/collisions.
-    // Activate it in a clear surface, as a keyboard user would.
+    // Check keyboard theme activation after dismissing the project dialog.
     await page.locator('#sobre-mi').evaluate(section => scrollTo(0, section.getBoundingClientRect().top + scrollY - 84));
     await expect(toggle).toBeVisible();
     await toggle.focus();

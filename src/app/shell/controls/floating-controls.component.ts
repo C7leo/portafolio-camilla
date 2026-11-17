@@ -5,6 +5,7 @@ import { CinematicIntroState } from '../../shared/motion/cinematic-intro-state.s
 import { ThemeService } from '../../shared/theme/theme.service';
 import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 import { ViewportControlTargets } from './viewport-control-targets';
+import { SectionNavigationService } from '../../shared/motion/section-navigation.service';
 import template from './floating-controls.component.html?raw';
 import styles from './floating-controls.component.css?inline';
 
@@ -15,6 +16,7 @@ import styles from './floating-controls.component.css?inline';
 })
 export class FloatingControlsComponent implements AfterViewInit, OnDestroy {
   readonly theme = inject(ThemeService);
+  private readonly navigation = inject(SectionNavigationService);
   readonly intro = inject(CinematicIntroState);
   readonly cueVisible = signal(true);
   readonly themeVisible = signal(true);
@@ -86,7 +88,7 @@ export class FloatingControlsComponent implements AfterViewInit, OnDestroy {
     const hero = document.querySelector('.hero');
     const about = document.getElementById('sobre-mi');
     if (hero && about && hero.getBoundingClientRect().bottom > innerHeight / 2) {
-      window.scrollTo({ top: about.getBoundingClientRect().top + scrollY - 84, behavior });
+      this.navigation.navigate('sobre-mi');
     } else window.scrollBy({ top: Math.round((visualViewport?.height ?? innerHeight) * .8), behavior });
   }
 
@@ -153,12 +155,9 @@ export class FloatingControlsComponent implements AfterViewInit, OnDestroy {
         atHome ? homeTop : themeBox.bottom - this.scrollButton.nativeElement.offsetHeight,
         44, this.scrollButton.nativeElement.offsetHeight,
       );
-      const inHome = atHome && !!hero && cue.top >= hero.top && cue.bottom <= hero.bottom - 12;
-      const afterHome = !atHome && !!about && cue.top >= about.top + 12;
-      const cueVisible = !blocked && cue.top >= viewportTop && cue.bottom <= viewportBottom
-        && (inHome || afterHome || atEnd) && this.targets!.isClear(cue);
-      this.targets!.watchControl(themeBox);
-      this.targets!.watchControl(cue, 'scroll');
+      // Global navigation stays available over chapter content and boundaries.
+      // Only modal UI and an off-screen Home anchor can suspend the control.
+      const cueVisible = !blocked && cue.top >= viewportTop && cue.bottom <= viewportBottom;
       // Theme remains available in every chapter. The shared clearance token
       // reserves its narrow-screen gutter instead of hiding it over content.
       const themeVisible = !blocked;

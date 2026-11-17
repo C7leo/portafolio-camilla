@@ -1,6 +1,7 @@
 # Urbanist
 
-Same 400/500/700/800 weights and unicode ranges previously served by Google Fonts.
+Variable Urbanist, declared once per Unicode subset with a 400–800 weight range.
+Latin is preloaded; Latin extended downloads only when a character requires it.
 
 Source CSS: https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;700;800&display=swap
 

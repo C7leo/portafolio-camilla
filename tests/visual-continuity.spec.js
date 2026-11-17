@@ -20,15 +20,14 @@ for (const [width, height] of [[1440, 900], [768, 900], [390, 844]]) {
     for (const language of ['es', 'en']) {
       await page.locator(`.language-choice[lang="${language}"]`).click();
       await page.locator('.contact').click();
-      await expect(page.locator('.site-footer')).toBeInViewport();
+      await expect(page.locator('#contacto')).toBeInViewport();
       await expect(page.locator('.contact')).toHaveAttribute('aria-current', 'location');
-      await expect(page.locator('#contacto')).toHaveClass('site-footer');
-      const gap = await page.evaluate(() => document.querySelector('.site-footer').getBoundingClientRect().top - document.querySelector('main').getBoundingClientRect().bottom);
+      await expect(page.locator('#contacto')).toHaveClass('contact-section');
+      const gap = await page.evaluate(() => document.querySelector('#contacto').getBoundingClientRect().top - document.querySelector('main').getBoundingClientRect().bottom);
       expect(Math.abs(gap)).toBeLessThanOrEqual(1);
     }
     const cta = page.locator('.brand-cta');
-    await expect(cta).not.toHaveAttribute('href', '#contacto');
-    await expect(cta).toHaveAttribute('href', /^(mailto:|https:\/\/)/);
+    await expect(cta).toHaveAttribute('href', '#contacto');
     await expect(page.locator('.footer-stage')).toHaveCSS('background-image', /url\(/);
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
     await page.screenshot({ path: `test-results/experience-footer-${width}.png` });

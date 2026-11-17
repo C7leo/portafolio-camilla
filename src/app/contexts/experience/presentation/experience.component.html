@@ -4,13 +4,14 @@
     <app-editorial-grid tone="dark" [rules]="[{ at: '84px' }, { at: 'calc(100% - var(--editorial-bottom-inset))' }]" />
   </div>
   <div class="experience-reveal">
-    <div class="experience-backdrop" data-control-surface="neutral" aria-hidden="true">
-      <div class="experience-photo">
+    <div class="experience-backdrop" data-control-surface="neutral">
+      <div class="experience-photo" aria-hidden="true">
         <canvas #valleyPreview class="experience-valley-preview"></canvas>
         <div class="experience-aperture-line"></div>
       </div>
-      <div class="experience-opening" aria-hidden="true">
-        <p class="experience-opening-word"><span class="opening-left">{{ openingParts[0] }}</span><span class="opening-right">{{ openingParts[1] }}</span></p>
+      <div class="experience-opening">
+        <p class="editorial-section-label" data-control-avoid>{{ '05 / EXPERIENCE' | t }}</p>
+        <p class="experience-opening-word" aria-hidden="true"><span class="opening-left">{{ openingParts[0] }}</span><span class="opening-right">{{ openingParts[1] }}</span></p>
       </div>
     </div>
     <div class="experience-visual-intro" aria-hidden="true"></div>
@@ -20,7 +21,6 @@
     <div class="experience-stage">
       <div class="container journey-composition">
         <header class="experience-header" data-control-avoid>
-          <p class="section-index">{{ '05 / EXPERIENCE' | t }}</p>
           <div class="title-composition"><h2 id="experience-title">{{ 'Cada experiencia abre un nuevo mundo.' | t }}</h2></div>
         </header>
         <ol class="experience-list" [attr.aria-label]="'Trayectoria profesional' | t">

@@ -6,7 +6,7 @@
   position: relative; height: 100svh; min-height: 620px; isolation: isolate;
   overflow: hidden; background: var(--paper); color: #FFFFFF;
 }
-.footer-stage { position: absolute; inset: 0; z-index: 0; background: #0B0B12 url('../../shared/assets/night-lily.png') right center / cover no-repeat; }
+.footer-stage { position: absolute; inset: 0; z-index: 0; background: #0B0B12 url('../../shared/assets/night-lily.webp') right center / cover no-repeat; }
 .footer-stage::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to bottom, var(--paper) 0%, rgb(0 0 0 / .96) 26%, rgb(0 0 0 / .8) 50%, rgb(0 0 0 / 0) 80%); }
 .footer-glass-wordmark {
   position: absolute; z-index: 1; left: 50%; bottom: calc(-2 * var(--u)); transform: translateX(-50%);

@@ -1,5 +1,5 @@
 :host { display: block; }
-.projects { --archive-background: var(--violet); --archive-foreground: var(--white); background: var(--archive-background); color: var(--archive-foreground); padding-block: var(--section-entry-space) 88px; scroll-margin-top: 90px; }
+.projects { --archive-background: var(--violet); --archive-foreground: var(--white); background: var(--archive-background); color: var(--archive-foreground); padding-block: var(--section-entry-space) 88px; }
 .projects:focus { outline: none; }
 .projects.is-detail { position: relative; }
 .projects:not(.is-detail) { padding: 0; background: var(--archive-background); color: var(--archive-foreground); }

@@ -14,13 +14,13 @@
       }
     </div>
     <div class="language-selector" role="group" [attr.aria-label]="'Idioma' | t">
-      <button type="button" class="language-choice" lang="en" aria-label="Switch to English"
+      <button type="button" class="language-choice" lang="en" aria-label="EN — Switch to English"
         [attr.aria-pressed]="language.language() === 'en'" (click)="language.setLanguage('en')">EN</button>
       <span aria-hidden="true">/</span>
-      <button type="button" class="language-choice" lang="es" aria-label="Cambiar a español"
+      <button type="button" class="language-choice" lang="es" aria-label="ES — Cambiar a español"
         [attr.aria-pressed]="language.language() === 'es'" (click)="language.setLanguage('es')">ES</button>
     </div>
-    <a class="contact" href="#contacto" [attr.aria-current]="activeSection() === 'contacto' ? 'location' : null" (click)="closeMenu()">
+    <a class="contact" href="#contacto" appContactLink [attr.aria-current]="activeSection() === 'contacto' ? 'location' : null" (click)="closeMenu()">
       <span>{{ 'Contacto' | t }}</span>
       <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M5 15 15 5M5 5h10v10" /></svg>
     </a>

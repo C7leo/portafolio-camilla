@@ -53,10 +53,10 @@
 @media (prefers-reduced-motion: reduce) { .contact, .contact svg, .cv-download, .nav-link, .menu-icon span { transition: none; } .contact:hover svg { transform: none; } }
 
 .language-selector { display: inline-flex; align-items: center; gap: 2px; color: var(--text-primary); font-size: 11px; }
-.language-choice { display: inline-flex; align-items: center; justify-content: center; min-width: 23px; min-height: 34px; padding: 0 2px; border: 0; border-radius: 6px; background: transparent; color: var(--text-primary); opacity: 0.6; font: inherit; font-size: 11px; font-weight: 500; cursor: pointer; }
-.language-choice[aria-pressed=true] { opacity: 1; font-weight: 700; }
-.language-choice:hover { background: var(--surface-raised); opacity: 1; }
-.language-choice:focus-visible { outline: 2px solid #5A4EFF; outline-offset: 1px; }
+.language-choice { display: inline-flex; align-items: center; justify-content: center; width: 28px; min-width: 28px; min-height: 34px; padding: 0 2px; border: 0; border-radius: 0; background: transparent; box-shadow: none; color: var(--text-primary); opacity: 0.7; font: inherit; font-size: 11px; font-weight: 600; cursor: pointer; text-decoration: none; text-underline-offset: 5px; }
+.language-choice[aria-pressed=true], .language-choice:hover, .language-choice:active { color: var(--lime); opacity: 1; }
+/* A persistent text underline marks keyboard focus without a circular outline. */
+.language-choice:focus-visible { outline: none; text-decoration: underline; text-decoration-thickness: 2px; text-decoration-color: var(--text-primary); }
 @media (max-width: 820px) { .navbar { gap: 5px; } .language-choice { min-height: 40px; min-width: 20px; } .menu-toggle { padding-inline: 8px; font-size: 12px; } .contact { padding-inline: 10px; font-size: 12px; } }
 @media (max-width: 360px) { .navbar { gap: 3px; padding-left: 10px; } .brand { font-size: 14px; } .language-selector { gap: 0; } .language-choice { min-width: 18px; font-size: 10px; } .menu-toggle { padding-inline: 6px; } .contact { padding-inline: 9px; } }
 @media (max-width: 820px) {
@@ -72,7 +72,6 @@
 
 .floating-header { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 250ms ease, visibility 250ms, color var(--theme-duration); }
 .floating-header.is-visible { opacity: 1; visibility: visible; pointer-events: auto; }
-.floating-header.is-home { top: calc(var(--safe-area-top) + var(--hero-marquee-height) + 4px); }
 .is-home .navbar { --text-primary: #FFFFFF; border-color: transparent; }
 .is-home .glass-surface { opacity: 0; }
 .glass-surface { transition: opacity var(--theme-duration), background-color var(--theme-duration), box-shadow var(--theme-duration); }
@@ -80,6 +79,6 @@
 .is-home .navigation:not(.is-open) .nav-link.active { background: transparent; color: var(--lime); }
 .is-home .navigation:not(.is-open) .nav-link:hover { background: transparent; color: var(--lime); }
 .is-home .navigation.is-open { --text-primary: var(--text-editorial); }
-.is-home :is(.brand, .nav-link, .menu-toggle, .language-choice):focus-visible { outline-color: var(--lime); }
+.is-home :is(.brand, .nav-link, .menu-toggle):focus-visible { outline-color: var(--lime); }
 .is-home .navigation.is-open .nav-link:focus-visible { outline-color: var(--violet); }
 @media (prefers-reduced-motion: reduce) { .floating-header { transition: none; } }

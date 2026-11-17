@@ -2,7 +2,7 @@
   <app-editorial-grid [rails]="true" [rules]="[{ anchor: '.services-meta' }, { anchor: '.services-cta' }, { at: 'calc(100% - 1px)' }]" />
   <div class="container">
     <header class="services-meta">
-      <p data-control-avoid>{{ '04 / SERVICIOS' | t }}</p>
+      <p class="editorial-section-label" data-control-avoid>{{ '04 / SERVICIOS' | t }}</p>
     </header>
     <div class="services-intro" appReveal="focus" [motionDuration]="600">
       <h2 id="services-title" data-control-avoid>{{ 'Soluciones digitales para llevar tus ideas más lejos.' | t }}</h2>
@@ -26,13 +26,11 @@
         <p class="services-cta-label">{{ '¿TRABAJAMOS JUNTOS?' | t }}</p>
         <p class="services-cta-title">{{ 'Hagamos realidad tu próxima idea.' | t }}</p>
       </div>
-      @if (whatsappUrl) {
-      <a class="services-contact" [href]="whatsappUrl" target="_blank" rel="noopener noreferrer">
+      <a class="services-contact" href="#contacto" appContactLink>
         {{ 'Hablemos' | t }}
         <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M5 15 15 5M5 5h10v10" /></svg>
-        <span class="sr-only">{{ 'Abrir WhatsApp' | t }} {{ '(se abre en otra pestaña)' | t }}</span>
+        <span class="sr-only">{{ 'Ir al formulario de contacto' | t }}</span>
       </a>
-      }
     </div>
   </div>
 </section>

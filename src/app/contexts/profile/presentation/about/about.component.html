@@ -4,7 +4,7 @@
       <figure class="portrait visual">
         <div class="portrait-mask">
           @if (photoSrc && !photoFailed()) {
-            <img [src]="photoSrc" [alt]="'Fotografía personal' | t" width="600" height="800"
+            <img [attr.src]="intro.backgroundReady() ? photoSrc : null" [attr.srcset]="intro.backgroundReady() ? portraitSrcset : null" sizes="(max-width: 640px) 80vw, 38vw" [alt]="'Fotografía personal' | t" width="1024" height="1024"
               loading="lazy" decoding="async" (error)="photoFailed.set(true)" />
           } @else {
             <div class="image-space portrait-space" role="img" [attr.aria-label]="'Espacio para incorporar una fotografía personal' | t">
@@ -22,7 +22,7 @@
         </header>
         <figure class="process visual">
           @if (workSrc && !workFailed()) {
-            <img [src]="workSrc" [alt]="workAlt | t" width="1536" height="1024"
+            <img [attr.src]="intro.backgroundReady() ? workSrc : null" [attr.srcset]="intro.backgroundReady() ? processSrcset : null" sizes="(max-width: 640px) 85vw, 40vw" [alt]="workAlt | t" width="1536" height="1024"
               loading="lazy" decoding="async" (error)="workFailed.set(true)" />
           } @else {
             <div class="image-space process-space" role="img" [attr.aria-label]="'Espacio para incorporar una captura real de un proyecto o del proceso de trabajo' | t">

@@ -10,14 +10,14 @@
       <p>{{ 'Ideas que se convierten en experiencias digitales.' | t }}</p>
       <span>{{ projects.length.toString().padStart(2, '0') }} <span>{{ 'proyectos seleccionados' | t }}</span></span>
     </div>
-    <div class="sea-gallery" data-control-boundary data-control-surface="neutral" [attr.aria-label]="'Archivo visual de proyectos' | t">
+    <div class="sea-gallery" role="group" data-control-boundary data-control-surface="neutral" [attr.aria-label]="'Archivo visual de proyectos' | t">
       <div class="gallery-stage">
       <div #ringWall class="ring-wall" aria-hidden="true">
         <div class="ring-lens"><div class="ring-center">
           @for (project of ringSlots; track $index) {
             <button class="ring-card" data-control-avoid type="button" tabindex="-1" (mousedown)="$event.preventDefault()" (click)="openProject($index % projects.length, $event)" [attr.aria-label]="project.name">
               <span class="ring-face">
-                <img [src]="project.image" alt="" loading="lazy" width="900" height="600" draggable="false" />
+                <img [attr.src]="intro.backgroundReady() ? project.image : null" [attr.srcset]="intro.backgroundReady() ? project.imageSrcset : null" sizes="(max-width: 640px) 90vw, (max-width: 1050px) 45vw, 700px" alt="" loading="lazy" decoding="async" [attr.width]="project.imageWidth || 1536" [attr.height]="project.imageHeight || 1024" draggable="false" />
                 <span class="ring-caption"><span>{{ project.name }}</span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10" /></svg></span>
               </span>
             </button>
@@ -46,7 +46,7 @@
         @for (project of projects; track project.id) {
           <li class="project-row">
             <button class="project-open" type="button" (click)="openProject($index, $event)">
-              <img [src]="project.image" alt="" loading="lazy" width="900" height="600" />
+              <img [attr.src]="intro.backgroundReady() ? project.image : null" [attr.srcset]="intro.backgroundReady() ? project.imageSrcset : null" sizes="(max-width: 640px) 90vw, (max-width: 1050px) 45vw, 700px" alt="" loading="lazy" decoding="async" [attr.width]="project.imageWidth || 1536" [attr.height]="project.imageHeight || 1024" />
               <span class="index-number" aria-hidden="true">{{ ($index + 1).toString().padStart(2, '0') }}</span>
               <span>{{ project.name }}</span><svg class="index-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10" /></svg>
             </button>

@@ -6,16 +6,18 @@ import { ProjectCatalogService } from '../application/project-catalog.service';
 import { ProjectShowcaseComponent } from './project-showcase.component';
 import { ProjectArtComponent } from './project-art.component';
 import { ProjectSummaryComponent } from './project-summary.component';
+import { SectionPositionService } from '../../../shared/motion/section-position.service';
 import template from './projects.component.html?raw';
 import styles from './projects.component.css?inline';
 
 @Component({
   selector: 'app-projects', standalone: true, imports: [EditorialGridComponent, TranslatePipe, ProjectShowcaseComponent, ProjectArtComponent, ProjectSummaryComponent],
-  template, styles, host: { '(window:hashchange)': 'syncRoute()' },
+  template, styles, host: { '(window:hashchange)': 'syncRoute()', '(window:sectionnavigation)': 'syncRoute(false)' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProjectsComponent implements OnInit, OnDestroy {
   private readonly catalog = inject(ProjectCatalogService);
+  private readonly positions = inject(SectionPositionService);
   readonly projects = this.catalog.projects;
   readonly detailProject = signal<Project | null>(null);
   private readonly element = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -23,16 +25,16 @@ export class ProjectsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void { this.syncRoute(); }
 
-  syncRoute(): void {
+  syncRoute(position = true): void {
     const project = this.catalog.findByRoute(location.hash);
     const previous = this.detailProject();
     this.detailProject.set(project);
     const returning = !project && previous && (location.hash === '#proyectos' || location.hash === '');
     cancelAnimationFrame(this.routeFrame);
-    if (!project && !returning) return;
+    if (!position || (!project && !returning)) return;
     this.routeFrame = requestAnimationFrame(() => {
-      const section = this.element.nativeElement.querySelector<HTMLElement>('#proyectos');
-      section?.scrollIntoView({ block: 'start', behavior: 'instant' });
+      const top = this.positions.destination('proyectos');
+      if (top !== null) this.positions.land(top);
       if (project) this.element.nativeElement.querySelector<HTMLElement>('#project-detail-title')?.focus({ preventScroll: true });
     });
   }

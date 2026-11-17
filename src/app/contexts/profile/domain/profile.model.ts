@@ -1,5 +1,5 @@
 export interface ContactLink {
-  readonly id: 'email' | 'linkedin' | 'github';
+  readonly id: 'linkedin' | 'github';
   readonly title: string;
   readonly href: string;
   readonly external: boolean;

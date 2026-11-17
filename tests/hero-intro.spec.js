@@ -11,7 +11,7 @@ for (const scenario of [
 ]) {
   test(`Home stays visible after its entrance: ${scenario.name}`, async ({ page }) => {
     await page.setViewportSize(scenario.viewport);
-    await page.goto(url);
+    await page.goto(url, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('.cinematic-screen')).toBeVisible();
     await page.evaluate(() => {
       const hero = document.querySelector('.hero');

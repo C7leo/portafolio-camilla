@@ -2,18 +2,21 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 import { AfterViewInit, ChangeDetectionStrategy, Component, computed, ElementRef, inject, NgZone, OnDestroy, signal, ViewChild } from '@angular/core';
 import { LanguageService } from '../../shared/i18n/language.service';
 import { CinematicIntroState } from '../../shared/motion/cinematic-intro-state.service';
+import { ContactLinkDirective } from '../../shared/motion/contact-link.directive';
+import { SectionNavigationService } from '../../shared/motion/section-navigation.service';
+import { SectionPositionService } from '../../shared/motion/section-position.service';
 import template from './navbar.component.html?raw';
 import styles from './navbar.component.css?inline';
 
 @Component({
   selector: 'app-navbar', standalone: true,
-  imports: [TranslatePipe],
+  imports: [TranslatePipe, ContactLinkDirective],
   template, styles,
   host: { '(document:keydown.escape)': 'closeMenu(true)' },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NavbarComponent implements AfterViewInit, OnDestroy {
-  readonly logoSrc = new URL('../../shared/assets/logo.png', import.meta.url).href;
+  readonly logoSrc = new URL('../../shared/assets/logo.webp', import.meta.url).href;
   readonly language = inject(LanguageService);
   get cvFilename(): string { return this.language.language() === 'en' ? 'CV_Camilla_Espinoza_EN.pdf' : 'CV_Camilla_Espinoza.pdf'; }
   get cvUrl(): string { return `${import.meta.env.BASE_URL}cv/${this.cvFilename}`; }
@@ -26,9 +29,12 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
     { id: 'proyectos', label: 'Proyectos' }, { id: 'servicios', label: 'Servicios' }, { id: 'experiencia', label: 'Experiencia' },
   ];
   private readonly zone = inject(NgZone);
+  private readonly navigation = inject(SectionNavigationService);
+  private readonly positions = inject(SectionPositionService);
   private frame = 0;
   @ViewChild('menuToggle') toggle?: ElementRef<HTMLButtonElement>;
   ngAfterViewInit(): void {
+    this.navigation.start();
     this.zone.runOutsideAngular(() => {
       window.addEventListener('scroll', this.queueActiveSection, { passive: true });
       window.addEventListener('resize', this.queueActiveSection, { passive: true });
@@ -39,11 +45,13 @@ export class NavbarComponent implements AfterViewInit, OnDestroy {
     if (this.frame) return;
     this.frame = requestAnimationFrame(() => {
       this.frame = 0;
-      const threshold = Math.min(180, innerHeight * 0.25);
       let active = 'inicio';
       for (const id of ['sobre-mi', 'proyectos', 'servicios', 'experiencia', 'contacto']) {
         const section = document.getElementById(id);
-        if (section && section.getBoundingClientRect().top <= threshold) active = id;
+        if (section && getComputedStyle(section.closest('app-contact-form') ?? section).position !== 'fixed') {
+          const entry = this.positions.destination(id);
+          if (entry !== null && scrollY >= entry - 2) active = id;
+        }
       }
       if (active !== this.activeSection()) this.zone.run(() => {
         this.activeSection.set(active);

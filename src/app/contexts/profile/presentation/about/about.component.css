@@ -1,5 +1,5 @@
-﻿:host { display: block; background: var(--surface); color: var(--text-editorial); transition: background-color var(--theme-duration), color var(--theme-duration); }
-.about { scroll-margin-top: 84px; }
+:host { display: block; background: var(--surface); color: var(--text-editorial); transition: background-color var(--theme-duration), color var(--theme-duration); }
+.about { }
 .about:focus { outline: none; }
 .editorial-scene { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: start; gap: clamp(48px, 9vw, 144px); padding-block: 64px 96px; }
 .visual { min-width: 0; margin: 0; }

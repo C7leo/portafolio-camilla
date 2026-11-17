@@ -4,11 +4,13 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 import { RevealDirective } from '../../shared/motion/reveal.directive';
 import { ProfileCatalogService } from '../../contexts/profile/application/profile-catalog.service';
 import { ProjectCatalogService } from '../../contexts/projects/application/project-catalog.service';
+import { ContactFormComponent } from '../contact/contact-form.component';
+import { ContactLinkDirective } from '../../shared/motion/contact-link.directive';
 import template from './footer.component.html?raw';
 import styles from './footer.component.css?inline';
 
 @Component({
-  selector: 'app-footer', standalone: true, imports: [EditorialGridComponent, TranslatePipe, RevealDirective],
+  selector: 'app-footer', standalone: true, imports: [ContactLinkDirective, ContactFormComponent, EditorialGridComponent, TranslatePipe, RevealDirective],
   template, styles, changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterComponent {

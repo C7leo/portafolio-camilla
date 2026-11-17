@@ -54,7 +54,8 @@ function visit(file){
 }
 visit(path.join(root,'src/main.ts'));visited.add(path.join(root,'src/vite-env.d.ts'));
 for(const match of fs.readFileSync('index.html','utf8').matchAll(/(?:src|href)="\/(src\/[^"?]+)"/g))visit(path.join(root,match[1]));
-const unused=[...list(sourceRoot),...list(path.join(root,'public'))].filter(file=>!visited.has(file)&&!file.endsWith('.md')&&!file.endsWith('.txt'));
+// PNGs are editable inputs to optimize-images; optimized variants are runtime assets.
+const unused=[...list(sourceRoot),...list(path.join(root,'public'))].filter(file=>!visited.has(file)&&!file.endsWith('.md')&&!file.endsWith('.txt')&&!(file.endsWith('.png')&&fs.existsSync(file.replace(/\.png$/,'.webp')))&&!(file.endsWith('cinematic-intro.mp4')&&fs.existsSync(file.replace(/\.mp4$/,'.optimized.mp4'))));
 for(const file of unused)errors.push(`Unreachable source/resource: ${relative(file)}`);
 const manifest=JSON.parse(fs.readFileSync('package.json','utf8'));
 // Angular's published packages declare RxJS/tslib as runtime requirements.

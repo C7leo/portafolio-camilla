@@ -1,0 +1,59 @@
+<section id="contacto" class="contact-section" data-control-surface="dark" aria-labelledby="contact-title" tabindex="-1">
+  <app-editorial-grid [rails]="true" [rules]="[{ anchor: '.editorial-section-label' }, { at: 'calc(100% - 1px)' }]" />
+  <div class="container">
+    <p class="editorial-section-label" data-control-avoid>{{ '06 / CONTACT' | t }}</p>
+    <h2 id="contact-title" class="contact-heading" appReveal="focus" [motionDuration]="600">{{ 'Contacto' | t }}</h2>
+    <article class="contact-card" data-control-surface="light" aria-labelledby="contact-card-title" appReveal="focus" [motionDuration]="700" [motionDelay]="120">
+    <div class="contact-card-content">
+      <header class="contact-copy">
+        <h3 id="contact-card-title" appReveal="rise" [motionDuration]="400">{{ 'Hablemos' | t }}</h3>
+        <p appReveal="rise" [motionDuration]="400" [motionDelay]="65">{{ '¿Tienes una idea, un proyecto o una oportunidad de colaboración? Me encantaría conocerla.' | t }}</p>
+      </header>
+      <form class="contact-form" [action]="endpoint" method="POST" novalidate (submit)="submit($event)" [attr.aria-busy]="state() === 'sending'" aria-labelledby="contact-card-title">
+        <fieldset [disabled]="state() === 'sending'">
+          <legend class="sr-only">{{ 'Datos de tu consulta' | t }}</legend>
+          <div class="contact-field" [class.has-error]="!!errors().name" appReveal="rise" [motionDuration]="400" [motionDelay]="130">
+            <label for="contact-name">{{ 'Nombre completo' | t }} <span aria-hidden="true">*</span></label>
+            <span class="field-control"><input id="contact-name" name="name" autocomplete="name" required maxlength="120" [attr.aria-invalid]="errors().name ? 'true' : null" aria-describedby="contact-name-error" (input)="edit('name')"></span>
+            <p id="contact-name-error" class="field-error">{{ errors().name | t }}</p>
+          </div>
+          <div class="contact-field" [class.has-error]="!!errors().email" appReveal="rise" [motionDuration]="400" [motionDelay]="195">
+            <label for="contact-email">{{ 'Correo electrónico' | t }} <span aria-hidden="true">*</span></label>
+            <span class="field-control"><input id="contact-email" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required maxlength="254" [attr.aria-invalid]="errors().email ? 'true' : null" aria-describedby="contact-email-error" (input)="edit('email')"></span>
+            <p id="contact-email-error" class="field-error">{{ errors().email | t }}</p>
+          </div>
+          <div class="contact-field full-width" [class.has-error]="!!errors().subject" appReveal="rise" [motionDuration]="400" [motionDelay]="260">
+            <label for="contact-subject">{{ 'Asunto o tipo de consulta' | t }} <span class="optional">{{ '(opcional)' | t }}</span></label>
+            <span class="field-control"><input id="contact-subject" name="subject" maxlength="160" [attr.aria-invalid]="errors().subject ? 'true' : null" aria-describedby="contact-subject-error" (input)="edit('subject')"></span>
+            <p id="contact-subject-error" class="field-error">{{ errors().subject | t }}</p>
+          </div>
+          <div class="contact-field full-width" [class.has-error]="!!errors().message" appReveal="rise" [motionDuration]="400" [motionDelay]="325">
+            <label for="contact-message">{{ 'Mensaje' | t }} <span aria-hidden="true">*</span></label>
+            <span class="field-control"><textarea id="contact-message" name="message" rows="4" required maxlength="6000" [attr.aria-invalid]="errors().message ? 'true' : null" aria-describedby="contact-message-error" (input)="edit('message')"></textarea></span>
+            <p id="contact-message-error" class="field-error">{{ errors().message | t }}</p>
+          </div>
+          <div class="contact-honeypot" aria-hidden="true">
+            <label for="contact-website">Website</label><input id="contact-website" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+          <div class="contact-actions full-width" appReveal="rise" [motionDuration]="400" [motionDelay]="390">
+            <p class="contact-privacy">{{ 'El envío se procesa con Formspree. Tus datos se usan para responder a tu consulta.' | t }}</p>
+            <button type="submit" class="contact-submit" [class.is-sending]="state() === 'sending'" [class.is-sent]="state() === 'success'" [disabled]="state() === 'sending'" [attr.aria-label]="(state() === 'sending' ? 'Enviando…' : state() === 'success' ? 'Mensaje enviado' : 'Enviar mensaje') | t">
+              <span class="submit-labels" aria-hidden="true">
+                <span [class.is-current]="state() !== 'sending' && state() !== 'success'">{{ 'Enviar mensaje' | t }}</span>
+                <span [class.is-current]="state() === 'sending'">{{ 'Enviando…' | t }}</span>
+                <span [class.is-current]="state() === 'success'">{{ 'Mensaje enviado' | t }}</span>
+              </span>
+              <span class="submit-icon" aria-hidden="true">
+                <svg class="submit-arrow" viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 15 15 5M5 5h10v10" /></svg>
+                <span class="submit-spinner"></span>
+                <svg class="submit-check" viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m4 10 4 4 8-8" /></svg>
+              </span>
+            </button>
+          </div>
+        </fieldset>
+        <p id="contact-feedback" class="contact-feedback" [class.is-success]="state() === 'success'" [class.is-error]="state() === 'error'" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">{{ notice() | t }}</p>
+      </form>
+    </div>
+    </article>
+  </div>
+</section>

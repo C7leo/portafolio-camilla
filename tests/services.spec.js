@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { SITE_URL, WHATSAPP_NUMBER } from './support/site.js';
+import { SITE_URL } from './support/site.js';
 
 for (const [width, height] of [[320, 740], [390, 844], [768, 1024], [821, 900], [1024, 900], [1440, 1000]]) {
   test(`Services shares the editorial grid and preserves contact and themes at ${width}px`, async ({ page }, testInfo) => {
@@ -56,12 +56,9 @@ for (const [width, height] of [[320, 740], [390, 844], [768, 1024], [821, 900], 
     expect(header.x).toBeGreaterThanOrEqual(0);
     expect(header.x + header.width).toBeLessThanOrEqual(width);
     const contact = page.locator('.services-contact');
-    const url = new URL(await contact.getAttribute('href'));
-    expect(url.origin + url.pathname).toBe(`https://wa.me/${WHATSAPP_NUMBER}`);
-    expect(url.searchParams.get('text')).toBe('Hola, vi tu portafolio y me gustaría conversar contigo sobre un proyecto de desarrollo web.');
+    await expect(contact).toHaveAttribute('href', '#contacto');
     expect(await contact.getAttribute('href')).toBe(await page.locator('.micro-cta-link').getAttribute('href'));
-    await expect(contact).toHaveAttribute('target', '_blank');
-    await expect(contact).toHaveAttribute('rel', 'noopener noreferrer');
+    await expect(contact).not.toHaveAttribute('target');
     expect((await contact.boundingBox()).height).toBeGreaterThanOrEqual(44);
     await page.screenshot({ path: testInfo.outputPath('services.png') });
     if (width <= 640) {
@@ -69,10 +66,10 @@ for (const [width, height] of [[320, 740], [390, 844], [768, 1024], [821, 900], 
         const cue = document.querySelector('.floating-scroll-cue').getBoundingClientRect();
         scrollTo(0, element.getBoundingClientRect().top + scrollY - cue.top - 10);
       });
-      await expect(page.locator('.floating-scroll-cue')).toBeHidden();
+      await expect(page.locator('.floating-scroll-cue')).toBeVisible();
     }
-    // Place a clear editorial gutter under the fixed controls before activating
-    // the theme: protected mobile text legitimately hides overlapping utilities.
+    // Exercise the theme over the Services surface; global controls remain
+    // available when text crosses their fixed viewport positions.
     await section.locator('.services-grid').evaluate(element => scrollTo(0, element.getBoundingClientRect().top + scrollY - innerHeight + 60));
     await expect(page.locator('.floating-theme-toggle')).toBeVisible();
     await page.locator('.floating-theme-toggle').click();
@@ -83,7 +80,7 @@ for (const [width, height] of [[320, 740], [390, 844], [768, 1024], [821, 900], 
     await page.locator('.language-choice[lang="en"]').click();
     await expect(section.locator('h2')).toHaveText('Digital solutions to take your ideas further.');
     await expect(section.locator('h3')).toHaveText(['Web development', 'Custom applications', 'Data and automation']);
-    await expect(page.locator('.experience-header .section-index')).toHaveText('05 / EXPERIENCE');
+    await expect(page.locator('#experiencia .editorial-section-label')).toHaveText('05 / EXPERIENCE');
     if (width <= 820) await page.locator('.menu-toggle').click();
     await page.locator('.nav-link[href="#servicios"]').click();
     await expect(page.locator('.menu-toggle')).toHaveAttribute('aria-expanded', 'false');
@@ -120,7 +117,7 @@ for (const reducedMotion of ['reduce', 'no-preference']) {
     }
     await page.locator('#experiencia').evaluate(element => scrollTo(0, element.getBoundingClientRect().top + scrollY));
     await expect(page.locator('.nav-link[href="#experiencia"]')).toHaveAttribute('aria-current', 'location');
-    await expect(page.locator('.experience-header .section-index')).toHaveText('05 / EXPERIENCIA');
+    await expect(page.locator('#experiencia .editorial-section-label')).toHaveText('05 / EXPERIENCIA');
     if (reducedMotion === 'no-preference') await expect(page.locator('#experiencia')).toHaveAttribute('data-journey-enabled', '');
     else await expect(page.locator('#experiencia')).not.toHaveAttribute('data-journey-enabled');
   });

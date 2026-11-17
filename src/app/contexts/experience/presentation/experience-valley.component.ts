@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, inject, Input, NgZone, OnDestroy, Output, PLATFORM_ID, signal } from '@angular/core';
+import { CinematicIntroState } from '../../../shared/motion/cinematic-intro-state.service';
 
 @Component({
   selector: 'app-experience-valley', standalone: true,
@@ -24,6 +25,8 @@ export class ExperienceValleyComponent implements AfterViewInit, OnDestroy {
   private renderer?: { update(): void; dispose(): void };
   private readonly state = { progress: 0 };
   private destroyed = false;
+  private readonly intro = inject(CinematicIntroState);
+  private stopIntro?: () => void;
 
   setProgress(progress: number): void {
     this.state.progress = progress;
@@ -32,14 +35,14 @@ export class ExperienceValleyComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     if (!this.browser || typeof IntersectionObserver === 'undefined') return;
-    this.zone.runOutsideAngular(() => {
+    this.stopIntro = this.intro.afterIntro(() => this.zone.runOutsideAngular(() => {
       this.observer = new IntersectionObserver(entries => {
         if (!entries.some(entry => entry.isIntersecting)) return;
         this.observer?.disconnect();
         void this.load();
       }, { rootMargin: '500px 0px' });
       this.observer.observe(this.host);
-    });
+    }));
   }
 
   private async load(): Promise<void> {
@@ -56,5 +59,5 @@ export class ExperienceValleyComponent implements AfterViewInit, OnDestroy {
     } catch { if (!this.destroyed) this.zone.run(() => this.unavailable.emit()); }
   }
 
-  ngOnDestroy(): void { this.destroyed = true; this.observer?.disconnect(); this.renderer?.dispose(); }
+  ngOnDestroy(): void { this.destroyed = true; this.stopIntro?.(); this.observer?.disconnect(); this.renderer?.dispose(); }
 }

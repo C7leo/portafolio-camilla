@@ -8,6 +8,9 @@ export interface Project {
   readonly solution: string;
   readonly technologies: readonly string[];
   readonly image: string | null;
+  readonly imageSrcset?: string;
+  readonly imageWidth?: number;
+  readonly imageHeight?: number;
   readonly imageAlt: string;
   readonly detailRoute: string;
   readonly landingUrl: string;
