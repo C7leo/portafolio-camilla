@@ -1,0 +1,29 @@
+<section id="servicios" class="services" data-control-surface="neutral" data-control-boundary aria-labelledby="services-title" tabindex="-1">
+  <div class="services-container">
+    <header class="services-header">
+      <h2 id="services-title">{{ 'section.services' | t }}</h2>
+    </header>
+    <ol class="services-list">
+      @for (service of services; track service.number; let index = $index) {
+        <li class="service" [class.is-active]="active() === index">
+          <h3 class="service-heading">
+            <button class="service-trigger" type="button" [id]="'service-button-' + service.number"
+              [attr.aria-expanded]="active() === index" [attr.aria-controls]="'service-panel-' + service.number"
+              (click)="active.set(index)">
+              <span class="service-number" aria-hidden="true">{{ service.number }}</span>
+              <span class="service-title">{{ service.title | t }}</span>
+              <span class="service-symbol" aria-hidden="true">{{ active() === index ? '−' : '+' }}</span>
+            </button>
+          </h3>
+          <div class="service-panel" [id]="'service-panel-' + service.number"
+            [attr.aria-labelledby]="'service-button-' + service.number" [attr.aria-hidden]="active() !== index"
+            [attr.inert]="active() !== index ? '' : null">
+            <div class="service-panel-inner">
+              <p>{{ service.description | t }}</p>
+            </div>
+          </div>
+        </li>
+      }
+    </ol>
+  </div>
+</section>

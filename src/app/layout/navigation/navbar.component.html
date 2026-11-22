@@ -1,0 +1,27 @@
+<header class="floating-header" [class.is-home]="activeSection() === 'inicio'" [class.light-logo]="theme.theme() === 'dark' && activeSection() !== 'inicio'" [class.is-visible]="visible()" [attr.inert]="visible() ? null : ''" [attr.aria-hidden]="visible() ? null : 'true'">
+  <nav class="home-navbar" [attr.aria-label]="'Navegación principal' | t">
+    <a class="home-brand" href="#inicio" [attr.aria-label]="'Camilla. Ir al inicio' | t" (click)="navigate($event, 'inicio')"><img [src]="logoSrc" alt="" width="36" height="36" /></a>
+    <div class="home-controls">
+      <button class="home-theme" type="button" (click)="theme.toggle()" [attr.aria-pressed]="theme.theme() === 'dark'" [attr.aria-label]="(theme.theme() === 'light' ? 'Activar tema oscuro' : 'Activar tema claro') | t">
+        @if (theme.theme() === 'light') { <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42m0-14.14-1.42 1.42M6.35 17.65l-1.42 1.42"/></svg> } @else { <svg class="theme-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.985 12.486A9 9 0 1 1 11.514 3.015a7 7 0 0 0 9.471 9.471Z"/></svg> }
+      </button>
+      <button #menuToggle class="home-menu-toggle" type="button" aria-controls="home-navigation" [attr.aria-expanded]="menuOpen()" [attr.aria-label]="(menuOpen() ? 'Cerrar menú' : 'Abrir menú') | t" (click)="menuOpen.set(!menuOpen())">
+        <span class="menu-icon" aria-hidden="true"><span></span><span></span></span>
+      </button>
+      <div id="home-navigation" class="home-navigation" [class.is-open]="menuOpen()">
+        @for (item of sections; track item.id) {
+          <a class="nav-link" [class.active]="activeSection() === item.id" [attr.aria-current]="activeSection() === item.id ? 'location' : null" [href]="'#' + item.id" (click)="navigate($event, item.id)">{{ item.label | t }}</a>
+        }
+        <div class="language-selector" role="group" [attr.aria-label]="'Idioma' | t">
+          <button type="button" class="language-choice" lang="en" [attr.aria-label]="'language.switchEnglish' | t" [attr.aria-pressed]="language.language() === 'en'" (click)="language.setLanguage('en')">EN</button>
+          <span aria-hidden="true">/</span>
+          <button type="button" class="language-choice" lang="es" [attr.aria-label]="'language.switchSpanish' | t" [attr.aria-pressed]="language.language() === 'es'" (click)="language.setLanguage('es')">ES</button>
+        </div>
+        <a class="home-contact" href="#contacto" [attr.aria-current]="activeSection() === 'contacto' ? 'location' : null" (click)="navigate($event, 'contacto')">{{ 'nav.contactCta' | t }}</a>
+        <a class="home-cv" [href]="cvUrl" [attr.download]="cvFilename" [attr.aria-label]="'Descargar CV en PDF' | t" (click)="closeMenu()">
+          <span>{{ 'Descargar CV' | t }}</span><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m-4-4 4 4 4-4M4 13v4h12v-4"/></svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+</header>

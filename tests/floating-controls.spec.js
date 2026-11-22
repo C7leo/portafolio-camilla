@@ -84,7 +84,7 @@ for (const [width, height] of [[1042, 531], [1440, 900], [390, 844]]) {
     for (const fraction of [.3, .5, .7, .3]) {
       await page.locator('.experience-content').evaluate((content, fraction) => {
         const height = document.querySelector('.experience-grid').clientHeight;
-        scrollTo(0, content.getBoundingClientRect().top + scrollY + height * 8.5 * fraction);
+        scrollTo(0, content.getBoundingClientRect().top + scrollY + height * 5.5 * fraction);
       }, fraction);
       await page.waitForTimeout(950);
       await expectAnchored();
@@ -224,7 +224,7 @@ test('theme changes keep the Experience canvas and reading controls intact', asy
   await expect(page.locator('#experiencia')).toHaveAttribute('data-journey-enabled', '');
   await page.locator('.experience-content').evaluate(content => {
     const height = document.querySelector('.experience-grid').clientHeight;
-    scrollTo(0, content.getBoundingClientRect().top + scrollY + height * 8.5 * 3 / 10.3);
+    scrollTo(0, content.getBoundingClientRect().top + scrollY + height * 5.5 * 3 / 10.3);
   });
   const information = page.locator('[data-company="bcp"] .entry-information');
   await expect(information).toHaveCSS('opacity', '1');
@@ -260,7 +260,7 @@ for (const [width, height] of [[390, 844], [1440, 900]]) {
     await expect.poll(() => page.evaluate(() => scrollY)).toBeGreaterThan(before + 100);
     await page.locator('.experience-content').evaluate(content => {
       const height = document.querySelector('.experience-grid').clientHeight;
-      scrollTo(0, content.getBoundingClientRect().top + scrollY + height * 8.5 * 3 / 10.3);
+      scrollTo(0, content.getBoundingClientRect().top + scrollY + height * 5.5 * 3 / 10.3);
     });
     await expect(page.locator('[data-company="bcp"] .entry-information')).toHaveCSS('opacity', '1');
     await expect(cue).toBeVisible();

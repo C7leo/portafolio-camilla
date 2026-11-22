@@ -1,0 +1,22 @@
+<section id="experiencia" class="experience" data-control-surface="neutral" data-control-boundary aria-labelledby="experience-title" tabindex="-1">
+  <div class="experience-container">
+    <header class="experience-introduction" data-control-avoid>
+      <h2 id="experience-title">{{ 'section.experience' | t }}</h2>
+      <p class="experience-intro"><span>{{ copy.introLead }}</span>{{ ' ' }}<span class="intro-muted">{{ copy.introRest }}</span></p>
+    </header>
+
+    <ol class="timeline" [attr.aria-label]="copy.timelineLabel">
+      @for (entry of copy.entries; track entry.id) {
+        <li class="timeline-entry" [attr.data-company]="entry.id">
+          <div class="timeline-node" [class.is-active]="entry.id === 'banbif' && timelineComplete()" aria-hidden="true"><span class="material-symbol">{{ entry.icon }}</span></div>
+          <div class="entry-information" data-control-avoid>
+            <p class="entry-date">{{ entry.date }}</p>
+            <h3>{{ entry.role }}</h3>
+            <p class="entry-area">{{ entry.area }}</p>
+            <p class="entry-description">{{ entry.description }}</p>
+          </div>
+        </li>
+      }
+    </ol>
+  </div>
+</section>
