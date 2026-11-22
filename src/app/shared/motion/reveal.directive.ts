@@ -1,7 +1,7 @@
 import { AfterViewInit, Directive, ElementRef, inject, Input, NgZone, OnDestroy } from '@angular/core';
 import { ViewportMotionService } from './viewport-motion.service';
 
-export type RevealKind = 'focus';
+export type RevealKind = 'focus' | 'rise';
 
 @Directive({ selector: '[appReveal]', standalone: true })
 export class RevealDirective implements AfterViewInit, OnDestroy {
@@ -24,8 +24,8 @@ export class RevealDirective implements AfterViewInit, OnDestroy {
     this.zone.runOutsideAngular(() => {
       this.element.dataset.motion = this.appReveal;
       if (!this.motion.supported || this.motion.reduced || typeof this.element.animate !== 'function') { this.finish(); return; }
-      this.from = { opacity: .15, translate: '0 8px', filter: 'blur(14px)' };
-      this.to = { opacity: 1, translate: '0 0', filter: 'blur(0px)' };
+      this.from = this.appReveal === 'rise' ? { opacity: 0, translate: '0 8px' } : { opacity: .15, translate: '0 8px', filter: 'blur(14px)' };
+      this.to = this.appReveal === 'rise' ? { opacity: 1, translate: '0 0' } : { opacity: 1, translate: '0 0', filter: 'blur(0px)' };
       const style = this.element.style;
       this.original = { opacity: style.opacity, translate: style.translate, willChange: style.willChange, filter: style.filter };
       style.opacity = String(this.from.opacity);
@@ -43,7 +43,7 @@ export class RevealDirective implements AfterViewInit, OnDestroy {
     this.stopObserve?.();
     if (this.motion.reduced) { this.finish(); return; }
     this.element.dataset.motionState = 'animating';
-    this.element.style.willChange = 'opacity, translate, filter';
+    this.element.style.willChange = this.appReveal === 'rise' ? 'opacity, translate' : 'opacity, translate, filter';
     this.animation = this.element.animate([this.from, this.to], {
       duration: Number(this.motionDuration), delay: Math.max(0, Number(this.motionDelay)),
       easing: 'cubic-bezier(0.22, 1, 0.36, 1)', fill: 'both',

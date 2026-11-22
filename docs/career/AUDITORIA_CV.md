@@ -34,7 +34,7 @@ No hay una sección de certificaciones activa ni archivos de certificados en el 
 
 ## 3. Contacto e identidad
 
-- Correo recuperado: cleo.espivas@gmail.com. Coincide con la configuración pública actual y el perfil de datos del portafolio público anterior. No se envió ningún correo ni se comprobó la entrega del buzón.
+- Correo recuperado: https://portafolio-camilla.vercel.app/#contacto. Coincide con la configuración pública actual y el perfil de datos del portafolio público anterior. No se envió ningún correo ni se comprobó la entrega del buzón.
 - GitHub: https://github.com/C7leo — perfil público accesible; muestra Camilla Leonor Espinoza Vivas y fija repositorios de Harmonix, SpotFinder y EduSpace.
 - LinkedIn: https://www.linkedin.com/in/camilla-leonor-espinoza-vivas-4ba5b2361/ — coincide entre configuración, perfil GitHub y documentación pública anterior. LinkedIn devolvió HTTP 999 al intentar leerlo: asociación corroborada, contenido del perfil no auditado directamente.
 - Teléfono personal: no encontrado. El teléfono de la landing de SmartCampus es del producto académico y no se atribuyó a la candidata.

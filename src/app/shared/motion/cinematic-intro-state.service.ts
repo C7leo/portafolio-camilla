@@ -26,6 +26,8 @@ export class CinematicIntroState implements OnDestroy {
   private readonly reloading = this.browser && (window.performance?.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type === 'reload';
   readonly required = this.browser && shouldPlayIntro(this.reloading);
   readonly visible = signal(this.required);
+  readonly backgroundReady = signal(!this.required);
+  private readonly backgroundCallbacks = new Set<() => void>();
   private result?: IntroResult;
   private listener?: (result: IntroResult) => void;
   private resetFrame = 0;
@@ -42,6 +44,17 @@ export class CinematicIntroState implements OnDestroy {
     this.listener?.(result);
     if (this.reloading) this.restoreHomeScroll();
   }
+  afterIntro(callback: () => void): () => void {
+    if (this.backgroundReady()) callback();
+    else this.backgroundCallbacks.add(callback);
+    return () => this.backgroundCallbacks.delete(callback);
+  }
+  releaseBackgroundResources(): void {
+    this.backgroundReady.set(true);
+    const callbacks = [...this.backgroundCallbacks];
+    this.backgroundCallbacks.clear();
+    callbacks.forEach(callback => callback());
+  }
   listen(listener: (result: IntroResult) => void): () => void {
     this.listener = listener;
     if (this.result) listener(this.result);
@@ -57,6 +70,7 @@ export class CinematicIntroState implements OnDestroy {
     });
   }
   ngOnDestroy(): void {
+    this.backgroundCallbacks.clear();
     if (!this.browser) return;
     cancelAnimationFrame(this.resetFrame); cancelAnimationFrame(this.restoreFrame);
     if (this.originalRestoration) window.history.scrollRestoration = this.originalRestoration;

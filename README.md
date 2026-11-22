@@ -61,6 +61,7 @@ El exportador genera los PDF públicos con texto seleccionable usando Chrome. Co
 
 - [Arquitectura y dependencias entre capas](docs/architecture.md)
 - [Desarrollo, configuración y herramientas](docs/development.md)
+- [Rendimiento, Lighthouse y caché de Vercel](docs/performance.md)
 - [Recursos gráficos y documentos públicos](docs/assets.md)
 - [Informe de limpieza y archivos retirados](docs/cleanup.md)
 - [Sistema visual](docs/design-system.md)

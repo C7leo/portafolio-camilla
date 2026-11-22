@@ -6,9 +6,16 @@ would interrupt a native modal nested inside Hero. The navbar remains independen
 CinematicIntroState coordinates completion with Hero and keeps
 the optional session decision in one place, with browser/platform/storage guards.
 
-Assets use their actual existing paths:
-- `src/app/shell/intro/assets/cinematic-intro.mp4` (approximately 10 seconds, 1280×720).
-- `src/app/shared/assets/night-lily.png` (poster and transition fallback).
+The original movie remains an unchanged editable source at
+`src/app/shell/intro/assets/cinematic-intro.mp4`. Playback uses generated VP9/WebM
+or H.264/MP4 faststart variants at the same resolution, frame rate and full visual
+duration. A WebP of the opening frame is used as the startup poster; the final
+transition still follows the actual optimized floral Hero backdrop. See
+[restoration, comparison and validation](../intro-restoration.md).
+
+The movie autoplays on the original first-visit/reload conditions, with muted,
+inline playback and a skip control. There is no manual play button. Secondary
+images and WebGL observers wait until the original Hero construction completes.
 
 The native fullscreen dialog places the movie above all content and makes the
 page inert. It supports a translated skip button, Escape and contained wheel/touch

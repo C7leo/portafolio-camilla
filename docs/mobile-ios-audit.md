@@ -26,7 +26,7 @@ Evidencia inicial: `.local/mobile-audit/before/` y `.local/mobile-audit/before-w
 - Pintado del tema: se reprodujo un segundo fallo a densidad 3×, después del recorrido largo de Experience. El SVG conservaba caja, trazo y visibilidad correctos, pero sus píxeles desaparecían. Se contrastaron capas independientes: transformar el wrapper del icono no lo resolvió; dar al botón una capa propia mediante `translateZ(0)` sí. La prueba compara los píxeles del icono antes y después del scroll, en Chrome y WebKit.
 - Experience: las capas transparentes de la abertura ahora terminan con `visibility: hidden`; el backdrop saliente se retira al completar su salida y reaparece al invertir el mismo timeline. Esta corrección de ciclo de visibilidad está comprobada. **No demuestra que sea la causa del parpadeo vertical reportado en Safari iOS**, que no se reprodujo de forma concluyente aquí.
 - Safe areas: viewport con `viewport-fit=cover`, tokens compartidos y límites del viewport visual. Se reutilizan los listeners existentes y todos se eliminan en `ngOnDestroy`; no se añade otro listener de scroll ni un bucle de sondeo.
-- WhatsApp: se conserva `VITE_CONTACT_WHATSAPP`, el mensaje y la apertura segura. Cuando falta la variable en el entorno de compilación, los enlaces no se renderizan; la ausencia del CTA en un despliegue sin esa configuración no se corrige inventando un número ni incrustándolo en el código.
+- Contacto: el diagnóstico histórico de WhatsApp fue sustituido por el formulario integrado de Formspree. Los CTA ya no dependen de un número configurado. Ver [la integración actual](formspree-contact.md).
 
 ## Validación y límites
 

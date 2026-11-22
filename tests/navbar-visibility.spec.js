@@ -13,9 +13,9 @@ for (const [width, height] of [[390, 844], [1440, 900]]) {
     await expect(header).toHaveClass(/is-home/);
     await expect(page.locator('.glass-surface')).toHaveCSS('opacity', '0');
     await expect(page.locator('.navbar')).toHaveCSS('border-top-color', 'rgba(0, 0, 0, 0)');
-    const marquee = await page.locator('.hero-marquee').boundingBox();
     const homeNav = await header.boundingBox();
-    expect(homeNav.y).toBeGreaterThanOrEqual(marquee.y + marquee.height);
+    expect(homeNav.y).toBeGreaterThanOrEqual(16);
+    expect(homeNav.y).toBeLessThanOrEqual(18);
     const meta = await page.locator('.hero-meta').boundingBox();
     expect(homeNav.y + homeNav.height).toBeLessThanOrEqual(meta.y);
     await page.screenshot({ path: testInfo.outputPath('home-navbar.png') });
