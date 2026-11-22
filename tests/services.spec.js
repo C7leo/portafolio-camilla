@@ -12,13 +12,13 @@ for (const [width, height] of [[320, 740], [390, 844], [768, 1024], [821, 900], 
     await section.evaluate(element => scrollTo(0, element.getBoundingClientRect().top + scrollY - 84));
     await expect(page.locator('.services-intro')).toHaveAttribute('data-motion-state', 'done');
     await expect(page.locator('.nav-link[href="#servicios"]')).toHaveAttribute('aria-current', 'location');
-    await expect(section).toHaveCSS('background-color', 'rgb(255, 255, 255)');
+    await expect(section).toHaveCSS('background-color', 'rgb(17, 17, 17)');
     await expect(section.locator('h3')).toHaveText(['Desarrollo web', 'Aplicaciones a medida', 'Datos y automatización']);
     await expect(section.locator('.service-number')).toHaveText(['01 / WEB', '02 / SOFTWARE', '03 / DATA']);
     await expect(section.locator('.service-icon svg')).toHaveCount(3);
-    await expect(section.locator('.service').first()).toHaveCSS('background-color', 'rgb(90, 78, 255)');
-    await expect(section.locator('.service').nth(1)).toHaveCSS('background-color', 'rgb(242, 242, 242)');
-    await expect(section.locator('.service').last()).toHaveCSS('border-radius', '16px');
+    await expect(section.locator('.service').first()).toHaveCSS('background-color', 'rgb(38, 38, 38)');
+    await expect(section.locator('.service').nth(1)).toHaveCSS('background-color', 'rgb(28, 28, 28)');
+    await expect(section.locator('.service').last()).toHaveCSS('border-radius', '12px');
     const layout = await section.evaluate(element => {
       const rect = selector => element.querySelector(selector).getBoundingClientRect().toJSON();
       return {
@@ -56,13 +56,17 @@ for (const [width, height] of [[320, 740], [390, 844], [768, 1024], [821, 900], 
     expect(header.x).toBeGreaterThanOrEqual(0);
     expect(header.x + header.width).toBeLessThanOrEqual(width);
     const contact = page.locator('.services-contact');
-    const url = new URL(await contact.getAttribute('href'));
-    expect(url.origin + url.pathname).toBe(`https://wa.me/${WHATSAPP_NUMBER}`);
-    expect(url.searchParams.get('text')).toBe('Hola, vi tu portafolio y me gustaría conversar contigo sobre un proyecto de desarrollo web.');
-    expect(await contact.getAttribute('href')).toBe(await page.locator('.micro-cta-link').getAttribute('href'));
-    await expect(contact).toHaveAttribute('target', '_blank');
-    await expect(contact).toHaveAttribute('rel', 'noopener noreferrer');
-    expect((await contact.boundingBox()).height).toBeGreaterThanOrEqual(44);
+    if (WHATSAPP_NUMBER) {
+      const url = new URL(await contact.getAttribute('href'));
+      expect(url.origin + url.pathname).toBe(`https://wa.me/${WHATSAPP_NUMBER}`);
+      expect(url.searchParams.get('text')).toBe('Hola, vi tu portafolio y me gustaría conversar contigo sobre un proyecto de desarrollo web.');
+      expect(await contact.getAttribute('href')).toBe(await page.locator('.micro-cta-link').getAttribute('href'));
+      await expect(contact).toHaveAttribute('target', '_blank');
+      await expect(contact).toHaveAttribute('rel', 'noopener noreferrer');
+      expect((await contact.boundingBox()).height).toBeGreaterThanOrEqual(44);
+    } else {
+      await expect(contact).toHaveCount(0);
+    }
     await page.screenshot({ path: testInfo.outputPath('services.png') });
     if (width <= 640) {
       await section.locator('h3').nth(1).evaluate(element => {
@@ -77,9 +81,9 @@ for (const [width, height] of [[320, 740], [390, 844], [768, 1024], [821, 900], 
     await expect(page.locator('.floating-theme-toggle')).toBeVisible();
     await page.locator('.floating-theme-toggle').click();
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-    await expect(section).toHaveCSS('background-color', 'rgb(9, 9, 11)');
-    await expect(section.locator('.service').first()).toHaveCSS('background-color', 'rgb(90, 78, 255)');
-    await expect(section.locator('.service').nth(1)).toHaveCSS('background-color', 'rgb(24, 24, 27)');
+    await expect(section).toHaveCSS('background-color', 'rgb(17, 17, 17)');
+    await expect(section.locator('.service').first()).toHaveCSS('background-color', 'rgb(38, 38, 38)');
+    await expect(section.locator('.service').nth(1)).toHaveCSS('background-color', 'rgb(28, 28, 28)');
     await page.locator('.language-choice[lang="en"]').click();
     await expect(section.locator('h2')).toHaveText('Digital solutions to take your ideas further.');
     await expect(section.locator('h3')).toHaveText(['Web development', 'Custom applications', 'Data and automation']);
@@ -87,9 +91,11 @@ for (const [width, height] of [[320, 740], [390, 844], [768, 1024], [821, 900], 
     if (width <= 820) await page.locator('.menu-toggle').click();
     await page.locator('.nav-link[href="#servicios"]').click();
     await expect(page.locator('.menu-toggle')).toHaveAttribute('aria-expanded', 'false');
-    await contact.focus();
-    await expect(contact).toBeFocused();
-    await expect(contact).toBeInViewport();
+    if (WHATSAPP_NUMBER) {
+      await contact.focus();
+      await expect(contact).toBeFocused();
+      await expect(contact).toBeInViewport();
+    }
   });
 }
 

@@ -27,8 +27,8 @@ export class StoryChaptersDirective implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     this.scrollMargin = this.main.style.scrollMarginTop;
-    this.main.style.scrollMarginTop = '96px';
-    const names = ['home', 'about', 'projects', 'services', 'experience'];
+    this.main.style.scrollMarginTop = '0px';
+    const names = ['home', 'about', 'services', 'projects', 'experience'];
     this.chapters = Array.from(this.main.children).flatMap((node, index) => {
       if (!(node instanceof HTMLElement)) return [];
       const surface = node.querySelector<HTMLElement>('section');

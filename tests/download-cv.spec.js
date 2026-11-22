@@ -6,8 +6,9 @@ for (const width of [1440, 390, 320]) {
     await page.setViewportSize({ width, height: 900 });
     await page.addInitScript(() => sessionStorage.setItem('camilla-cinematic-intro-seen', '1'));
     await page.goto(`${url}/#sobre-mi`);
-    const link = page.locator('.cv-download');
+    const link = page.locator('.home-cv');
     for (const language of ['es', 'en']) {
+      if (width <= 1000) await page.locator('.home-menu-toggle').click();
       await page.locator(`.language-choice[lang="${language}"]`).click();
       const filename = language === 'es' ? 'CV_Camilla_Espinoza.pdf' : 'CV_Camilla_Espinoza_EN.pdf';
       await expect(link).toHaveAttribute('download', filename);

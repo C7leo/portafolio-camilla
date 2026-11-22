@@ -2,8 +2,9 @@
 
 Los archivos gráficos conservan su contenido original. Su ubicación expresa quién los utiliza:
 
-- `src/app/shared/assets/night-lily.png`: fotografía compartida por Hero, introducción y footer.
-- `src/app/shared/assets/logo.png`: logo del navbar y favicon.
+- `src/app/contexts/profile/presentation/hero/assets/`: versiones WebP responsivas de la imagen utilizada por Hero y footer.
+- `src/app/shared/assets/night-lily.png`: imagen conservada para la introducción anterior, actualmente inactiva.
+- `src/app/shared/assets/logo.webp`: logo del navbar y favicon.
 - `src/app/shared/assets/fonts/`: Urbanist en WOFF2, pesos 400/500/700/800 y rangos Unicode originales, servida localmente. Incluye la licencia SIL Open Font License y las URLs de origen; sustituye la petición externa a Google Fonts.
 - `src/app/shell/intro/assets/cinematic-intro.mp4`: vídeo original de entrada.
 - `src/app/contexts/profile/presentation/about/assets/`: retrato y proceso de trabajo.
