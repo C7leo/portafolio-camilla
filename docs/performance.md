@@ -1,80 +1,71 @@
-# Rendimiento y despliegue en Vercel
+# Rendimiento
 
-El proyecto utiliza Angular standalone sobre Vite. Se revisaron los archivos del repositorio: no existían `angular.json` ni `vercel.json`. La configuración nueva identifica el framework de construcción como Vite, genera `dist/` y utiliza el CDN integrado de Vercel. No requiere contratar servicios, optimización de imágenes bajo demanda ni funciones de pago.
+## Apertura de partículas
 
-## Construcción
+Tras ordenar la aparición visual, una nueva ejecución móvil local dio 92/100, LCP de 2,6 s, CLS de 0 y tiempo total de bloqueo de 240 ms; la transferencia inicial fue de 224.260 B. La medición anterior de la introducción (93/100 y 180 ms de bloqueo) se muestra debajo. Las diferencias entre ejecuciones pueden incluir variación del entorno. El informe está en `.local/lighthouse-particles-ordered.report.html`.
 
-```sh
-npm ci
-npm run build
-npm run serve:production
-npm run audit:lighthouse
-```
+La escena carga dinámicamente un módulo propio y toma las muestras de la imagen responsive ya usada por el Hero. En escritorio utiliza WebGL; en pantallas de hasta 640 px usa menos partículas con Canvas 2D para evitar el coste de inicializar WebGL. La escena termina y libera sus recursos; se omite con movimiento reducido, ahorro de datos o navegación directa a otra sección. El indicador de preparación es indeterminado porque no se dispone de progreso fiable por bytes.
 
-Usar Node 24.15 o posterior compatible con Angular 22. El build compila las plantillas Angular AOT en `.local/`, enlaza las bibliotecas, minifica JS/CSS y genera HTML estático con Playwright. Localmente requiere Chrome. En la construcción Linux de Vercel utiliza Chromium de `@sparticuz/chromium`, instalado como dependencia de desarrollo. Vercel debe instalar las dependencias de desarrollo durante el build. El navegador de construcción no se publica en `dist/`.
+| Lighthouse móvil local | Antes | Después |
+| --- | ---: | ---: |
+| Rendimiento | 96 | 93 |
+| LCP | 2,5 s | 2,6 s |
+| CLS | 0,005 | 0,005 |
+| Tiempo total de bloqueo | 110 ms | 180 ms |
+| JavaScript transferido | 137.033 B | 141.000 B |
+| Transferencia total inicial | 218.626 B | 223.052 B |
 
-El prerender genera contenido en español legible sin JavaScript. La aplicación se inicia después sobre ese contenido: no es hidratación Angular SSR. Los controles se habilitan al arrancar la aplicación. No se capturan datos privados ni variables de entorno salvo los destinos públicos de contacto ya utilizados por el sitio.
+Son ejecuciones simuladas individuales, no datos reales de usuarios. La animación añade trabajo y transferencia; no se afirma una mejora de rendimiento. Informes: `.local/lighthouse-particles-before.report.html` y `.local/lighthouse-particles-final2.report.html`.
 
-## Optimizaciones
+Una auditoría móvil local adicional sobre `vite preview` obtuvo 92/100 en rendimiento, 96/100 en accesibilidad, 100/100 en buenas prácticas y 92/100 en SEO; FCP 0,8 s, LCP 2,5 s, TBT 270 ms y CLS 0,005. El informe está en `.local/lighthouse-latest.report.html`. Es una medición simulada, sujeta a variación y no representa datos reales de usuarios.
 
-- Imágenes WebP de 480/960 px y una variante grande, `srcset`, `sizes`, dimensiones intrínsecas, decodificación asíncrona y lazy loading en contenido inferior. Los PNG originales quedan como fuentes editables y no se publican.
-- Fondo principal precargado según el ancho de pantalla; fuente Urbanist local y variable declarada una vez por subconjunto, con `font-display: swap`.
-- La introducción cinematográfica se reproduce automáticamente con `autoplay`, `muted` y `playsinline`, como en la implementación original. El montaje completo se sirve en WebM/VP9 o MP4/H.264 optimizado con faststart, con poster del primer fotograma. Se conservan el salto, la disolución y la entrada tipográfica del Hero. WebGL y las imágenes inferiores esperan hasta terminar la entrada del Hero; después conservan su carga por proximidad al viewport. Movimiento reducido y rechazo de autoplay disponen de salida legible al Hero.
-- Se mantienen `OnPush`, señales, claves estables en bucles y animaciones fuera de Angular. La lista duplicada del carrusel se calcula solo al recibir proyectos.
-- Esqueletos discretos en los espacios reservados para imágenes; los gráficos conservan sus alternativas CSS mientras cargan.
-- JS/CSS minificados; Angular, movimiento y Three.js separados para reutilizar caché. El compilador Angular es una dependencia de desarrollo y no llega al navegador. Los estilos de componentes se minifican antes de compilar; Angular elimina constantes de plantillas y estilos que no necesita en producción.
-- Se verificó que las dependencias de ejecución restantes tienen consumidores. No se aplicó un borrado automático de selectores: hay clases dinámicas de Angular y GSAP que deben conservarse. Se eliminaron declaraciones de fuente duplicadas.
+La compilación de Vite produce un sitio estático con archivos JS y CSS minificados. La página sigue siendo una aplicación Angular renderizada en el navegador: el HTML generado no contiene el contenido prerenderizado de las secciones.
 
-No hay campos de búsqueda/formularios, mapas ni listas largas: no se añade debounce ni paginación a los siete proyectos. No se añaden dependencias para funcionalidades que no existen.
+## Recursos
 
-## Caché y actualizaciones
+- La portada usa WebP de 1280 o 1802 píxeles y se precarga según el ancho de pantalla. El pie reutiliza el mismo recurso.
+- Las imágenes de proyectos usan WebP de 640 y 1280 píxeles; el navegador elige con `srcset` según el tamaño y la densidad de pantalla.
+- El carrusel y React se importan cuando el visitante se aproxima a proyectos. Mientras tanto se reserva el espacio y se muestra una vista previa. Los controles se habilitan cuando el carrusel termina de cargar.
+- Las fuentes se sirven localmente y la tipografía principal usa `font-display: swap`.
 
-`vercel.json` aplica:
+## Vercel
 
-| Recurso | Cache-Control del navegador |
-| --- | --- |
-| `/` e `/index.html` | `public, max-age=0, must-revalidate` |
-| Archivos en `/assets/` cuyo nombre contiene hash | `public, max-age=31536000, immutable` |
-| Iconos sin hash y PDF del CV | `public, max-age=0, must-revalidate` |
+Vercel distribuye automáticamente archivos estáticos en su CDN. `vercel.json` configura la caché del navegador para los archivos con hash bajo `assets/build/` (un año) y para los CV (un día). Los archivos bajo `public/assets/skills/` no tienen nombres versionados y no reciben la regla inmutable. Las cabeceras requieren un despliegue en Vercel para quedar activas; `vite preview` no las aplica.
 
-El HTML se revalida. Al cambiar una imagen, fuente, JS o CSS, Vite produce otra URL con hash; el HTML del nuevo despliegue referencia esos archivos. Los PDF e iconos no reciben caché inmutable porque sus URLs se mantienen al actualizarse. Vercel gestiona los recursos estáticos en su CDN y la promoción de despliegues. No se instala un service worker ni se almacena HTML mediante JavaScript.
+## Auditoría local
 
-Las animaciones se crean en cada arranque; la caché solo reutiliza bytes de los recursos. Las preferencias de idioma y tema siguen en el almacenamiento existente. Un despliegue no reemplaza una pestaña que ya está abierta: al navegar o recargar se solicita el HTML actualizado. Si una pestaña antigua solicita un fragmento JS que ya no existe, el manejador de `vite:preloadError` recarga el HTML una vez, con protección contra bucles y sin recargar cuando no hay conexión. Las rutas de proyectos usan fragmentos `#proyectos/...`; no necesitan redirigir peticiones de archivos ausentes a HTML.
+Una ejecución móvil simulada de Lighthouse sobre `vite preview`, el 21 de noviembre de 2026, dio los siguientes resultados. Las métricas varían entre ejecuciones y no representan datos reales de visitantes.
 
-La política sigue las recomendaciones de [caché de Vercel](https://vercel.com/docs/caching/cache-control-headers). La compilación de bibliotecas utiliza el [linker oficial de Angular](https://angular.dev/tools/libraries/creating-libraries#consuming-partial-ivy-code-outside-the-angular-cli).
+| Métrica | Antes | Después |
+| --- | ---: | ---: |
+| Rendimiento | 48/100 | 68/100 |
+| Primera pintura con contenido | 3,4 s | 2,9 s |
+| Pintura del elemento principal | 13,7 s | 4,1 s |
+| Tiempo total de bloqueo | 720 ms | 530 ms |
+| Cambio acumulado de diseño | 0 | 0 |
 
-## Verificación
+En esa medición el JS inicial aún incluía el compilador JIT de Angular, principal oportunidad detectada.
 
-Última auditoría local de producción, con introducción automática activa y sin omitir el video, después del [ajuste editorial del Hero](hero-composition.md). La comparación usa la línea base original con autoplay; no usa la versión intermedia de reproducción manual. Véase [restauración cinematográfica](intro-restoration.md).
+Una nueva medición local sobre la compilación de producción dio 68/100 en rendimiento, 96/100 en accesibilidad, 100/100 en buenas prácticas y 92/100 en SEO; FCP 2,9 s, LCP 4,1 s, TBT 540 ms y CLS 0. La reducción de archivos de una introducción ya desactivada no cambió apreciablemente la puntuación. El reporte está en `.local/lighthouse-current.report.html` y Lighthouse sigue señalando JavaScript sin usar como oportunidad principal.
 
-| Métrica | Original (móvil) | Actual (móvil) | Actual (escritorio) |
-| --- | --- | --- | --- |
-| Lighthouse rendimiento | 61 | 93 | 99 |
-| Primera pintura de contenido | 3,4 s | 1,0 s | 0,3 s |
-| Pintura del contenido principal | 3,4 s | 1,0 s | 0,8 s |
-| Bloqueo total | 813 ms | 268 ms | 2 ms |
-| Transferencia observada | 7467 KiB | 3170 KiB | 3461 KiB |
+La introducción estaba desactivada antes de esta revisión. Se retiró su componente de la entrada para que el vídeo y su portada no se incluyan en `dist`; se conserva el código anterior por sus cambios y pruebas locales. No hay mapas ni vídeos activos que requieran un control de carga por clic. El formulario valida al enviar y no realiza peticiones por cada pulsación; tampoco hay listas largas que justifiquen paginación.
 
-Se hicieron dos auditorías del mismo build después del ajuste visual: móvil 78/93 y escritorio 99/99. La tabla muestra la segunda ejecución; el rango y los resultados de la primera se conservan en el informe del ajuste editorial. Accesibilidad, buenas prácticas y SEO: 100. No hubo cambios de código entre ambas mediciones.
+## Segunda fase: compilación anticipada
 
-Las variantes principales de las imágenes suman 0,79 MB frente a 19,64 MB de los PNG originales (aproximadamente −96 %). Con la introducción automática restaurada, el JS inicial sin comprimir es aproximadamente 590 kB frente a 1371 kB; incluye la introducción necesaria para empezar inmediatamente y excluye el compilador Angular. Los resultados varían entre ejecuciones y la transferencia de escenas opcionales depende de cuándo entran en el margen del viewport.
+Se sustituyó la compilación JIT en el navegador por AOT mediante el plugin de Angular para Vite. Las plantillas y estilos usan `templateUrl` y `styleUrl`; los recursos compartidos de Hero y la fuente de Experience se procesan desde los estilos globales para conservar sus URL en producción. El carrusel continúa en su fragmento diferido.
 
-El ajuste actual se verificó con 57 casos en Chrome (ejecución principal y confirmaciones) y 18 en WebKit: composición en siete anchos, ES/EN, foco y hover, fuentes retrasadas, autoplay sin entradas reales del usuario, recorrido completo y salto, Escape, navegación, movimiento reducido, bloqueo de autoplay, formatos alternativos, continuidad visual y caché. La restauración anterior también comprobó el poster durante un arranque lento. TypeScript, arquitectura y construcción AOT/prerender pasaron. WebKit se ejecutó en Windows con tamaños de móvil y escritorio; no sustituye una prueba en un iPhone físico. El Chromium Linux de construcción en Vercel debe verificarse en el próximo despliegue.
+| Medida móvil simulada, Lighthouse local | Antes | Después |
+| --- | ---: | ---: |
+| Rendimiento | 68 | 96 |
+| LCP | 4,1 s | 2,4 s |
+| FCP | 2,9 s | 1,6 s |
+| Tiempo total de bloqueo | 540 ms | 150 ms |
+| CLS | 0 | 0,005 |
+| JavaScript inicial transferido | 410.035 B | 135.225 B |
+| Total transferido | 487.539 B | 214.738 B |
 
-Lighthouse produce informes HTML/JSON en `.local/performance/mobile.*` y `desktop.*` sobre la construcción de producción, con compresión y cabeceras de caché. La línea base está en `before.report.*`. Son mediciones de laboratorio local; no son datos de usuarios reales ni una auditoría del despliegue nuevo en Vercel.
+Ambas mediciones son ejecuciones locales simuladas, no datos reales de visitantes ni mediciones válidas de INP. El elemento LCP fue la sección Hero y su fondo WebP estaba correctamente precargado; la reducción del trabajo de JavaScript fue la intervención principal. El informe final está en `.local/lighthouse-phase2.report.html`.
 
-```powershell
-$env:TEST_BASE_URL = 'http://127.0.0.1:5184'
-$env:CHECK_CACHE = '1'
-npx playwright test tests/performance.spec.js
-```
+El HTML sigue sin prerenderizar: SSG podría mejorar el SEO y la primera pintura, pero necesita adaptar el acceso directo a `window`, `document`, almacenamiento y animaciones, y comprobar hidratación, navegación por hash y despliegue en Vercel. No se activó automáticamente. Angular 22.2.5 requiere Node 22.22.3+, 24.15.0+ o 26+; las verificaciones locales se ejecutaron con Node 24.11.0, que emitió avisos de incompatibilidad aunque compiló, por lo que debe actualizarse antes de considerar el entorno compatible.
 
-Después de desplegar, comprobar cabeceras reales:
-
-```sh
-curl -I https://portafolio-camilla.vercel.app/
-curl -I https://portafolio-camilla.vercel.app/assets/NOMBRE-CON-HASH.js
-curl -I https://portafolio-camilla.vercel.app/cv/CV_Camilla_Espinoza.pdf
-```
-
-Para auditar producción, establecer `AUDIT_URL=https://portafolio-camilla.vercel.app/` antes de `npm run audit:lighthouse`. El script no publica cambios. Para este trabajo se comprobó que la URL existente responde 200 y utiliza Vercel; la configuración nueva requiere un próximo despliegue para reflejarse allí.
+Para repetir la medición, ejecutar `npm run build`, iniciar `npm run preview` y apuntar Lighthouse a la URL local. Los informes de esta revisión se encuentran en `.local/`, que no forma parte del despliegue.

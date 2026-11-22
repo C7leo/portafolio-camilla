@@ -12,7 +12,7 @@ async function open(page, hash = '') {
 async function seekJourney(page, time) {
   await page.locator('.experience-content').evaluate((content, time) => {
     const height = document.querySelector('.experience-grid').clientHeight;
-    scrollTo(0, content.getBoundingClientRect().top + scrollY + height * 8.5 * time / 10.3);
+    scrollTo(0, content.getBoundingClientRect().top + scrollY + height * 5.5 * time / 10.3);
   }, time);
   await settle(page);
 }

@@ -31,7 +31,7 @@ async function start(page) {
     // Translated content above Experience can change its document position.
     await page.locator('.experience-content').evaluate((content, time) => {
       const base = content.getBoundingClientRect().top + scrollY;
-      scrollTo(0, base + innerHeight * 8.5 * time / 10.3);
+      scrollTo(0, base + innerHeight * 5.5 * time / 10.3);
     }, time);
     await page.waitForTimeout(800); // Allow the scrub to settle, rather than advancing the scene on a timer.
   };

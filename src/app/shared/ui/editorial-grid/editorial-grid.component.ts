@@ -1,7 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, Input, NgZone, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import styles from './editorial-grid.component.css?inline';
 
 export interface EditorialRule {
   /** CSS position, or an existing element whose layout defines this rule. */
@@ -16,7 +15,7 @@ export interface EditorialRule {
 
 /** Decorative only: follows each scene's positioning, including pinned scenes. */
 @Component({
-  selector: 'app-editorial-grid', standalone: true, styles,
+  selector: 'app-editorial-grid', standalone: true, styleUrl: './editorial-grid.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'aria-hidden': 'true',

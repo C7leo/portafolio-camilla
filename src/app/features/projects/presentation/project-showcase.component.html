@@ -1,0 +1,43 @@
+<div class="project-showcase" data-control-surface="neutral" data-control-boundary>
+  <div class="showcase-container">
+    <header class="showcase-header" data-control-avoid>
+      <h2 id="projects-title">{{ 'section.projects' | t }}</h2>
+      <div class="showcase-intro">
+        <p>{{ 'Ideas que toman forma.' | t }}</p>
+        <p>{{ 'Una selección de proyectos donde combino' | t }} <span>{{ 'desarrollo de software, análisis de datos y creatividad para resolver desafíos reales.' | t }}</span></p>
+      </div>
+    </header>
+    @if (activeProject; as active) {
+      <div class="carousel">
+        <div class="react-carousel"></div>
+        @if (!carouselReady() && active.imageSmall) {
+          <div class="carousel-placeholder" aria-hidden="true"><img [src]="active.imageSmall" alt="" width="640" height="427" loading="lazy" decoding="async" /></div>
+        }
+        <div class="carousel-controls" role="group" [attr.aria-label]="'Controles de proyectos' | t">
+          @for (project of projects; track project.id; let index = $index) {
+            <button type="button" class="carousel-dot" [disabled]="!carouselReady()" [class.is-active]="index === activeIndex()"
+              [attr.aria-label]="('carousel.goToProject' | t) + ' ' + project.name"
+              [attr.aria-current]="index === activeIndex() ? 'true' : null" (click)="select(index)"><span aria-hidden="true"></span></button>
+          }
+          <button type="button" class="autoplay-toggle" [disabled]="!carouselReady()" [attr.aria-pressed]="autoplay()" [attr.aria-label]="(autoplay() ? 'Pausar animación' : 'Reanudar animación') | t" (click)="toggleAutoplay()">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              @if (autoplay()) { <path d="M9 5v14M15 5v14" /> } @else { <path d="M8 5v14l11-7z" /> }
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="project-info" data-control-avoid>
+        <div class="project-primary">
+          <h3>{{ active.name.toUpperCase() }}</h3>
+          <a class="project-link" [href]="active.detailRoute">{{ 'Ver proyecto' | t }} <span aria-hidden="true">⟶</span></a>
+        </div>
+        <div class="project-secondary">
+          <ul class="project-technologies" [attr.aria-label]="'Tecnologías' | t">
+            @for (technology of active.technologies; track technology) { <li>{{ technology }}</li> }
+          </ul>
+          <p>{{ active.id === 'harmonix' ? ('Plataforma web para organizar y gestionar las finanzas del hogar.' | t) : (active.description | t) }}</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>

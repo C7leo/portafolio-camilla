@@ -22,10 +22,13 @@ export class StoryChaptersDirective implements AfterViewInit, OnDestroy {
   private destroyed = false;
   private short = false;
   private viewportWidth = innerWidth;
+  private scrollMargin = '';
   private refreshFocus?: HTMLElement;
 
   ngAfterViewInit(): void {
-    const names = ['home', 'about', 'projects', 'services', 'experience'];
+    this.scrollMargin = this.main.style.scrollMarginTop;
+    this.main.style.scrollMarginTop = '0px';
+    const names = ['home', 'about', 'services', 'projects', 'experience'];
     this.chapters = Array.from(this.main.children).flatMap((node, index) => {
       if (!(node instanceof HTMLElement)) return [];
       const surface = node.querySelector<HTMLElement>('section');
@@ -166,6 +169,7 @@ export class StoryChaptersDirective implements AfterViewInit, OnDestroy {
     this.observer?.disconnect();
     this.stopPreference?.();
     this.context?.revert();
+    this.main.style.scrollMarginTop = this.scrollMargin;
     this.chapters.forEach(chapter => {
       delete chapter.host.dataset.storyChapter;
       delete chapter.surface.dataset.storyTransition;

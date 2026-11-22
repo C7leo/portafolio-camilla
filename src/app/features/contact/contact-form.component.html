@@ -1,0 +1,52 @@
+<section id="contacto" class="contact-section" data-control-surface="neutral" aria-labelledby="contact-title" tabindex="-1">
+  <div class="contact-inner">
+    <header class="contact-intro" appReveal="focus" [motionDuration]="400">
+      <h2 id="contact-title" class="contact-heading">{{ 'section.contact' | t }}</h2>
+      <p>{{ 'Abierta a nuevos proyectos, colaboraciones y oportunidades profesionales.' | t }}</p>
+    </header>
+      <form class="contact-form" [action]="endpoint" method="POST" novalidate (submit)="submit($event)" [attr.aria-busy]="state() === 'sending'" aria-labelledby="contact-title">
+        <fieldset [disabled]="state() === 'sending'">
+          <legend class="sr-only">{{ 'Datos de tu consulta' | t }}</legend>
+          <div class="contact-field" [class.has-error]="!!errors().name" appContactReveal [motionDuration]="400" [motionDelay]="130">
+            <label class="sr-only" for="contact-name">{{ 'Nombre completo' | t }} <span aria-hidden="true">*</span></label>
+            <span class="field-control"><input id="contact-name" [placeholder]="'Nombre' | t" name="name" autocomplete="name" required maxlength="120" [attr.aria-invalid]="errors().name ? 'true' : null" aria-describedby="contact-name-error" (input)="edit('name')"></span>
+            <p id="contact-name-error" class="field-error">{{ errors().name | t }}</p>
+          </div>
+          <div class="contact-field" [class.has-error]="!!errors().email" appContactReveal [motionDuration]="400" [motionDelay]="195">
+            <label class="sr-only" for="contact-email">{{ 'Correo electrónico' | t }} <span aria-hidden="true">*</span></label>
+            <span class="field-control"><input id="contact-email" [placeholder]="'Correo' | t" name="email" type="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required maxlength="254" [attr.aria-invalid]="errors().email ? 'true' : null" aria-describedby="contact-email-error" (input)="edit('email')"></span>
+            <p id="contact-email-error" class="field-error">{{ errors().email | t }}</p>
+          </div>
+          <div class="contact-field full-width" [class.has-error]="!!errors().subject" appContactReveal [motionDuration]="400" [motionDelay]="260">
+            <label class="sr-only" for="contact-subject">{{ 'Asunto o tipo de consulta' | t }} <span class="optional">{{ '(opcional)' | t }}</span></label>
+            <span class="field-control"><input id="contact-subject" [placeholder]="'Asunto' | t" name="subject" maxlength="160" [attr.aria-invalid]="errors().subject ? 'true' : null" aria-describedby="contact-subject-error" (input)="edit('subject')"></span>
+            <p id="contact-subject-error" class="field-error">{{ errors().subject | t }}</p>
+          </div>
+          <div class="contact-field full-width" [class.has-error]="!!errors().message" appContactReveal [motionDuration]="400" [motionDelay]="325">
+            <label class="sr-only" for="contact-message">{{ 'Mensaje' | t }} <span aria-hidden="true">*</span></label>
+            <span class="field-control"><textarea id="contact-message" [placeholder]="'Mensaje' | t" name="message" rows="4" required maxlength="6000" [attr.aria-invalid]="errors().message ? 'true' : null" aria-describedby="contact-message-error" (input)="edit('message')"></textarea></span>
+            <p id="contact-message-error" class="field-error">{{ errors().message | t }}</p>
+          </div>
+          <div class="contact-honeypot" aria-hidden="true">
+            <label for="contact-website">{{ 'contact.website' | t }}</label><input id="contact-website" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+          <div class="contact-actions full-width" appContactReveal [motionDuration]="400" [motionDelay]="390">
+            <button type="submit" class="contact-submit" [class.is-sending]="state() === 'sending'" [class.is-sent]="state() === 'success'" [disabled]="state() === 'sending'" [attr.aria-label]="(state() === 'sending' ? 'Enviando…' : state() === 'success' ? 'Mensaje enviado' : 'Enviar mensaje') | t">
+              <span class="submit-labels" aria-hidden="true">
+                <span [class.is-current]="state() !== 'sending' && state() !== 'success'">{{ 'Enviar mensaje' | t }}</span>
+                <span [class.is-current]="state() === 'sending'">{{ 'Enviando…' | t }}</span>
+                <span [class.is-current]="state() === 'success'">{{ 'Mensaje enviado' | t }}</span>
+              </span>
+              <span class="submit-icon" aria-hidden="true">
+                <svg class="submit-arrow" viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 15 15 5M5 5h10v10" /></svg>
+                <span class="submit-spinner"></span>
+                <svg class="submit-check" viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m4 10 4 4 8-8" /></svg>
+              </span>
+            </button>
+            <p class="contact-privacy">{{ 'El envío se procesa con Formspree. Tus datos se usan para responder a tu consulta.' | t }}</p>
+          </div>
+        </fieldset>
+        <p id="contact-feedback" class="contact-feedback" [class.is-success]="state() === 'success'" [class.is-error]="state() === 'error'" role="status" aria-live="polite" aria-atomic="true" tabindex="-1">{{ notice() | t }}</p>
+      </form>
+  </div>
+</section>

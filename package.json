@@ -5,18 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "node scripts/compile-aot.mjs && vite build && node scripts/prerender.mjs",
+    "build": "vite build",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "check:architecture": "node scripts/check-architecture.mjs",
     "test": "playwright test",
     "test:mobile": "playwright test --config playwright.mobile.config.js",
-    "cv:export": "node scripts/export-cv.mjs",
-    "build:client": "node scripts/compile-aot.mjs && vite build",
-    "images:optimize": "node scripts/optimize-images.mjs",
-    "serve:production": "node scripts/serve-production.mjs",
-    "audit:lighthouse": "node scripts/audit-lighthouse.mjs",
-    "video:optimize": "node scripts/optimize-intro.mjs"
+    "cv:export": "node scripts/export-cv.mjs"
   },
   "dependencies": {
     "@angular/common": "^22.2.5",
@@ -24,20 +19,18 @@
     "@angular/platform-browser": "^22.2.5",
     "gsap": "^3.13.0",
     "lucide": "^1.70.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "rxjs": "^7.8.2",
     "three": "^0.180.0",
     "tslib": "^2.9.1"
   },
   "devDependencies": {
+    "@analogjs/vite-plugin-angular": "^2.9.7",
+    "@angular/build": "^22.2.5",
     "@angular/compiler": "^22.2.5",
     "@angular/compiler-cli": "^22.2.5",
-    "@babel/core": "^8.1.2",
     "@playwright/test": "^1.56.0",
-    "@sparticuz/chromium": "^153.0.0",
-    "chrome-launcher": "^1.2.3",
-    "lighthouse": "^13.6.0",
-    "lightningcss": "^1.33.0",
-    "sharp": "^0.35.5",
     "typescript": "^6.0.3",
     "vite": "^7.1.0"
   }

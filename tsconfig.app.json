@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": { "noEmit": false, "outDir": "./out-tsc" },
+  "angularCompilerOptions": { "strictTemplates": true },
+  "files": ["src/main.ts"],
+  "include": ["src/**/*.d.ts"]
+}
