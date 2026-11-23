@@ -1,19 +1,10 @@
-# Recursos activos
+# Recursos
 
-Los archivos gráficos conservan su contenido original. Su ubicación expresa quién los utiliza:
+- `src/app/features/profile/presentation/home/assets/`: fondos WebP de 1280 y 1802 px, elegidos y precargados por ancho de pantalla.
+- `src/app/features/profile/presentation/about/assets/`: imagen de About en variantes WebP de 384 y 530 px, seleccionadas con `srcset`.
+- `src/app/features/projects/infrastructure/assets/`: variantes WebP de los proyectos.
+- `src/app/shared/assets/`: logo y fuentes Urbanist en WOFF2, servidas localmente.
+- `public/cv/`: PDF descargables en espa?ol e ingl?s.
+- `design-assets/originals/`: originales editables; no se publican con la aplicaci?n.
 
-- `src/app/contexts/profile/presentation/hero/assets/`: versiones WebP responsivas de la imagen utilizada por Hero y footer.
-- `src/app/shared/assets/night-lily.png`: imagen conservada para la introducción anterior, actualmente inactiva.
-- `src/app/shared/assets/logo.webp`: logo del navbar y favicon.
-- `src/app/shared/assets/fonts/`: Urbanist en WOFF2, pesos 400/500/700/800 y rangos Unicode originales, servida localmente. Incluye la licencia SIL Open Font License y las URLs de origen; sustituye la petición externa a Google Fonts.
-- `src/app/shell/intro/assets/cinematic-intro.mp4`: vídeo original de entrada.
-- `src/app/contexts/profile/presentation/about/assets/`: retrato y proceso de trabajo.
-- `src/app/contexts/projects/infrastructure/assets/`: imágenes de Harmonix, SpotFinder, NutriSend, SmartCampus, Courtly, EduSpace y Veyra.
-- `public/assets/skills/`: los trece SVG utilizados por el marquee de tecnologías. El nombre de esta ruta pública se conserva para mantener sus URLs. Las atribuciones y la licencia Devicon permanecen junto a los SVG.
-- `public/cv/`: PDF en español e inglés que descarga el navbar.
-
-Vite resuelve los recursos de `src` mediante `new URL(..., import.meta.url)` y `url(...)` en CSS. Los recursos públicos conservan sus URLs y usan `import.meta.env.BASE_URL` desde la aplicación. No hay referencias a las antiguas fotografías empresariales ni a los iconos del Contacto retirado.
-
-Las escenas del horizonte, el valle y el carrusel son código de presentación; sus archivos `.d.ts` forman parte del contrato TypeScript. La reorganización no altera sus shaders ni sus movimientos.
-
-Los PDF se generan desde los Markdown de `docs/career/` con `npm run cv:export`. El exportador utiliza Chrome mediante la dependencia de desarrollo Playwright; el sitio distribuido no necesita un navegador automatizado ni genera documentos en el cliente.
+`npm run images:optimize` regenera las variantes activas de Hero y About desde sus originales con Sharp y conserva la versi?n existente cuando ocupa menos. Las im?genes de proyectos usan `srcset`; la imagen del Hero se precarga y las im?genes fuera de pantalla usan carga diferida. Los recursos de `src` se generan con nombres versionados por Vite.

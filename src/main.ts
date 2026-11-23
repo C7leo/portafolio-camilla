@@ -4,6 +4,7 @@ import { AppComponent } from './app/app.component';
 import { appConfig } from './app/app.config';
 import './app/shared/assets/fonts/urbanist.css';
 import './styles.css';
+import { startCurtainIntro } from './app/shell/intro/curtain-intro';
 
 // A tab opened before a deployment may request an old lazy chunk. Revalidate
 // HTML once instead of leaving the optional UI broken; avoid offline reload loops.
@@ -19,7 +20,7 @@ window.addEventListener('vite:preloadError', (event: Event) => {
   window.location.reload();
 });
 
-bootstrapApplication(AppComponent, appConfig).then(() => {
+const bootstrap = bootstrapApplication(AppComponent, appConfig).then(() => {
   document.querySelector('app-root')?.setAttribute('data-ready', '');
   document.querySelectorAll('[data-prerender-style]').forEach(node => node.remove());
 }).catch((error: unknown) => {
@@ -28,3 +29,4 @@ bootstrapApplication(AppComponent, appConfig).then(() => {
   const root = document.querySelector('app-root');
   if (root) root.textContent = 'No se pudo cargar la página. Intenta actualizarla.';
 });
+startCurtainIntro(bootstrap);

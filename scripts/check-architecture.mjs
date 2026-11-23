@@ -17,7 +17,7 @@ function checkBoundary(from,target,specifier){
     if(current==='presentation'&&destination&&(destination[1]!==context||destination[2]==='infrastructure')) errors.push(`${relative(from)}: presentation must use its application/domain layer, not ${specifier}`);
   }
   if(relative(from).startsWith('src/app/shared/')&&destination)errors.push(`${relative(from)}: shared code cannot depend on a business context`);
-  if(relative(from).startsWith('src/app/layout/')&&destination&&destination[2]!=='application')errors.push(`${relative(from)}: layout must consume application services`);
+  if(relative(from).startsWith('src/app/layout/')&&destination&&!['application','presentation'].includes(destination[2]))errors.push(`${relative(from)}: layout must compose presentation components or consume application services`);
 }
 function resolve(from,specifier,dependency=true){
   if(!specifier.startsWith('.')) {if(dependency){checkBoundary(from,null,specifier);packages.add(specifier.startsWith('@')?specifier.split('/').slice(0,2).join('/'):specifier.split('/')[0]);}return;}

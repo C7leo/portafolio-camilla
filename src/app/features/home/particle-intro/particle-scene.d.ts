@@ -1,1 +1,0 @@
-export function mountParticleScene(canvas: HTMLCanvasElement, hero: HTMLElement, url: string, signal: AbortSignal, onReady: () => void, onProgress: (count: number, fading: boolean) => void, onDisperse: () => void, onConsolidate: () => void, onComplete: () => void): Promise<() => void>;

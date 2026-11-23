@@ -1,0 +1,26 @@
+<div class="editor">
+  <div class="editor-chrome" aria-hidden="true">
+    <div class="editor-dots"><span></span><span></span><span></span></div>
+    <span class="editor-filename">{{ tabs[active() === 'development' ? 0 : active() === 'data' ? 1 : 2].file }}</span>
+    <span class="editor-chrome-spacer"></span>
+  </div>
+  <div class="editor-toolbar">
+    <div class="editor-tabs" role="tablist" [attr.aria-label]="'Ejemplos de código' | t">
+      @for (tab of tabs; track tab.id; let i = $index) {
+        <button type="button" role="tab" [id]="'code-tab-' + tab.id" aria-controls="code-panel" [attr.aria-selected]="active() === tab.id" [attr.tabindex]="active() === tab.id ? 0 : -1" (click)="select(tab.id)" (keydown)="onTabKey($event, i)">{{ tab.label | t }}</button>
+      }
+    </div>
+    <button class="copy-button" type="button" [class.has-feedback]="copyState() !== 'idle'" (click)="copy()" [attr.aria-label]="'Copiar código' | t">
+      <svg viewBox="0 0 20 20" aria-hidden="true"><rect x="6" y="6" width="9" height="10" rx="1.5"/><path d="M12 6V4.5A1.5 1.5 0 0 0 10.5 3h-6A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13H6"/></svg>
+      <span class="copy-label">{{ (copyState() === 'copied' ? 'Copiado' : copyState() === 'error' ? 'No se pudo copiar' : 'Copiar código') | t }}</span>
+    </button>
+  </div>
+  <div id="code-panel" class="code-stage" role="tabpanel" [attr.aria-labelledby]="'code-tab-' + active()" tabindex="0">
+    <div class="code-scroll">
+      <div class="line-numbers" aria-hidden="true">@for (line of lineNumbers; track line) {<span>{{ line }}</span>}</div>
+      <pre><code class="code-text">@for (token of tokens(); track token.key) {<span [class]="'token token--' + token.kind" [attr.data-token-key]="token.kind === 'space' ? null : token.key">{{ token.text }}</span>}</code></pre>
+    </div>
+    <div class="code-ghosts" aria-hidden="true"></div>
+  </div>
+  <span class="sr-only" role="status" aria-live="polite">{{ (copyState() === 'copied' ? 'Copiado' : copyState() === 'error' ? 'No se pudo copiar' : '') | t }}</span>
+</div>
