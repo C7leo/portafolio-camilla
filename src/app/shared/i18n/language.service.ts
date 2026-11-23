@@ -29,6 +29,12 @@ const ES: Record<string, string> = {
   'CREATE.': 'CREA.', 'BUILD.': 'CONSTRUYE.', 'EVOLVE.': 'EVOLUCIONA.',
 };
 const EN: Record<string, string> = {
+  'Detrás del código': 'Behind the code',
+  'De la lógica a la experiencia.': 'From logic to experience.',
+  'Una mirada a las ideas que cobran vida a través del código.': 'A glimpse at ideas brought to life through code.',
+  'Automatización': 'Automation',
+  'Ejemplos de código': 'Code examples', 'Copiar código': 'Copy code',
+  'Copiado': 'Copied', 'No se pudo copiar': 'Could not copy',
   'nav.contactCta': 'Contact me', 'intro.loading': 'Preparing animation',
   'Tecnologías con las que creo': 'Technologies I build with',
   'Ideas en movimiento. Herramientas para crearlas.': 'Ideas in motion. Tools to bring them to life.',

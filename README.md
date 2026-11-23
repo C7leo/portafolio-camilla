@@ -15,25 +15,18 @@ Configura los enlaces públicos de contacto en un archivo `.env` local siguiendo
 
 ```text
 src/app/
-  app.component.ts       Composición de la página
-  app.config.ts          Proveedores de repositorios
-  contexts/
-    profile/             Identidad, biografía y contacto
-    projects/            Proyectos y referencias públicas
-    experience/          Experiencia profesional
-  shell/                 Navbar, introducción y footer
-  shared/                Idioma, movimiento, cuadrícula y recursos comunes
-public/
-  assets/skills/         Iconos activos y sus licencias
-  cv/                    PDF descargables en ES/EN
-docs/
-  career/                CV editables, credenciales y auditoría
-  features/              Documentación de las escenas
-scripts/                 Exportación de CV y comprobación de arquitectura
-tests/                   Pruebas de navegador
+  features/{profile,projects,experience}/  dominios y presentaci?n
+  core/                                   navegaci?n y tema
+  layout/                                 navbar, controles y pie
+  shared/                                 idioma, movimiento y UI com?n
+  shell/intro/                            cortina de entrada
+public/cv/                                PDF descargables
+design-assets/originals/                  im?genes originales editables
+scripts/                                  compilaci?n, im?genes y validaci?n
+tests/                                    pruebas de navegador
 ```
 
-Cada contexto de `contexts/` contiene `domain`, `application`, `infrastructure` y `presentation`. El dominio es TypeScript puro; `app.config.ts` conecta sus contratos con repositorios estáticos. Los componentes consultan servicios de aplicación.
+Cada dominio de `features/` contiene `domain`, `application`, `infrastructure` y `presentation`. El dominio es TypeScript puro; `app.config.ts` conecta sus contratos con repositorios estáticos. Los componentes consultan servicios de aplicación.
 
 ## Validar
 

@@ -64,8 +64,9 @@ test('language is restored during the intro and can change immediately afterward
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   await page.goto('/#inicio', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
-  await expect(page.locator('.particle-intro__loading')).toContainText('Preparing animation');
-  await page.keyboard.press('Escape');
+  await expect(page.locator('#curtain-intro')).toHaveAttribute('aria-label', 'Loading portfolio');
+  await expect(page.locator('.curtain-step-label').first()).toHaveText('Loading interface');
+  await expect(page.locator('#curtain-intro')).toHaveCount(0, { timeout: 9000 });
   await switchLanguage(page, 'es');
   await checkSections(page, 'es');
 });

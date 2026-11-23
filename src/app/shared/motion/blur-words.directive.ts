@@ -90,7 +90,7 @@ export class BlurWordsDirective implements AfterViewInit, OnDestroy {
       const node = walker.currentNode as Text;
       const parent = node.parentElement;
       if (!parent || this.seen.has(node) || !node.data.trim() || !/[\p{L}\p{N}]/u.test(node.data)) continue;
-      if (parent.closest('script, style, svg, textarea, option, [aria-hidden="true"], .sr-only, .skip-link, [data-blur-words], app-particle-intro')) continue;
+      if (parent.closest('script, style, svg, textarea, option, [aria-hidden="true"], .sr-only, .skip-link, [data-blur-words], [data-no-blur], app-particle-intro')) continue;
       // The intro controls the whole Hero and navbar reveal for this page load.
       if (document.documentElement.dataset.particlePhase && parent.closest('app-hero, app-navbar')) { this.seen.add(node); continue; }
       this.seen.add(node);

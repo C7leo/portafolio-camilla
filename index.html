@@ -11,27 +11,72 @@
         try { if (localStorage.getItem('portfolio-theme') === 'dark') theme = 'dark'; } catch {}
         document.documentElement.dataset.theme = theme;
         document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#09090B' : '#FFFFFF';
-        const connection = navigator.connection;
-        if ((!location.hash || location.hash === '#inicio') && !matchMedia('(prefers-reduced-motion: reduce)').matches && !connection?.saveData && !/(^|-)2g/.test(connection?.effectiveType || '')) {
-          document.documentElement.dataset.particlePhase = 'loading';
-          setTimeout(() => {
-            if (document.documentElement.dataset.particlePhase === 'loading') {
-              document.documentElement.dataset.particlePhase = 'complete';
-              window.dispatchEvent(new Event('particle-intro-timeout'));
-            }
-          }, 8000);
+        if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          document.documentElement.classList.add('curtain-active');
+          const fallback = setTimeout(() => {
+            document.documentElement.classList.remove('curtain-active');
+            document.getElementById('curtain-intro')?.remove();
+          }, 15000);
+          window.addEventListener('curtain-finished', () => clearTimeout(fallback), { once: true });
         }
       })();
     </script>
-    <style>html{background:#fff;color:#212121}html[data-theme="dark"]{background:#09090b;color:#fff;color-scheme:dark}</style>
+    <style>
+      html{background:#fff;color:#212121;scrollbar-gutter:stable}html[data-theme="dark"]{background:#09090b;color:#fff;color-scheme:dark}
+      html.curtain-active{overflow:hidden}
+      #curtain-intro{display:none}
+      html.curtain-active #curtain-intro{display:grid;position:fixed;inset:0;z-index:10000;place-items:center;background:#fff;color:#292929;will-change:transform;transition:transform 1250ms cubic-bezier(.76,0,.24,1)}
+      html[data-theme="dark"].curtain-active #curtain-intro{background:#09090b;color:#f1f1f3}
+      html.curtain-active #curtain-intro.is-revealing{transform:translateY(-100%)}
+      .curtain-content{width:min(300px,70vw);text-align:center;font:500 10px/1.4 'Urbanist',sans-serif;letter-spacing:.02em}
+      .curtain-details{text-align:left;margin-bottom:34px;animation:curtain-details-in .65s ease-out both}
+      .curtain-heading{display:flex;justify-content:space-between;align-items:baseline;gap:16px;color:#39363d;font-size:12px;font-weight:600;letter-spacing:0}
+      .curtain-heading p{margin:0}
+      .curtain-time{color:#85818a;font-size:10px;font-weight:500;font-variant-numeric:tabular-nums}
+      .curtain-steps{list-style:none;display:grid;gap:9px;margin:18px 0 0;padding:0;color:#aaa6ad;font-size:11px;letter-spacing:0}
+      .curtain-step{display:flex;align-items:center;gap:10px;transition:color .35s ease,transform .35s ease}
+      .curtain-step[data-state="active"]{color:#514d58;transform:translateY(-1px)}
+      .curtain-step[data-state="done"]{color:#79757e}
+      .curtain-mark{display:grid;place-items:center;width:12px;height:12px;flex:none;color:#8d99ab;font:600 11px/1 'Urbanist',sans-serif}
+      .curtain-mark::before{content:'';width:3px;height:3px;border-radius:50%;background:#d2cfd5;transition:background-color .3s ease,transform .3s ease}
+      .curtain-step[data-state="active"] .curtain-mark::before{background:#a9b8cf;transform:scale(1.35)}
+      .curtain-step[data-state="done"] .curtain-mark::before{content:'✓';width:auto;height:auto;background:none}
+      html[data-theme="dark"] .curtain-heading{color:#eeeaf0}
+      html[data-theme="dark"] .curtain-time{color:#a6a1ab}
+      html[data-theme="dark"] .curtain-steps{color:#77717c}
+      html[data-theme="dark"] .curtain-step[data-state="active"]{color:#e1dce6}
+      html[data-theme="dark"] .curtain-step[data-state="done"]{color:#b9b3bd}
+      html[data-theme="dark"] .curtain-mark::before{background:#514b56}
+      html[data-theme="dark"] .curtain-step[data-state="active"] .curtain-mark::before{background:#a9b8cf}
+      @keyframes curtain-details-in{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+      .curtain-track{height:3px;overflow:hidden;background:#e4e4e4}
+      html[data-theme="dark"] .curtain-track{background:#34343a}
+      .curtain-progress{display:block;width:100%;height:100%;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,#6ac9e4,#a4b8ed,#f39a91)}
+      .curtain-label{margin:10px 0 0}
+      .curtain-percent{margin:6px 0 0;font-variant-numeric:tabular-nums}
+    </style>
     <meta name="description" content="Transformo necesidades de negocio en soluciones tecnológicas, combinando desarrollo de software, análisis de datos y mejora de procesos." />
     <title>Camilla Espinoza — Desarrollo &amp; Datos</title>
     <link rel="icon" href="/src/app/shared/assets/logo.webp" type="image/webp" />
-    <link rel="preload" as="image" href="/src/app/features/home/assets/hero-fondo-1280.webp" media="(max-width: 1280px)" fetchpriority="high" />
-    <link rel="preload" as="image" href="/src/app/features/home/assets/hero-fondo-1802.webp" media="(min-width: 1281px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/src/app/features/profile/presentation/home/assets/hero-fondo-1280.webp" media="(max-width: 1280px)" fetchpriority="high" />
+    <link rel="preload" as="image" href="/src/app/features/profile/presentation/home/assets/hero-fondo-1802.webp" media="(min-width: 1281px)" fetchpriority="high" />
     <link rel="preload" href="/src/app/shared/assets/fonts/urbanist-7981ef90c246.woff2" as="font" type="font/woff2" crossorigin />
   </head>
   <body>
+    <div id="curtain-intro" role="progressbar" aria-label="Cargando portafolio" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="curtain-content">
+        <div class="curtain-details" aria-hidden="true">
+          <div class="curtain-heading"><p class="curtain-heading-text">Preparando la experiencia...</p><span class="curtain-time">0.0s</span></div>
+          <ol class="curtain-steps">
+            <li class="curtain-step" data-state="active"><span class="curtain-mark"></span><span class="curtain-step-label">Cargando la interfaz</span></li>
+            <li class="curtain-step" data-state="pending"><span class="curtain-mark"></span><span class="curtain-step-label">Preparando las imágenes</span></li>
+            <li class="curtain-step" data-state="pending"><span class="curtain-mark"></span><span class="curtain-step-label">Organizando las secciones</span></li>
+            <li class="curtain-step" data-state="pending"><span class="curtain-mark"></span><span class="curtain-step-label">Abriendo el portafolio</span></li>
+          </ol>
+        </div>
+        <div class="curtain-track"><span class="curtain-progress"></span></div><p class="curtain-label">PORTAFOLIO — 2026</p><p class="curtain-percent" aria-hidden="true">0%</p>
+      </div>
+    </div>
     <a class="skip-link" href="#inicio">Saltar al contenido</a>
     <app-root></app-root>
     <script type="module" src="/src/main.ts"></script>

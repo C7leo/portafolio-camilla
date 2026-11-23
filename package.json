@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 127.0.0.1",
-    "build": "vite build",
+    "build": "vite build && node scripts/prerender.mjs",
+    "build:client": "vite build",
+    "images:optimize": "node scripts/optimize-images.mjs",
+    "audit:lighthouse": "node scripts/audit-lighthouse.mjs",
     "preview": "vite preview --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
     "check:architecture": "node scripts/check-architecture.mjs",
@@ -31,6 +34,10 @@
     "@angular/compiler": "^22.2.5",
     "@angular/compiler-cli": "^22.2.5",
     "@playwright/test": "^1.56.0",
+    "@sparticuz/chromium": "^153.0.0",
+    "chrome-launcher": "^1.2.3",
+    "lighthouse": "^13.6.0",
+    "sharp": "^0.35.5",
     "typescript": "^6.0.3",
     "vite": "^7.1.0"
   }

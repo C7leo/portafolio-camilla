@@ -19,8 +19,8 @@ La instalación local usa Node 24.11.0. Las dependencias Angular 22.2.5 declaran
 ## Dependencias
 
 - Ejecución: Angular, RxJS/tslib, GSAP, Three.js y Lucide.
-- Construcción y auditoría: Vite, TypeScript, Angular compiler/compiler-cli, Babel linker, Lightning CSS, Sharp, Playwright, Chromium y Lighthouse.
-- No hay un segundo framework de UI ni un procesador Tailwind/PostCSS configurado.
+- Construcción y auditoría: Vite, TypeScript, Angular compiler/compiler-cli, Sharp, Playwright y Chromium. Lighthouse puede ejecutarse como herramienta de auditor?a local.
+- El carrusel de proyectos usa React y se carga de forma diferida.
 
 Desarrollo utiliza JIT para conservar el flujo de Vite. Producción compila las plantillas con Angular AOT, enlaza las bibliotecas Angular y elimina el compilador del navegador. Después genera HTML estático; el cliente arranca sobre ese contenido sin hidratación Angular. Consulta [rendimiento y Vercel](performance.md).
 

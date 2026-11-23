@@ -28,7 +28,7 @@ export class StoryChaptersDirective implements AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.scrollMargin = this.main.style.scrollMarginTop;
     this.main.style.scrollMarginTop = '0px';
-    const names = ['home', 'about', 'services', 'projects', 'experience'];
+    const names = ['home', 'about', 'services', 'behind-code', 'projects', 'experience'];
     this.chapters = Array.from(this.main.children).flatMap((node, index) => {
       if (!(node instanceof HTMLElement)) return [];
       const surface = node.querySelector<HTMLElement>('section');
@@ -82,6 +82,7 @@ export class StoryChaptersDirective implements AfterViewInit, OnDestroy {
       for (let index = 1; index < this.chapters.length; index++) {
         const outgoing = this.chapters[index - 1];
         const incoming = this.chapters[index];
+        if (incoming.name === 'behind-code' || outgoing.name === 'behind-code') continue;
         // These sections enter in natural document flow, without a chapter transition.
         if (incoming.name === 'projects') continue;
         // Services is a reading section in natural flow on either side.
