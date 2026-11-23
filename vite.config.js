@@ -2,10 +2,13 @@
 
 import angular from '@analogjs/vite-plugin-angular';
 
+// Compile Angular templates consistently in development and production.
 export default defineConfig({
   plugins: [angular()],
   esbuild: { target: 'es2022', jsx: 'automatic' },
   build: {
+    minify: 'esbuild',
+    cssMinify: 'esbuild',
     rollupOptions: {
       output: {
         entryFileNames: 'assets/build/[name]-[hash].js',

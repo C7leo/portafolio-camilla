@@ -1,0 +1,19 @@
+:host { display: block; background: var(--surface); color: var(--text-editorial); transition: background-color var(--theme-duration), color var(--theme-duration); }
+.behind-code { position: relative; overflow: clip; padding: var(--portfolio-section-space) 0 clamp(62px, 7vw, 100px); }
+.behind-container { width: min(1200px, calc(100% - 2 * var(--editorial-rail-inset))); margin-inline: auto; }
+.behind-header { position: relative; z-index: 1; max-width: 600px; }
+.behind-label { margin: 0 0 20px; color: var(--text-muted); font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.behind-label::before { content: ''; display: block; width: 44px; height: 3px; margin-bottom: 10px; border-radius: 2px; background: #ff6975; }
+h2 { margin: 0; max-width: 17ch; font-size: clamp(38px, 5vw, 66px); line-height: 1.03; letter-spacing: -.045em; font-weight: 500; }
+.behind-description { max-width: 42ch; margin: 18px 0 0; color: var(--text-muted); font-size: clamp(15px, 1.4vw, 17px); line-height: 1.45; }
+.behind-composition { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); place-items: center; min-width: 0; min-height: 720px; margin-top: -38px; isolation: isolate; }
+.editor-position { position: relative; z-index: 1; width: min(710px, 74%); max-width: 100%; min-width: 0; margin-block: 145px 175px; }
+.can-reveal .behind-header, .can-reveal .editor-position, .can-reveal app-falling-rays { opacity: 0; }
+.can-reveal .behind-header, .can-reveal .editor-position { transform: translateY(12px); }
+.can-reveal.is-visible .behind-header, .can-reveal.is-visible .editor-position, .can-reveal.is-visible app-falling-rays { opacity: 1; transform: none; }
+.can-reveal .behind-header { transition: opacity .65s ease, transform .65s ease; }
+.can-reveal app-falling-rays { transition: opacity 1s .12s ease; }
+.can-reveal .editor-position { transition: opacity .75s .2s ease, transform .75s .2s ease; }
+@media (max-width: 820px) { .behind-container { width: calc(100% - 2 * var(--editorial-rail-inset)); } .editor-position { width: min(710px, 88%); } .behind-composition { min-height: 640px; } }
+@media (max-width: 640px) { .behind-code { padding-bottom: 64px; } .behind-label { margin-bottom: 17px; } h2 { font-size: clamp(34px, 9vw, 44px); } .behind-composition { min-height: 600px; margin-top: -8px; } .editor-position { width: 100%; margin-block: 115px 140px; } }
+@media (prefers-reduced-motion: reduce) { .can-reveal .behind-header, .can-reveal .editor-position, .can-reveal app-falling-rays { opacity: 1; transform: none; transition: none; } }

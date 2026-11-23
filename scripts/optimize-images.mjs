@@ -1,30 +1,19 @@
 import sharp from 'sharp';
-import { readdir, mkdir, writeFile, stat } from 'node:fs/promises';
-import path from 'node:path';
+import { readFile, stat, writeFile } from 'node:fs/promises';
 
-async function walk(dir) {
-  return (await Promise.all((await readdir(dir, { withFileTypes: true })).map(entry =>
-    entry.isDirectory() ? walk(path.join(dir, entry.name)) : path.join(dir, entry.name)))).flat();
+// Generate only active assets from the retained originals, without replacing a
+// smaller existing file with a larger encoding of equivalent quality.
+const variants = [
+  ['design-assets/originals/hero-fondo.png', 'src/app/features/profile/presentation/home/assets/hero-fondo-1280.webp', 1280],
+  ['design-assets/originals/hero-fondo.png', 'src/app/features/profile/presentation/home/assets/hero-fondo-1802.webp', 1802],
+  ['design-assets/originals/about.png', 'src/app/features/profile/presentation/about/assets/about-384.webp', 384],
+  ['design-assets/originals/about.png', 'src/app/features/profile/presentation/about/assets/about.webp', 530],
+];
+for (const [source, target, width] of variants) {
+  const output = await sharp(await readFile(source)).resize({ width, withoutEnlargement: true }).webp({ quality: 82, effort: 6 }).toBuffer();
+  const existing = await stat(target).catch(() => null);
+  if (!existing || output.length < existing.size) {
+    await writeFile(target, output);
+    console.log(`${target}: ${output.length} bytes${existing ? ` (antes ${existing.size})` : ''}`);
+  } else console.log(`${target}: se conserva el archivo existente (${existing.size} bytes)`);
 }
-
-// Keep originals as editable sources. Only optimized variants are referenced by the app.
-const files = (await walk('src')).filter(file => file.endsWith('.png'));
-let original = 0, optimized = 0;
-for (const file of files) {
-  const image = sharp(file);
-  const { width, height } = await image.metadata();
-  const widths = file.endsWith('logo.png') ? [72, 144] : file.endsWith('night-lily.png') ? [960, width] : [480, 960, Math.min(width, 1920)];
-  for (const size of [...new Set(widths)].slice(0, -1)) {
-    const target = file.replace('.png', `-${size}.webp`);
-    await image.clone().resize({ width: size, withoutEnlargement: true }).webp({ quality: 80, effort: 6 }).toFile(target);
-  }
-  const largest = Math.max(...widths);
-  const target = file.replace('.png', '.webp');
-  await image.clone().resize({ width: largest, withoutEnlargement: true }).webp({ quality: 80, effort: 6 }).toFile(target);
-  original += (await stat(file)).size;
-  optimized += (await stat(target)).size;
-  console.log(`${path.basename(file)}: ${width}×${height} → ${largest}px WebP`);
-}
-await mkdir('.local/performance', { recursive: true });
-await writeFile('.local/performance/image-sizes.json', JSON.stringify({ original, optimized }));
-console.log(`Primary variants: ${(original / 1e6).toFixed(2)} MB → ${(optimized / 1e6).toFixed(2)} MB`);

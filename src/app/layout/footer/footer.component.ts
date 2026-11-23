@@ -5,7 +5,7 @@ import { TranslatePipe } from '../../shared/i18n/translate.pipe';
 import { RevealDirective } from '../../shared/motion/reveal.directive';
 import { ProfileCatalogService } from '../../features/profile/application/profile-catalog.service';
 import { ProjectCatalogService } from '../../features/projects/application/project-catalog.service';
-import { ContactFormComponent } from '../../features/contact/contact-form.component';
+import { ContactFormComponent } from '../../features/profile/presentation/contact/contact-form.component';
 
 
 

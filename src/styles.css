@@ -7,8 +7,8 @@
 }
 
 :root {
-  --hero-image-large: url('./app/features/home/assets/hero-fondo-1802.webp');
-  --hero-image-small: url('./app/features/home/assets/hero-fondo-1280.webp');
+  --hero-image-large: url('./app/features/profile/presentation/home/assets/hero-fondo-1802.webp');
+  --hero-image-small: url('./app/features/profile/presentation/home/assets/hero-fondo-1280.webp');
   font-family: var(--font-body);
   --font-body: 'Urbanist', sans-serif;
   --font-display: Impact, 'Arial Narrow', sans-serif;
@@ -21,7 +21,6 @@
   background: var(--surface);
   color-scheme: light;
   --surface: #FFFFFF;
-  --particle-intro-background: #fff;
   --surface-raised: #F5F5F5;
   --experience-surface: #fafafa;
   --text-primary: #212121;
@@ -75,7 +74,6 @@
 :root[data-theme='dark'] {
   color-scheme: dark;
   --surface: #09090B;
-  --particle-intro-background: #09090b;
   --surface-raised: #18181B;
   --experience-surface: rgb(224 224 224 / 15%);
   --text-primary: #FFFFFF;
@@ -127,45 +125,7 @@ html[data-theme='dark'] app-navbar .light-logo .home-navigation a.nav-link { col
 html[data-theme='dark'] app-navbar .light-logo .home-navigation a.nav-link:hover { color: #fff; }
 html[data-theme='dark'] app-navbar .light-logo .home-navigation a.nav-link.active { color: #80b8ff; }
 html[data-theme='dark'] app-navbar .light-logo .home-theme svg.theme-moon { fill: #fff; }
-/* The introduction lives inside the Hero; it never captures page interaction. */
-html:is([data-particle-phase='loading'], [data-particle-phase='progress'], [data-particle-phase='assembling'])::before { content: ''; position: fixed; inset: 0; z-index: 1; background: var(--particle-intro-background); pointer-events: none; opacity: 1; transition: opacity 2.3s linear; }
-html:is([data-particle-phase='loading'], [data-particle-phase='progress'], [data-particle-phase='assembling']) app-hero { position: relative; z-index: 2; }
-html:is([data-particle-phase='loading'], [data-particle-phase='progress'], [data-particle-phase='assembling']) app-navbar .floating-header.is-visible,
-html:is([data-particle-phase='loading'], [data-particle-phase='progress'], [data-particle-phase='assembling']) app-floating-controls,
-html:is([data-particle-phase='loading'], [data-particle-phase='progress'], [data-particle-phase='assembling']) app-hero .hero .hero-content,
-html:is([data-particle-phase='loading'], [data-particle-phase='progress'], [data-particle-phase='assembling']) app-hero .hero .hero-cta { opacity: 0; visibility: hidden; }
-app-particle-intro { display: none; }
-app-particle-intro.is-active { display: block; position: fixed; inset: 0; z-index: 3; overflow: hidden; pointer-events: none; }
-app-particle-intro .particle-intro__veil { position: absolute; inset: 0; background: var(--particle-intro-background); }
-app-particle-intro .particle-intro__canvas { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; transition: opacity .2s ease; }
-app-particle-intro.is-ready .particle-intro__canvas { opacity: 1; }
-app-particle-intro.is-consolidating .particle-intro__veil,
-app-particle-intro.is-consolidating .particle-intro__canvas { opacity: 0; transition: opacity 1.1s ease-in-out; }
-app-particle-intro .particle-intro__loading { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: var(--particle-intro-background); color: var(--text-primary); font-size: 13px; transition: opacity .2s ease; }
-app-particle-intro .particle-intro__loading svg { width: 104px; height: 104px; animation: particle-loader-spin 8s linear infinite; }
-app-particle-intro .particle-intro__loading circle { fill: none; stroke: url('#particle-ring-gradient'); stroke-width: 2; stroke-linecap: round; stroke-dasharray: .1 5.6; }
-app-particle-intro.is-ready .particle-intro__loading { opacity: 0; }
-app-particle-intro .particle-intro__count { position: absolute; inset: 0; display: grid; place-items: center; color: var(--text-primary); font: 500 22px var(--font-body); letter-spacing: -.04em; opacity: 0; transition: opacity .3s ease; }
-app-particle-intro.is-ready .particle-intro__count { opacity: 1; }
-app-particle-intro.is-ready .particle-intro__count.is-fading { opacity: 0; }
 app-hero .hero-content, app-hero .hero-cta { z-index: 2; }
-html app-hero .hero:has(app-particle-intro.is-active) .hero-content,
-html app-hero .hero:has(app-particle-intro.is-active) .hero-copy,
-html app-hero .hero:has(app-particle-intro.is-active) .hero-lead { color: #fff; }
-@keyframes particle-loader-spin { to { transform: rotate(360deg); } }
-@keyframes particle-content-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-/* The intro owns the Hero reveal; its completed state must not restart the old entrance. */
-html[data-particle-phase] app-hero .hero .hero-copy,
-html[data-particle-phase] app-hero .hero #hero-title,
-html[data-particle-phase] app-hero .hero .hero-cta { animation: none; }
-html[data-particle-phase] app-hero .hero.hero::before { animation: none; opacity: 0; }
-html[data-particle-phase='revealing'] app-navbar .home-brand { animation: particle-content-in .55s .05s ease-out both; }
-html[data-particle-phase='revealing'] app-navbar .home-controls { animation: particle-content-in .6s .28s ease-out both; }
-html[data-particle-phase='revealing'] app-hero .hero .hero-copy { animation: particle-content-in .6s .7s ease-out both; }
-html[data-particle-phase='revealing'] app-hero .hero #hero-title { animation: particle-content-in .65s 1s ease-out both; }
-html[data-particle-phase='revealing'] app-hero .hero .hero-cta { animation: particle-content-in .6s 1.35s ease-out both; }
-html[data-particle-phase='revealing'] app-floating-controls { animation: particle-content-in .45s .48s ease-out both; }
-@media (prefers-reduced-motion: reduce) { app-particle-intro.is-active { display: none; } }
 html, body { transition: background-color var(--theme-duration), color var(--theme-duration); }
 html { scroll-behavior: smooth; }
 *, *::before, *::after { box-sizing: border-box; }
